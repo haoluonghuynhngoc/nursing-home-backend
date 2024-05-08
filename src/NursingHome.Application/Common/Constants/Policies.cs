@@ -1,0 +1,14 @@
+﻿using NursingHome.Domain.Constants;
+
+namespace NursingHome.Application.Common.Constants;
+
+public abstract class Policies
+{
+    public const string Admin = $"{RoleName.Admin}";
+    public const string Staff = $"{RoleName.Staff}";
+    public const string StationManager = $"{RoleName.StationManager}";
+    public const string User = $"{RoleName.User}";
+    public const string StationManager_Or_Staff = $"{RoleName.StationManager},{RoleName.Staff}";
+    public const string Admin_Or_StationManager = $"{RoleName.StationManager},{RoleName.Admin}";
+    public const string StationManager_Or_Staff_Or_Admin = $"{RoleName.StationManager},{RoleName.Staff},{RoleName.Admin}";
+}

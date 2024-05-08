@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4B26A5CB-D755-42C2-8A6E-5DD7BAACF975}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Packages.props = Directory.Packages.props
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.WebApi", "src\NursingHome.WebApi\NursingHome.WebApi.csproj", "{09BA5B40-01A3-4194-87CE-0C793DC7129B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.Application", "src\NursingHome.Application\NursingHome.Application.csproj", "{CD710047-78D2-410D-96DE-F2369A9AF52B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.Domain", "src\NursingHome.Domain\NursingHome.Domain.csproj", "{B899E6AA-9DB4-4844-A458-02A633AFC502}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.Infrastructure", "src\NursingHome.Infrastructure\NursingHome.Infrastructure.csproj", "{DBEAAEC4-22F5-4CF1-AD4B-F39D5A2B4092}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.Shared", "src\NursingHome.Shared\NursingHome.Shared.csproj", "{AA7C2EF4-F717-43DC-AB44-EFFC301F70FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09BA5B40-01A3-4194-87CE-0C793DC7129B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09BA5B40-01A3-4194-87CE-0C793DC7129B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09BA5B40-01A3-4194-87CE-0C793DC7129B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09BA5B40-01A3-4194-87CE-0C793DC7129B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD710047-78D2-410D-96DE-F2369A9AF52B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD710047-78D2-410D-96DE-F2369A9AF52B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD710047-78D2-410D-96DE-F2369A9AF52B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD710047-78D2-410D-96DE-F2369A9AF52B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B899E6AA-9DB4-4844-A458-02A633AFC502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B899E6AA-9DB4-4844-A458-02A633AFC502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B899E6AA-9DB4-4844-A458-02A633AFC502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B899E6AA-9DB4-4844-A458-02A633AFC502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBEAAEC4-22F5-4CF1-AD4B-F39D5A2B4092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBEAAEC4-22F5-4CF1-AD4B-F39D5A2B4092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBEAAEC4-22F5-4CF1-AD4B-F39D5A2B4092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBEAAEC4-22F5-4CF1-AD4B-F39D5A2B4092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA7C2EF4-F717-43DC-AB44-EFFC301F70FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA7C2EF4-F717-43DC-AB44-EFFC301F70FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA7C2EF4-F717-43DC-AB44-EFFC301F70FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA7C2EF4-F717-43DC-AB44-EFFC301F70FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1CFDDA3F-1338-4BA6-A165-F9B825E249EB}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<ProjectReference Include="..\NursingHome.Domain\NursingHome.Domain.csproj" />
+		<ProjectReference Include="..\NursingHome.Shared\NursingHome.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Common\Resources\Resource.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resource.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Common\Resources\Resource.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resource.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Features\Empty\Commands\" />
+	  <Folder Include="Features\Empty\Events\" />
+	  <Folder Include="Features\Empty\Handlers\" />
+	  <Folder Include="Features\Empty\Models\" />
+	  <Folder Include="Features\Empty\Queries\" />
+	</ItemGroup>
+
+</Project>
