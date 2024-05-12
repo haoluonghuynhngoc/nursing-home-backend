@@ -92,6 +92,10 @@ public static class DependencyInjection
             options.Password.RequiredUniqueChars = 0;
             //options.User.RequireUniqueEmail = true;
 
+            // Lockout configuration
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Lockout time of 5 minutes
+            options.Lockout.MaxFailedAccessAttempts = 5; // Lockout after 5 failed attempts
+            options.Lockout.AllowedForNewUsers = true;
         }).AddEntityFrameworkStores<ApplicationDbContext>()
           .AddDefaultTokenProviders();
     }

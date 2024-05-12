@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NursingHome.Application.Behaviours;
 using NursingHome.Shared.Helpers;
@@ -10,10 +11,11 @@ using System.Reflection;
 namespace NursingHome.Application;
 public static class DependencyInjection
 {
-    public static void AddApplication(this IServiceCollection services)
+    public static void AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddValidators();
         services.AddMediator();
+        services.AddCachingRedis(configuration);
     }
 
     private static void AddMediator(this IServiceCollection services)
@@ -25,7 +27,16 @@ public static class DependencyInjection
 
         });
     }
+    private static void AddCachingRedis(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            string cacheConnection = configuration.GetConnectionString("CacheConnection")!;
+            options.Configuration = cacheConnection;
 
+        });
+        services.AddMemoryCache();
+    }
     private static void AddValidators(this IServiceCollection services)
     {
         services.AddFluentValidationRulesToSwagger();

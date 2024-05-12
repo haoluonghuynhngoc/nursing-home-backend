@@ -9,10 +9,17 @@ using NursingHome.Domain.Entities.Identities;
 namespace NursingHome.Application.Features.Auth.Handlers;
 internal sealed class LoginRequestHandler(
     UserManager<User> userManager,
+    SignInManager<User> signInManager,
     IJwtService jwtService) : IRequestHandler<LoginRequest, AccessTokenResponse>
 {
     public async Task<AccessTokenResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
     {
+        var result = await signInManager.PasswordSignInAsync(request.Username, request.Password, false, lockoutOnFailure: true);
+        if (result.IsLockedOut)
+        {
+            throw new UnauthorizedAccessException(Resource.LockedOut);
+        }
+
         var user = await userManager.FindByNameAsync(request.Username);
 
         if (user == null)

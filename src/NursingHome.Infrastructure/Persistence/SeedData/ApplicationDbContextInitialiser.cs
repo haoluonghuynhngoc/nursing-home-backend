@@ -83,7 +83,37 @@ public class ApplicationDbContextInitialiser(
             await userManager.CreateAsync(user, "user");
             await userManager.AddToRolesAsync(user, new[] { RoleName.User });
 
-            await unitOfWork.CommitAsync();
+            user = new User
+            {
+                UserName = "director",
+                IsActive = true,
+            };
+            await userManager.CreateAsync(user, "director");
+            await userManager.AddToRolesAsync(user, new[] { RoleName.Director });
+
+            user = new User
+            {
+                UserName = "manager",
+                IsActive = true,
+            };
+            await userManager.CreateAsync(user, "manager");
+            await userManager.AddToRolesAsync(user, new[] { RoleName.Manager });
+
+            user = new User
+            {
+                UserName = "staff",
+                IsActive = true,
+            };
+            await userManager.CreateAsync(user, "staff");
+            await userManager.AddToRolesAsync(user, new[] { RoleName.Staff });
+
+            user = new User
+            {
+                UserName = "nurses",
+                IsActive = true,
+            };
+            await userManager.CreateAsync(user, "nurses");
+            await userManager.AddToRolesAsync(user, new[] { RoleName.Nurses });
         }
 
     }

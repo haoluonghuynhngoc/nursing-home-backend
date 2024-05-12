@@ -1,6 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
+		<Compile Remove="Features\Empty\**" />
+		<EmbeddedResource Remove="Features\Empty\**" />
+		<None Remove="Features\Empty\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\NursingHome.Domain\NursingHome.Domain.csproj" />
 		<ProjectReference Include="..\NursingHome.Shared\NursingHome.Shared.csproj" />
 	</ItemGroup>
@@ -18,14 +24,6 @@
 			<Generator>PublicResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resource.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Features\Empty\Commands\" />
-	  <Folder Include="Features\Empty\Events\" />
-	  <Folder Include="Features\Empty\Handlers\" />
-	  <Folder Include="Features\Empty\Models\" />
-	  <Folder Include="Features\Empty\Queries\" />
 	</ItemGroup>
 
 </Project>

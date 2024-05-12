@@ -241,6 +241,15 @@ namespace NursingHome.Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account has been locked due to incorrect input 5 times. Please try again after 5 minutes.
+        /// </summary>
+        public static string LockedOut {
+            get {
+                return ResourceManager.GetString("LockedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We couldn&apos;t find what you were looking for..
         /// </summary>
         public static string NotFound {

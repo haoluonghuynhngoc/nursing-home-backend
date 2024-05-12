@@ -2,7 +2,10 @@
 public enum RoleEnums
 {
     Admin,
-    User,
-    StationManager,
+    Director,
+    Manager,
     Staff,
+    Nurses,
+    User,
+    Guest
 }

@@ -177,6 +177,9 @@
   <data name="InvalidUsernameOrPassword" xml:space="preserve">
     <value>Invalid username or password</value>
   </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>Your account has been locked due to incorrect input 5 times. Please try again after 5 minutes</value>
+  </data>
   <data name="NotFound" xml:space="preserve">
     <value>We couldn't find what you were looking for.</value>
   </data>

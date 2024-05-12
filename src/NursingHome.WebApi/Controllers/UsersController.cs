@@ -13,13 +13,18 @@ namespace NursingHome.WebApi.Controllers;
 [Authorize]
 public class UsersController(ISender sender) : ControllerBase
 {
-
+    /// <summary>
+    /// Get the exact account currently logged in
+    /// </summary>
     [HttpGet("profile")]
     public async Task<ActionResult<UserResponse>> GetProfile(CancellationToken cancellationToken)
     {
         return await sender.Send(new GetProfileQuery(), cancellationToken);
     }
 
+    /// <summary>
+    /// Update the currently logged in user
+    /// </summary>
     [HttpPut("profile")]
     public async Task<ActionResult<MessageResponse>> UpdateProfile(UpdateProfileCommand command, CancellationToken cancellationToken)
     {
