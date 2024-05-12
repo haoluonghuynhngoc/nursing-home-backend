@@ -7,11 +7,22 @@ using System.Reflection;
 namespace NursingHome.Infrastructure.Persistence.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>(options)
+//public class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
 {
+
     private const string Prefix = "AspNet";
+
+    //public ApplicationDbContext()
+    //{
+    //}
 
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Device> Devices { get; set; }
+
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseMySQL("server=localhost;user=root;password=root;database=NursingHome");
+    //}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

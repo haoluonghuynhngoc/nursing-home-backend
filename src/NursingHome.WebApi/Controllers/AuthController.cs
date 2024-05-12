@@ -9,14 +9,18 @@ namespace NursingHome.WebApi.Controllers;
 [ApiController]
 public class AuthController(ISender sender) : ControllerBase
 {
+
     /// <summary>
-    /// Login for admin, staff, store manager
+    /// Login for admin, staff , director, manager, nurses, user
     /// </summary>
     /// <remarks>
     /// ```
     /// Admin account: admin - admin
     /// Staff account: staff - staff
-    /// Store manager account: store - store
+    /// Director account: director - director
+    /// Manager account: manager - manager
+    /// Nurses account: nurses - nurses
+    /// User account: user - user
     /// ```
     /// </remarks>
     /// <param name="request"></param>

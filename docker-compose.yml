@@ -16,7 +16,7 @@ services:
     image: backend
     restart: always
     ports:
-      - 8080:8080
+      - 8888:8080
     environment:
        ConnectionStrings__DefaultConnection: server=db;user=root;password=12345;database=NursingHome
 

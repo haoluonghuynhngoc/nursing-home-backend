@@ -9,18 +9,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 		Dockerfile = Dockerfile
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		Note.txt = Note.txt
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.WebApi", "src\NursingHome.WebApi\NursingHome.WebApi.csproj", "{09BA5B40-01A3-4194-87CE-0C793DC7129B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NursingHome.WebApi", "src\NursingHome.WebApi\NursingHome.WebApi.csproj", "{09BA5B40-01A3-4194-87CE-0C793DC7129B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.Application", "src\NursingHome.Application\NursingHome.Application.csproj", "{CD710047-78D2-410D-96DE-F2369A9AF52B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NursingHome.Application", "src\NursingHome.Application\NursingHome.Application.csproj", "{CD710047-78D2-410D-96DE-F2369A9AF52B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.Domain", "src\NursingHome.Domain\NursingHome.Domain.csproj", "{B899E6AA-9DB4-4844-A458-02A633AFC502}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NursingHome.Domain", "src\NursingHome.Domain\NursingHome.Domain.csproj", "{B899E6AA-9DB4-4844-A458-02A633AFC502}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.Infrastructure", "src\NursingHome.Infrastructure\NursingHome.Infrastructure.csproj", "{DBEAAEC4-22F5-4CF1-AD4B-F39D5A2B4092}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NursingHome.Infrastructure", "src\NursingHome.Infrastructure\NursingHome.Infrastructure.csproj", "{DBEAAEC4-22F5-4CF1-AD4B-F39D5A2B4092}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NursingHome.Shared", "src\NursingHome.Shared\NursingHome.Shared.csproj", "{AA7C2EF4-F717-43DC-AB44-EFFC301F70FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NursingHome.Shared", "src\NursingHome.Shared\NursingHome.Shared.csproj", "{AA7C2EF4-F717-43DC-AB44-EFFC301F70FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

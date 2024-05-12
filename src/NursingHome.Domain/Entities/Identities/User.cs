@@ -8,9 +8,10 @@ public class User : IdentityUser<Guid>, IAuditableEntity
 {
     public string? FullName { get; set; }
     public string? AvatarUrl { get; set; }
-
+    public string? Address { get; set; }
+    public string? CCCD { get; set; }
     public bool IsActive { get; set; }
-
+    public string? DateOfBirth { get; set; }
     public string? CreatedBy { get; set; }
     public DateTimeOffset? CreatedAt { get; set; }
     public string? ModifiedBy { get; set; }

@@ -36,6 +36,7 @@ public class TestsController(
     }
 
     [HttpPost("cache/{key}")]
+    [AllowAnonymous]
     public async Task<IActionResult> PostCahce(string key, string value, CancellationToken cancellationToken)
     {
         await cacheService.SetAsync(key, value, cancellationToken);
@@ -43,6 +44,7 @@ public class TestsController(
     }
 
     [HttpGet("cache/{key}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetCache(string key, CancellationToken cancellationToken)
     {
         return Ok(await cacheService.GetAsync<string>(key, cancellationToken));

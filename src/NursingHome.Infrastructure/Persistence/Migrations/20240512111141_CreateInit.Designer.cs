@@ -8,18 +8,18 @@ using NursingHome.Infrastructure.Persistence.Data;
 
 #nullable disable
 
-namespace NursingHome.Infrastructure.Migrations
+namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240508104347_Init-Database")]
-    partial class InitDatabase
+    [Migration("20240512111141_CreateInit")]
+    partial class CreateInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Device", b =>
@@ -100,7 +100,13 @@ namespace NursingHome.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("AvatarUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CCCD")
                         .HasColumnType("longtext");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -108,13 +114,16 @@ namespace NursingHome.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset?>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("DateOfBirth")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("DeletedBy")
                         .HasColumnType("longtext");
@@ -137,10 +146,10 @@ namespace NursingHome.Infrastructure.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<DateTimeOffset?>("ModifiedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
@@ -271,7 +280,7 @@ namespace NursingHome.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset?>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
@@ -280,7 +289,7 @@ namespace NursingHome.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("DeletedBy")
                         .HasColumnType("longtext");
@@ -290,13 +299,13 @@ namespace NursingHome.Infrastructure.Migrations
                         .HasColumnType("nvarchar(24)");
 
                     b.Property<DateTimeOffset?>("ModifiedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset?>("ReadAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Title")
                         .HasColumnType("longtext");

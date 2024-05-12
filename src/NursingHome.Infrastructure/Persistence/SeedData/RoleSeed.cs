@@ -7,8 +7,10 @@ internal static class RoleSeed
     public static IList<Role> Default => new List<Role>()
     {
         new(RoleName.Admin),
-        new(RoleName.User),
-        //new(RoleName.Staff),
-        //new(RoleName.StationManager),
+        new(RoleName.Director),
+        new(RoleName.Manager),
+        new(RoleName.Staff),
+        new(RoleName.Nurses),
+        new(RoleName.User)
     };
 }
