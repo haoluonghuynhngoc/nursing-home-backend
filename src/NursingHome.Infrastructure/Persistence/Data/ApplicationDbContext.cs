@@ -18,6 +18,32 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Device> Devices { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<AppointmentType> AppointmentTypes { get; set; }
+    public DbSet<Area> Areas { get; set; }
+    public DbSet<Bed> Beds { get; set; }
+    public DbSet<Room> Rooms { get; set; }
+    public DbSet<Facility> Facilities { get; set; }
+    public DbSet<Bill> Bills { get; set; }
+    public DbSet<BillDetail> BillDetails { get; set; }
+    public DbSet<CareSchedule> CareSchedules { get; set; }
+    public DbSet<CareScheduleTask> CareScheduleTasks { get; set; }
+    public DbSet<Contract> Contracts { get; set; }
+    public DbSet<Elder> Elders { get; set; }
+    public DbSet<FeedBack> FeedBacks { get; set; }
+    public DbSet<HealthReport> HealthReports { get; set; }
+    public DbSet<HealthReportCategory> HealthReportCategories { get; set; }
+    public DbSet<HealthReportDetail> HealthReportDetails { get; set; }
+    public DbSet<Package> Packages { get; set; }
+    public DbSet<PackageType> PackageTypes { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+
+    // join Table HealthReportDetail
+
+    public DbSet<AppointmentUser> AppointmentUsers { get; set; }
+    public DbSet<ElderPackage> ElderPackages { get; set; }
+    public DbSet<ElderUser> ElderUsers { get; set; }
+    public DbSet<UserCareSchedule> UserCareSchedules { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
@@ -38,8 +64,39 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             }
         }
 
+        //modelBuilder.Entity<Bed>()
+        //    .Property(e => e.Id)
+        //    .ValueGeneratedOnAdd()
+        //    .UseMySqlIdentityColumn();
+        //modelBuilder.Entity<Room>()
+        //    .Property(e => e.Id)
+        //    .ValueGeneratedOnAdd()
+        //    .UseMySqlIdentityColumn();
+        //modelBuilder.Entity<CareScheduleTask>()
+        //    .Property(e => e.Id)
+        //    .ValueGeneratedOnAdd()
+        //    .UseMySqlIdentityColumn();
+        //modelBuilder.Entity<PackageType>()
+        //    .Property(e => e.Id)
+        //    .ValueGeneratedOnAdd()
+        //    .UseMySqlIdentityColumn();
+        //modelBuilder.Entity<HealthReportCategory>()
+        //    .Property(e => e.Id)
+        //    .ValueGeneratedOnAdd()
+        //    .UseMySqlIdentityColumn();
+        //modelBuilder.Entity<AppointmentType>()
+        //    .Property(e => e.Id)
+        //    .ValueGeneratedOnAdd()
+        //    .UseMySqlIdentityColumn();
+
+        //modelBuilder.Entity<UsersRole>(entity =>
+        //{
+        //    entity.HasKey(ur => new { ur.RoleId, ur.UsersId });
+        //});
+
         modelBuilder.Entity<UserRole>(b =>
         {
+
             b.HasOne(e => e.Role)
                 .WithMany(e => e.UserRoles)
                 .HasForeignKey(ur => ur.RoleId);
@@ -47,6 +104,50 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             b.HasOne(e => e.User)
                 .WithMany(e => e.UserRoles)
                 .HasForeignKey(ur => ur.UserId);
+        });
+        modelBuilder.Entity<AppointmentUser>(entity =>
+        {
+            entity.HasKey(a => new { a.AppointmentId, a.UserId });
+            entity.HasOne(a => a.Appointment)
+             .WithMany(a => a.AppointmentUsers)
+             .HasForeignKey(a => a.AppointmentId);
+
+            entity.HasOne(a => a.User)
+             .WithMany(a => a.AppointmentUsers)
+             .HasForeignKey(a => a.UserId);
+        });
+        modelBuilder.Entity<ElderPackage>(entity =>
+        {
+            entity.HasKey(a => new { a.ElderId, a.PackageId });
+            entity.HasOne(a => a.Elder)
+             .WithMany(a => a.ElderPackages)
+             .HasForeignKey(a => a.ElderId);
+
+            entity.HasOne(a => a.Package)
+             .WithMany(a => a.ElderPackages)
+             .HasForeignKey(a => a.PackageId);
+        });
+        modelBuilder.Entity<ElderUser>(entity =>
+        {
+            entity.HasKey(a => new { a.ElderId, a.UserId });
+            entity.HasOne(a => a.Elder)
+             .WithMany(a => a.ElderUsers)
+             .HasForeignKey(a => a.ElderId);
+
+            entity.HasOne(a => a.User)
+             .WithMany(a => a.ElderUsers)
+             .HasForeignKey(a => a.UserId);
+        });
+        modelBuilder.Entity<UserCareSchedule>(entity =>
+        {
+            entity.HasKey(a => new { a.UserId, a.CareScheduleId });
+            entity.HasOne(a => a.User)
+             .WithMany(a => a.UserCareSchedules)
+             .HasForeignKey(a => a.UserId);
+
+            entity.HasOne(a => a.CareSchedule)
+             .WithMany(a => a.UserCareSchedules)
+             .HasForeignKey(a => a.CareScheduleId);
         });
     }
 }

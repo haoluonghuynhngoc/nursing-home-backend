@@ -21,6 +21,14 @@ public class UsersController(ISender sender) : ControllerBase
     {
         return await sender.Send(new GetProfileQuery(), cancellationToken);
     }
+    /// <summary>
+    /// Get the account user by Id
+    /// </summary>
+    [HttpGet("{id}")]
+    public async Task<ActionResult<UserResponse>> GettUserByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await sender.Send(new GetUserByIdQuery(id), cancellationToken);
+    }
 
     /// <summary>
     /// Update the currently logged in user
