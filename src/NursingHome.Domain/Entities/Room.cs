@@ -1,0 +1,23 @@
+﻿using NursingHome.Domain.Common;
+using NursingHome.Domain.Entities.Identities;
+
+namespace NursingHome.Domain.Entities;
+public class Room : BaseEntity<int>
+{
+    public string? Name { get; set; }
+    public int Capacity { get; set; }
+    public bool AvailableBed { get; set; }
+    public string? Type { get; set; }
+    public string? Status { get; set; }
+    public float Width { get; set; }
+    public float Height { get; set; }
+    public float Length { get; set; }
+    public Guid AreaId { get; set; }
+    public virtual Area Area { get; set; } = default!;
+    public Guid PackageId { get; set; }
+    public virtual Package Package { get; set; } = default!;
+    public Guid UserId { get; set; }
+    public virtual User User { get; set; } = default!;
+    public virtual ICollection<Bed> Beds { get; set; } = new HashSet<Bed>();
+    public virtual ICollection<CareSchedule> CareSchedules { get; set; } = new HashSet<CareSchedule>();
+}

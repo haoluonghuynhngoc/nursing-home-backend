@@ -1,1 +1,7 @@
-dotnet ef migrations add CreateInit --output-dir Persistence/Migrations
+dotnet ef migrations add UpdateDatabaseV01 --output-dir Persistence/Migrations
+
+_ VNPAYMENT
++ Link Admimn : https://sandbox.vnpayment.vn/merchantv2/Home/Dashboard.htm
++ Account Login : haoluonghuynh2001@gmail.com
++ Account Password : Ngoch@o2001
++ Link Test : https://sandbox.vnpayment.vn/apis/vnpay-demo/

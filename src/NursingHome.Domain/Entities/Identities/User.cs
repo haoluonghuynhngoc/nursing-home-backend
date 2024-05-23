@@ -20,14 +20,28 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public DateTimeOffset? DeletedAt { get; set; }
     [Projectable]
     public bool IsDeleted => DeletedAt != null;
-
     public virtual ICollection<Notification> Notifications { get; set; } = new HashSet<Notification>();
     public virtual ICollection<Device> Devices { get; set; } = new HashSet<Device>();
-
+    public virtual ICollection<Bill> Bills { get; set; } = new HashSet<Bill>();
+    public virtual ICollection<FeedBack> FeedBacks { get; set; } = new HashSet<FeedBack>();
+    public virtual ICollection<AppointmentUser> AppointmentUsers { get; set; } = new HashSet<AppointmentUser>();
+    [Projectable]
+    [NotMapped]
+    public IEnumerable<Appointment> Appointments => AppointmentUsers.Select(ap => ap.Appointment);
+    public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
+    public virtual ICollection<ElderUser> ElderUsers { get; set; } = new HashSet<ElderUser>();
+    [Projectable]
+    [NotMapped]
+    public IEnumerable<Elder> Elders => ElderUsers.Select(eu => eu.Elder);
+    public virtual ICollection<Payment> Payments { get; set; } = new HashSet<Payment>();
+    public virtual ICollection<Room> Rooms { get; set; } = new HashSet<Room>();
+    public virtual ICollection<HealthReport> HealthReports { get; set; } = new HashSet<HealthReport>();
+    public virtual ICollection<UserCareSchedule> UserCareSchedules { get; set; } = new HashSet<UserCareSchedule>();
+    [Projectable]
+    [NotMapped]
+    public IEnumerable<CareSchedule> CareSchedules => UserCareSchedules.Select(uc => uc.CareSchedule);
     public virtual ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
-
     [Projectable]
     [NotMapped]
     public IEnumerable<Role> Roles => UserRoles.Select(ur => ur.Role);
-
 }

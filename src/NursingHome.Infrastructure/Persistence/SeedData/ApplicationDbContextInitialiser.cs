@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Domain.Constants;
+using NursingHome.Domain.Entities;
 using NursingHome.Domain.Entities.Identities;
 using NursingHome.Infrastructure.Persistence.Data;
 
@@ -56,6 +57,12 @@ public class ApplicationDbContextInitialiser(
 
     private async Task TrySeedAsync()
     {
+        if (!await unitOfWork.Repository<Facility>().ExistsByAsync())
+        {
+            var facility = FacilitySeed.Default;
+            await unitOfWork.Repository<Facility>().CreateAsync(facility);
+            await unitOfWork.CommitAsync();
+        }
 
         if (!await unitOfWork.Repository<Role>().ExistsByAsync())
         {
