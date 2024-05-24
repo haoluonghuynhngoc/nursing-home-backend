@@ -9,6 +9,6 @@ public sealed record AccessTokenResponse
     public required string AccessToken { get; init; }
 
     public required long ExpiresIn { get; init; }
-
+    public ICollection<string> ListRole { get; init; } = new List<string>();
     public required string RefreshToken { get; init; }
 }

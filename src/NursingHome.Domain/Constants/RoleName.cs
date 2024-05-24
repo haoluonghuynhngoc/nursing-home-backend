@@ -6,8 +6,8 @@ public abstract class RoleName
     public const string Director = nameof(Director);
     public const string Manager = nameof(Manager);
     public const string Staff = nameof(Staff);
-    public const string Nurses = nameof(Nurses);
-    public const string User = nameof(User);
+    public const string Nurse = nameof(Nurse);
+    public const string Customer = nameof(Customer);
     public const string Guest = nameof(Guest);
 
 }

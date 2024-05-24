@@ -1,5 +1,4 @@
 ﻿using Hangfire;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Contracts.Services.Notifications;
@@ -10,12 +9,15 @@ using System.Text.Json;
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class TestsController(
     INotifier notifier,
     ICurrentUserService currentUserService,
     ICacheService cacheService) : ControllerBase
 {
+    /// <summary>
+    /// Only used for backend testing
+    /// </summary>
     [HttpPost("push-notification")]
     public async Task<IActionResult> Post(CancellationToken cancellationToken)
     {
@@ -34,17 +36,21 @@ public class TestsController(
 
         return Ok("push success");
     }
-
+    /// <summary>
+    /// Only used for backend testing
+    /// </summary>
     [HttpPost("cache/{key}")]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     public async Task<IActionResult> PostCahce(string key, string value, CancellationToken cancellationToken)
     {
         await cacheService.SetAsync(key, value, cancellationToken);
         return Ok(key);
     }
-
+    /// <summary>
+    /// Only used for backend testing
+    /// </summary>
     [HttpGet("cache/{key}")]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     public async Task<IActionResult> GetCache(string key, CancellationToken cancellationToken)
     {
         return Ok(await cacheService.GetAsync<string>(key, cancellationToken));

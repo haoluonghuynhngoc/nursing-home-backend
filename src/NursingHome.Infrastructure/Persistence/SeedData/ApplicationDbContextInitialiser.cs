@@ -88,7 +88,7 @@ public class ApplicationDbContextInitialiser(
                 IsActive = true,
             };
             await userManager.CreateAsync(user, "user");
-            await userManager.AddToRolesAsync(user, new[] { RoleName.User });
+            await userManager.AddToRolesAsync(user, new[] { RoleName.Customer });
 
             user = new User
             {
@@ -120,7 +120,7 @@ public class ApplicationDbContextInitialiser(
                 IsActive = true,
             };
             await userManager.CreateAsync(user, "nurses");
-            await userManager.AddToRolesAsync(user, new[] { RoleName.Nurses });
+            await userManager.AddToRolesAsync(user, new[] { RoleName.Nurse });
         }
 
     }

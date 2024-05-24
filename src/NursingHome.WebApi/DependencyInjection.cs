@@ -124,8 +124,8 @@ public static class DependencyInjection
             options.AddPolicy(Policies.Director, policy => policy.RequireRole(RoleName.Director));
             options.AddPolicy(Policies.Director, policy => policy.RequireRole(RoleName.Manager));
             options.AddPolicy(Policies.Staff, policy => policy.RequireRole(RoleName.Staff));
-            options.AddPolicy(Policies.Director, policy => policy.RequireRole(RoleName.Nurses));
-            options.AddPolicy(Policies.User, policy => policy.RequireRole(RoleName.User));
+            options.AddPolicy(Policies.Director, policy => policy.RequireRole(RoleName.Nurse));
+            options.AddPolicy(Policies.Customer, policy => policy.RequireRole(RoleName.Customer));
 
             //  options.AddPolicy(Policies.StationManager_Or_Staff, policy => policy.RequireRole(RoleName.StationManager).RequireRole(RoleName.Staff));
             // options.AddPolicy(Policies.Admin_Or_StationManager, policy => policy.RequireRole(RoleName.Admin, RoleName.StationManager));
