@@ -126,6 +126,9 @@
   <data name="CreatedSuccess" xml:space="preserve">
     <value>Created successfully</value>
   </data>
+  <data name="CreateUserSuccessMessage" xml:space="preserve">
+    <value>User created successfully</value>
+  </data>
   <data name="DeletedSuccess" xml:space="preserve">
     <value>Deleted successfully</value>
   </data>

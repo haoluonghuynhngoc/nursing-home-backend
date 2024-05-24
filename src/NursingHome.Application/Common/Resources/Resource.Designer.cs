@@ -88,6 +88,15 @@ namespace NursingHome.Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User created successfully.
+        /// </summary>
+        public static string CreateUserSuccessMessage {
+            get {
+                return ResourceManager.GetString("CreateUserSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleted successfully.
         /// </summary>
         public static string DeletedSuccess {

@@ -65,6 +65,7 @@ public class JwtService : IJwtService
         {
             AccessToken = jwt,
             ExpiresIn = expires,
+            ListRole = await _signInManager.UserManager.GetRolesAsync(user) ?? new List<string>(),
             RefreshToken = ticketDataFormat.Protect(CreateRefreshTicket(claimsPrincipal, DateTimeOffset.UtcNow)),
         };
         return response;

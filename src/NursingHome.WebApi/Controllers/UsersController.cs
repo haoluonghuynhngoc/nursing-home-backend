@@ -5,6 +5,7 @@ using NursingHome.Application.Features.Users.Commands;
 using NursingHome.Application.Features.Users.Models;
 using NursingHome.Application.Features.Users.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Shared.Pages;
 
 namespace NursingHome.WebApi.Controllers;
 
@@ -29,7 +30,16 @@ public class UsersController(ISender sender) : ControllerBase
     {
         return await sender.Send(new GetUserByIdQuery(id), cancellationToken);
     }
-
+    /// <summary>
+    /// Get all profile users
+    /// </summary>
+    [HttpGet]
+    public async Task<ActionResult<PaginatedResponse<UserResponse>>> GetAllProfileUsers(
+        [FromQuery] GetAllProfileUserQuery request,
+        CancellationToken cancellationToken)
+    {
+        return await sender.Send(request, cancellationToken);
+    }
     /// <summary>
     /// Update the currently logged in user
     /// </summary>
@@ -38,7 +48,26 @@ public class UsersController(ISender sender) : ControllerBase
     {
         return await sender.Send(command, cancellationToken);
     }
-
+    /// <summary>
+    /// requires fields such as userName, roleName, password (nurse, staff, manager, director) ||
+    /// requires fields phoneNumber, password to register (customer)
+    /// </summary>
+    /// <remarks>
+    /// ```
+    /// Role name account staff: staff
+    /// Role name account nurse: nurse
+    /// Role name account manager: manager
+    /// Role name account director: director
+    /// ```
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("register")]
+    public async Task<ActionResult<MessageResponse>> RegisterProfile(RegisterRequest command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command, cancellationToken);
+    }
     [HttpPatch("set-password")]
     public async Task<ActionResult<MessageResponse>> SetPassword(SetPasswordCommand command, CancellationToken cancellationToken)
     {

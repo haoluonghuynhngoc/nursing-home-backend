@@ -38,7 +38,7 @@ internal sealed class SendOtpRequestHandler(
                 throw new ValidationBadRequestException(result.Errors);
             }
 
-            result = await userManager.AddToRoleAsync(user, RoleName.User);
+            result = await userManager.AddToRoleAsync(user, RoleName.Customer);
 
             if (!result.Succeeded)
             {
@@ -48,7 +48,7 @@ internal sealed class SendOtpRequestHandler(
             //await publisher.Publish(new InitWalletEvent() with { UserId = user.Id }, cancellationToken);
         }
 
-        if (!await userManager.IsInRoleAsync(user, RoleName.User))
+        if (!await userManager.IsInRoleAsync(user, RoleName.Customer))
         {
             throw new ForbiddenAccessException();
         }

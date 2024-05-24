@@ -10,7 +10,7 @@ internal static class RoleSeed
         new(RoleName.Director),
         new(RoleName.Manager),
         new(RoleName.Staff),
-        new(RoleName.Nurses),
-        new(RoleName.User)
+        new(RoleName.Nurse),
+        new(RoleName.Customer)
     };
 }

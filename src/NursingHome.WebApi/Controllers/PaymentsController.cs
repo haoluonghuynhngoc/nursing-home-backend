@@ -7,6 +7,9 @@ namespace NursingHome.WebApi.Controllers;
 [ApiController]
 public class PaymentsController(ISender sender, IHttpContextAccessor httpContextAccessor) : ControllerBase
 {
+    /// <summary>
+    /// Only used for backend testing
+    /// </summary>
     [HttpGet("momo-callback")]
     public async Task<IActionResult> MomoPaymentCallback(
     [FromQuery] MomoPaymentCallbackCommand callback,
@@ -15,6 +18,9 @@ public class PaymentsController(ISender sender, IHttpContextAccessor httpContext
         await sender.Send(callback, cancellationToken);
         return Redirect($"{callback.returnUrl}?isSuccess={callback.IsSuccess}");
     }
+    /// <summary>
+    /// Only used for backend testing
+    /// </summary>
     [HttpPost("deposit")]
     public async Task<IActionResult> Deposit(
     DepositCommand command,
@@ -23,6 +29,9 @@ public class PaymentsController(ISender sender, IHttpContextAccessor httpContext
     {
         return Ok(await sender.Send(command with { returnUrl = returnUrl }, cancellationToken));
     }
+    /// <summary>
+    /// Only used for backend testing
+    /// </summary>
     [HttpGet("{id}")]
     public IActionResult GetPayment(int id, [FromQuery] bool isSuccess)
     {
