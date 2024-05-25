@@ -31,3 +31,4 @@ public class Elder : BaseEntity<Guid>
     public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new HashSet<HealthReport>();
 }
+

@@ -33,7 +33,7 @@ public class AuthController(ISender sender) : ControllerBase
     }
 
     /// <summary>
-    /// Send otp to user's phone number
+    /// cannot be used yet
     /// </summary>
     /// <param name="request">
     /// ```
@@ -49,13 +49,17 @@ public class AuthController(ISender sender) : ControllerBase
     {
         return await sender.Send(request, cancellationToken);
     }
-
+    /// <summary>
+    /// cannot be used yet
+    /// </summary>
     [HttpPost("verify-otp")]
     public async Task<ActionResult<AccessTokenResponse>> VerifyOtp(VerifyOtpRequest request, CancellationToken cancellationToken)
     {
         return await sender.Send(request, cancellationToken);
     }
-
+    /// <summary>
+    /// cannot be used yet
+    /// </summary>
     [HttpPost("refresh")]
     public async Task<ActionResult<AccessTokenResponse>> RefreshToken(RefreshTokenRequest request, CancellationToken cancellationToken)
     {

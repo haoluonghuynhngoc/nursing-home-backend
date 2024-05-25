@@ -19,3 +19,4 @@ public class FeedBack : BaseEntity<long>
     public virtual Package Package { get; set; } = default!;
 
 }
+

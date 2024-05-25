@@ -26,4 +26,9 @@
 		</EmbeddedResource>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Features\Beds\Handlers\" />
+	  <Folder Include="Features\Beds\Models\" />
+	</ItemGroup>
+
 </Project>

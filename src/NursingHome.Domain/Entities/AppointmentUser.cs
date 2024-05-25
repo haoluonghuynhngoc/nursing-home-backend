@@ -10,4 +10,5 @@ public class AppointmentUser
     public bool IsAccepted { get; set; }
     public bool IsVisited { get; set; }
     public string? Note { get; set; }
+
 }
