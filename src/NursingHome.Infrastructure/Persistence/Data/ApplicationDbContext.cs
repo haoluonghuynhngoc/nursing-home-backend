@@ -20,10 +20,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Device> Devices { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<AppointmentType> AppointmentTypes { get; set; }
-    public DbSet<Area> Areas { get; set; }
+    public DbSet<Block> Blocks { get; set; }
     public DbSet<Bed> Beds { get; set; }
     public DbSet<Room> Rooms { get; set; }
-    public DbSet<Facility> Facilities { get; set; }
     public DbSet<Bill> Bills { get; set; }
     public DbSet<BillDetail> BillDetails { get; set; }
     public DbSet<CareSchedule> CareSchedules { get; set; }
@@ -45,6 +44,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ElderUser> ElderUsers { get; set; }
     public DbSet<UserCareSchedule> UserCareSchedules { get; set; }
 
+    //dotnet ef migrations add CreateInit --output-dir Persistence/Migrations
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
     //    optionsBuilder.UseMySQL("server=localhost;user=root;password=root;database=NursingHome");

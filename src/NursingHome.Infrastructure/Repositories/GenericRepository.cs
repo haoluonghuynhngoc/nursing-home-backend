@@ -34,7 +34,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         await dbSet.AddRangeAsync(entities, cancellationToken);
     }
 
-    public virtual async Task<T?> FindByIdAsync(
+    public virtual async Task<T?> FindByObjectAsync(
         object id,
         CancellationToken cancellationToken = default)
     {

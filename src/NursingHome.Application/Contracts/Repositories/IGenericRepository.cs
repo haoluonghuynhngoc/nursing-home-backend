@@ -10,7 +10,7 @@ namespace NursingHome.Application.Contracts.Repositories
             Expression<Func<T, bool>>? expression = null,
             CancellationToken cancellationToken = default);
 
-        Task<T?> FindByIdAsync(object id, CancellationToken cancellationToken = default);
+        Task<T?> FindByObjectAsync(object id, CancellationToken cancellationToken = default);
 
         IQueryable<T> Entities { get; }
 
