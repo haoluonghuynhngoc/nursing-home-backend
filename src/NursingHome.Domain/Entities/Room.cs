@@ -12,12 +12,12 @@ public class Room : BaseEntity<int>
     public float Width { get; set; }
     public float Height { get; set; }
     public float Length { get; set; }
-    public Guid BlockId { get; set; }
-    public virtual Block Block { get; set; } = default!;
-    public Guid? PackageId { get; set; }
+    public Guid AreaId { get; set; }
+    public virtual Area Area { get; set; } = default!;
+    public Guid PackageId { get; set; }
     public virtual Package Package { get; set; } = default!;
-    public Guid? UserId { get; set; }
+    public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
-    public virtual ICollection<Bed>? Beds { get; set; } = new HashSet<Bed>();
-    public virtual ICollection<CareSchedule>? CareSchedules { get; set; } = new HashSet<CareSchedule>();
+    public virtual ICollection<Bed> Beds { get; set; } = new HashSet<Bed>();
+    public virtual ICollection<CareSchedule> CareSchedules { get; set; } = new HashSet<CareSchedule>();
 }
