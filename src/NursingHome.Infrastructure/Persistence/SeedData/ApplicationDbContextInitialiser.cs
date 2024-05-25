@@ -57,13 +57,10 @@ public class ApplicationDbContextInitialiser(
 
     private async Task TrySeedAsync()
     {
-        if (!await unitOfWork.Repository<Block>().ExistsByAsync())
+        if (!await unitOfWork.Repository<Facility>().ExistsByAsync())
         {
-            var facility = BlockSeed.Default;
-            foreach (var item in facility)
-            {
-                await unitOfWork.Repository<Block>().CreateAsync(item);
-            }
+            var facility = FacilitySeed.Default;
+            await unitOfWork.Repository<Facility>().CreateAsync(facility);
             await unitOfWork.CommitAsync();
         }
 
