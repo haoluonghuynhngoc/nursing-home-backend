@@ -1,6 +1,7 @@
 ﻿using EntityFrameworkCore.Projectables;
 using Microsoft.AspNetCore.Identity;
 using NursingHome.Domain.Common.Interfaces;
+using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingHome.Domain.Entities.Identities;
@@ -11,6 +12,8 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public string? Address { get; set; }
     public string? CCCD { get; set; }
     public bool IsActive { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
+    public GenderStatus Gender { get; set; } = GenderStatus.Male;
     public string? DateOfBirth { get; set; }
     public string? CreatedBy { get; set; }
     public DateTimeOffset? CreatedAt { get; set; }

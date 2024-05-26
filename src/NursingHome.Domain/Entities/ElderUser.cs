@@ -7,4 +7,6 @@ public class ElderUser
     public virtual Elder Elder { get; set; } = default!;
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
+    // trực ngày mấy
+
 }

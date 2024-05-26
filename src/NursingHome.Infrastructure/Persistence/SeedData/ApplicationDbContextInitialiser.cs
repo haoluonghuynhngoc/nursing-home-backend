@@ -5,6 +5,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Domain.Constants;
 using NursingHome.Domain.Entities;
 using NursingHome.Domain.Entities.Identities;
+using NursingHome.Domain.Enums;
 using NursingHome.Infrastructure.Persistence.Data;
 
 namespace NursingHome.Infrastructure.Persistence.SeedData;
@@ -66,6 +67,23 @@ public class ApplicationDbContextInitialiser(
             }
             await unitOfWork.CommitAsync();
         }
+        if (!await unitOfWork.Repository<HealthReportCategory>().ExistsByAsync())
+        {
+            foreach (var item in HealthCaterorySeed.Default)
+            {
+                await unitOfWork.Repository<HealthReportCategory>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
+
+        if (!await unitOfWork.Repository<PackageType>().ExistsByAsync())
+        {
+            foreach (var item in PackageTypeSeed.Default)
+            {
+                await unitOfWork.Repository<PackageType>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
 
         if (!await unitOfWork.Repository<Role>().ExistsByAsync())
         {
@@ -81,6 +99,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "admin",
                 IsActive = true,
+                Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "admin");
             await userManager.AddToRolesAsync(user, new[] { RoleName.Admin });
@@ -89,6 +108,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "user",
                 IsActive = true,
+                Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "user");
             await userManager.AddToRolesAsync(user, new[] { RoleName.Customer });
@@ -97,6 +117,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "director",
                 IsActive = true,
+                Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "director");
             await userManager.AddToRolesAsync(user, new[] { RoleName.Director });
@@ -105,6 +126,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "manager",
                 IsActive = true,
+                Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "manager");
             await userManager.AddToRolesAsync(user, new[] { RoleName.Manager });
@@ -113,6 +135,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "staff",
                 IsActive = true,
+                Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "staff");
             await userManager.AddToRolesAsync(user, new[] { RoleName.Staff });
@@ -121,6 +144,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "nurses",
                 IsActive = true,
+                Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "nurses");
             await userManager.AddToRolesAsync(user, new[] { RoleName.Nurse });

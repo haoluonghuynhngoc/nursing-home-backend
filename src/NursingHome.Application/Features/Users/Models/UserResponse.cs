@@ -1,6 +1,7 @@
 ﻿using NursingHome.Application.Features.Devices.Models;
 using NursingHome.Application.Features.Roles.Models;
 using NursingHome.Application.Models;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Users.Models;
 
@@ -9,6 +10,7 @@ public record UserResponse : BaseAuditableEntityResponse<Guid>
     public string? UserName { get; set; }
     public string? AvatarUrl { get; set; }
     public string? Email { get; set; }
+    public GenderStatus Gender { get; set; } = GenderStatus.Male;
     public bool EmailConfirmed { get; set; }
     public string? PhoneNumber { get; set; }
     public bool PhoneNumberConfirmed { get; set; }
