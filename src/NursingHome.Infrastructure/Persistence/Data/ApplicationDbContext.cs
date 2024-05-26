@@ -5,7 +5,6 @@ using NursingHome.Domain.Entities.Identities;
 using System.Reflection;
 
 namespace NursingHome.Infrastructure.Persistence.Data;
-
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>(options)
 //public class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
 {
@@ -44,9 +43,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ElderUser> ElderUsers { get; set; }
     public DbSet<UserCareSchedule> UserCareSchedules { get; set; }
 
-    //dotnet ef migrations add CreateInit --output-dir Persistence/Migrations
+    // dotnet ef migrations add CreateInit --output-dir Persistence/Migrations
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
+    //    // Mysql In Digital Ocean
+    //    // ssh -i capstone -L 3307:localhost:3306 root@142.93.222.144
+    //    //optionsBuilder.UseMySQL("server=localhost;port=3307;user=root;password=root;database=NursingHome");
+    //    // Mysql In Local
     //    optionsBuilder.UseMySQL("server=localhost;user=root;password=root;database=NursingHome");
     //}
 
