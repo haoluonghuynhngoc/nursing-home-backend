@@ -22,6 +22,7 @@ public class Package : BaseEntity<Guid>
     public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<BillDetail> BillDetails { get; set; } = new HashSet<BillDetail>();
     public virtual ICollection<FeedBack> FeedBacks { get; set; } = new HashSet<FeedBack>();
+
     public virtual ICollection<ElderPackage> ElderPackages { get; set; } = new HashSet<ElderPackage>();
     [Projectable]
     [NotMapped]

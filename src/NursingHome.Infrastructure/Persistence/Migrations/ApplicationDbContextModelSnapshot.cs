@@ -837,6 +837,52 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.ToTable("Notifications");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.NurseElder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DutyDay")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("ElderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ElderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("NurseElders");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.Package", b =>
                 {
                     b.Property<Guid>("Id")
@@ -968,10 +1014,19 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Status")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(24)");
+
+                    b.Property<int>("TotalBed")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(24)");
+
+                    b.Property<int>("UnusedBed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserBed")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("char(36)");
@@ -1329,6 +1384,21 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.NurseElder", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Elder", "Elder")
+                        .WithMany("NurseElders")
+                        .HasForeignKey("ElderId");
+
+                    b.HasOne("NursingHome.Domain.Entities.Identities.User", "User")
+                        .WithMany("NurseElders")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Elder");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.Package", b =>
                 {
                     b.HasOne("NursingHome.Domain.Entities.PackageType", "PackageType")
@@ -1444,6 +1514,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("ElderUsers");
 
                     b.Navigation("HealthReports");
+
+                    b.Navigation("NurseElders");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.HealthReport", b =>
@@ -1478,6 +1550,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("HealthReports");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("NurseElders");
 
                     b.Navigation("Payments");
 

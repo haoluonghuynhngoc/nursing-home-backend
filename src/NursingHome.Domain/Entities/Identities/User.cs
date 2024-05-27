@@ -26,6 +26,7 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public virtual ICollection<Notification> Notifications { get; set; } = new HashSet<Notification>();
     public virtual ICollection<Device> Devices { get; set; } = new HashSet<Device>();
     public virtual ICollection<Bill> Bills { get; set; } = new HashSet<Bill>();
+    public virtual ICollection<NurseElder> NurseElders { get; set; } = new HashSet<NurseElder>();
     public virtual ICollection<FeedBack> FeedBacks { get; set; } = new HashSet<FeedBack>();
     public virtual ICollection<AppointmentUser> AppointmentUsers { get; set; } = new HashSet<AppointmentUser>();
     [Projectable]

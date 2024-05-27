@@ -17,12 +17,12 @@ internal sealed class GetElderWithPaginationQueryHandler(
     public async Task<PaginatedResponse<ElderResponse>> Handle(GetElderWithPaginationQuery request, CancellationToken cancellationToken)
     {
         var expression = request.GetExpressions();
-        expression = expression.And(e =>
+        expression = expression.Or(e =>
         (e.Status == request.Status || request.Status == null) &&
         (e.Gender == request.Gender || request.Gender == null) &&
         (e.InDate == request.InDate || request.InDate == null) &&
-        (e.OutDate == request.OutDate || request.OutDate == null)
-        );
+        (e.OutDate == request.OutDate || request.OutDate == null));
+
         var elders = await _elderRepository.FindAsync<ElderResponse>(
             request.PageIndex,
             request.PageSize,

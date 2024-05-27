@@ -1,14 +1,21 @@
 ﻿using NursingHome.Domain.Common;
 using NursingHome.Domain.Entities.Identities;
+using NursingHome.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingHome.Domain.Entities;
 public class Room : BaseEntity<int>
 {
     public string? Name { get; set; }
-    public int Capacity { get; set; }
     public bool AvailableBed { get; set; }
-    public string? Type { get; set; }
-    public string? Status { get; set; }
+    public int TotalBed { get; set; }
+    public int UnusedBed { get; set; }
+    public int UserBed { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
+    public TypeEnum? Type { get; set; } = TypeEnum.Basic;
+    [Column(TypeName = "nvarchar(24)")]
+    public RoomStatus? Status { get; set; }
+    public int Capacity { get; set; }
     public float Width { get; set; }
     public float Height { get; set; }
     public float Length { get; set; }

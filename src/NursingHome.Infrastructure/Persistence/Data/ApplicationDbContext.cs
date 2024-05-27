@@ -36,6 +36,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<PackageType> PackageTypes { get; set; }
     public DbSet<Payment> Payments { get; set; }
 
+    public DbSet<NurseElder> NurseElders { get; set; }
+
     // join Table HealthReportDetail
 
     public DbSet<AppointmentUser> AppointmentUsers { get; set; }
