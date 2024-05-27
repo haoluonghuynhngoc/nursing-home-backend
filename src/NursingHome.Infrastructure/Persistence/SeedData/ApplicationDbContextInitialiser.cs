@@ -60,13 +60,19 @@ public class ApplicationDbContextInitialiser(
     {
         if (!await unitOfWork.Repository<Block>().ExistsByAsync())
         {
-            var facility = BlockSeed.Default;
-            foreach (var item in facility)
+            var block = BlockSeed.Default;
+            foreach (var itemBlock in block)
             {
-                await unitOfWork.Repository<Block>().CreateAsync(item);
+                var room = BlockSeed.DefaultRoom;
+                foreach (var itemRoom in room)
+                {
+                    itemBlock.Rooms.Add(itemRoom);
+                }
+                await unitOfWork.Repository<Block>().CreateAsync(itemBlock);
             }
             await unitOfWork.CommitAsync();
         }
+
         if (!await unitOfWork.Repository<HealthReportCategory>().ExistsByAsync())
         {
             foreach (var item in HealthCaterorySeed.Default)

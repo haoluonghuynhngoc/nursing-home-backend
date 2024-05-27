@@ -21,6 +21,7 @@ public class Elder : BaseEntity<Guid>
     public DateTime OutDate { get; set; }
     public int BedId { get; set; }
     public virtual Bed? Bed { get; set; }
+    public virtual ICollection<NurseElder> NurseElders { get; set; } = new HashSet<NurseElder>();
     public virtual ICollection<ElderPackage> ElderPackages { get; set; } = new HashSet<ElderPackage>();
     [Projectable]
     [NotMapped]

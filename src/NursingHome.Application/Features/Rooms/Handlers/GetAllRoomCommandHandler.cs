@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using LinqKit;
+using MediatR;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.Rooms.Models;
 using NursingHome.Application.Features.Rooms.Queries;
@@ -13,12 +14,15 @@ internal sealed class GetAllRoomCommandHandler(
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
     public async Task<PaginatedResponse<RoomResponse>> Handle(GetAllRoomCommand request, CancellationToken cancellationToken)
     {
+
+        var expression = request.GetExpressions();
+        expression = expression.Or(r => r.Type == request.Type)
+            .Or(r => r.AvailableBed == request.AvailableBed);
         var listRoom = await _roomRepository.FindAsync<RoomResponse>(
-               pageIndex: request.PageNumber,
+               pageIndex: request.PageIndex,
                pageSize: request.PageSize,
-               expression: x =>
-                  (string.IsNullOrEmpty(request.Search) || x.Name.Contains(request.Search)),
-               orderBy: x => x.OrderBy(x => x.Name),
+               expression,
+               orderBy: x => x.OrderBy(x => x.Id),
                cancellationToken: cancellationToken
                );
         return await listRoom.ToPaginatedResponseAsync();

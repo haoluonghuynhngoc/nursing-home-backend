@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NursingHome.Application.Features.Rooms.Commands;
 using NursingHome.Application.Features.Rooms.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
@@ -22,9 +23,27 @@ public class RoomController(ISender sender) : ControllerBase
     /// 
     /// </summary>
     [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreateRoom(CreateRoomCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreateRoom(
+        Guid blockId,
+        Guid packageId,
+        CreateRoomCommand command,
+        CancellationToken cancellationToken)
     {
-        return await sender.Send(command, cancellationToken);
+        return await sender.Send(command with { BlockId = blockId, PackageId = packageId }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Enter the room number and block id and it will automatically generate according to the information you enter
+    /// </summary>
+    [HttpPost("/auto")]
+    public async Task<ActionResult<MessageResponse>> CreateRoomAuto(
+        Guid blockId,
+        Guid packageId,
+        TypeEnum type,
+        CreateAutoCommand command,
+        CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { BlockId = blockId, Type = type, PackageId = packageId }, cancellationToken);
     }
     /// <summary>
     /// 
