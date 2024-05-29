@@ -97,12 +97,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AlterColumn<int>(
+            migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "PackageTypes",
-                type: "int",
+                type: "nvarchar(24)",
                 nullable: false,
-                defaultValue: 0,
+                defaultValue: "",
                 oldClrType: typeof(string),
                 oldType: "longtext",
                 oldNullable: true);
@@ -281,8 +281,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 table: "PackageTypes",
                 type: "longtext",
                 nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
+                oldClrType: typeof(string),
+                oldType: "nvarchar(24)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Gender",
