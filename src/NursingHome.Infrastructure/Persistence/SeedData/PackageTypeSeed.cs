@@ -8,6 +8,6 @@ internal static class PackageTypeSeed
      new List<PackageType>
      {
             new PackageType { Name = PackageTypeName.ServicePackage },
-            new PackageType { Name = PackageTypeName.Subscription }
+            new PackageType { Name = PackageTypeName.RegisterPackage }
      };
 }

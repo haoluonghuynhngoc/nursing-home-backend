@@ -16,8 +16,6 @@ public class Contract : BaseEntity<Guid>
     public string? Notes { get; set; }
     public Guid ElderId { get; set; }
     public virtual Elder Elder { get; set; } = default!;
-    public Guid PackageId { get; set; }
-    public virtual Package Package { get; set; } = default!;
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
 }

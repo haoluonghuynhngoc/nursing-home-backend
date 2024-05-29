@@ -11,7 +11,6 @@ public class Nutrition : BaseEntity<Guid>
     public string? Calories { get; set; }
     public string? Protein { get; set; }
     public string? Instructions { get; set; }
-
     public string? ImageNutrition { get; set; }
     public string? Description { get; set; }
     public string? Note { get; set; }

@@ -27,7 +27,7 @@ public class BlockController(ISender sender) : ControllerBase
         return await sender.Send(new GetBlockByIdQuery(id), cancellationToken);
     }
     /// <summary>
-    /// Create bed
+    /// Create Block
     /// </summary>
     [HttpPost]
     public async Task<ActionResult<MessageResponse>> CreateBlock(CreateBlockCommand command, CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ public class BlockController(ISender sender) : ControllerBase
         return await sender.Send(command, cancellationToken);
     }
     /// <summary>
-    /// Update Bed By Id
+    /// Update Block By Id
     /// </summary>
     [HttpPut("{id}")]
     public async Task<ActionResult<MessageResponse>> UpdateBlock(Guid id, UpdateBlockCommand command, CancellationToken cancellationToken)

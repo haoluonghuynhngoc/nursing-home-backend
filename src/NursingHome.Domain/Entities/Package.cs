@@ -13,16 +13,15 @@ public class Package : BaseEntity<Guid>
     public string? Color { get; set; }
     public int Capacity { get; set; }
     public string? Currency { get; set; }
+    public DateTime EffectiveDate { get; set; }
+    public DateTime ExpiryDate { get; set; }
     public int DurationTime { get; set; }
     public int DurationMonth { get; set; }
     public int PackageTypeId { get; set; }
     public PackageType PackageType { get; set; } = default!;
-
     public virtual ICollection<Room> Rooms { get; set; } = new HashSet<Room>();
-    public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<BillDetail> BillDetails { get; set; } = new HashSet<BillDetail>();
     public virtual ICollection<FeedBack> FeedBacks { get; set; } = new HashSet<FeedBack>();
-
     public virtual ICollection<ElderPackage> ElderPackages { get; set; } = new HashSet<ElderPackage>();
     [Projectable]
     [NotMapped]

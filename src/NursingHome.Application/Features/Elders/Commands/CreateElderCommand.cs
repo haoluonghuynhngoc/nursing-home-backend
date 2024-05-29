@@ -16,5 +16,4 @@ public sealed record CreateElderCommand : IRequest<MessageResponse>
     public string? Notes { get; set; }
     public DateTime InDate { get; set; }
     public DateTime OutDate { get; set; }
-    public int BedId { get; set; }
 }

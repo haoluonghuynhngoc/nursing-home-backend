@@ -1,5 +1,4 @@
 ﻿using NursingHome.Domain.Common;
-using NursingHome.Domain.Entities.Identities;
 using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,8 +22,8 @@ public class Room : BaseEntity<int>
     public virtual Block Block { get; set; } = default!;
     public Guid? PackageId { get; set; }
     public virtual Package Package { get; set; } = default!;
-    public Guid? UserId { get; set; }
-    public virtual User User { get; set; } = default!;
-    public virtual ICollection<Bed>? Beds { get; set; } = new HashSet<Bed>();
+    //public Guid? UserId { get; set; }
+    //public virtual User User { get; set; } = default!;
+    public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();
     public virtual ICollection<CareSchedule>? CareSchedules { get; set; } = new HashSet<CareSchedule>();
 }

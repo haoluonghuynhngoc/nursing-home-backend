@@ -2,5 +2,5 @@
 public enum PackageTypeName
 {
     ServicePackage,
-    Subscription
+    RegisterPackage
 }

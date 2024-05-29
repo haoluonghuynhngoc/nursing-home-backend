@@ -3,6 +3,7 @@
 namespace NursingHome.Application.Features.Elders.Models;
 public sealed record ElderResponse
 {
+    public Guid Id { get; set; }
     public string? FullName { get; set; }
     public string? IdentityNumber { get; set; }
     public string? DateOfBirth { get; set; }
@@ -14,7 +15,6 @@ public sealed record ElderResponse
     public string? Notes { get; set; }
     public DateTime InDate { get; set; }
     public DateTime OutDate { get; set; }
-    public ElderBedResponse? Bed { get; set; }
     //public virtual ICollection<ElderPackage> ElderPackages { get; set; } = new HashSet<ElderPackage>();
     //[Projectable]
     //[NotMapped]

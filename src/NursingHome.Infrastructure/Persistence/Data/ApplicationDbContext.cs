@@ -20,7 +20,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<AppointmentType> AppointmentTypes { get; set; }
     public DbSet<Block> Blocks { get; set; }
-    public DbSet<Bed> Beds { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Bill> Bills { get; set; }
     public DbSet<BillDetail> BillDetails { get; set; }
@@ -35,7 +34,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Package> Packages { get; set; }
     public DbSet<PackageType> PackageTypes { get; set; }
     public DbSet<Payment> Payments { get; set; }
-
     public DbSet<NurseElder> NurseElders { get; set; }
 
     // join Table HealthReportDetail

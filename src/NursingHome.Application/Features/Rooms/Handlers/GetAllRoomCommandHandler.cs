@@ -22,9 +22,10 @@ internal sealed class GetAllRoomCommandHandler(
                pageIndex: request.PageIndex,
                pageSize: request.PageSize,
                expression,
-               orderBy: x => x.OrderBy(x => x.Id),
+               orderBy: request.GetOrder(),
                cancellationToken: cancellationToken
                );
         return await listRoom.ToPaginatedResponseAsync();
     }
 }
+//x => x.OrderBy(x => x.Id)
