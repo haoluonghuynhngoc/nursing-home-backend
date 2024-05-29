@@ -35,9 +35,9 @@ public class ElderController(ISender sender) : ControllerBase
     /// 
     /// </summary>
     [HttpPost("bedId")]
-    public async Task<ActionResult<MessageResponse>> CreateElder(int bedId, CreateElderCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreateElder(CreateElderCommand command, CancellationToken cancellationToken)
     {
-        return await sender.Send(command with { BedId = bedId }, cancellationToken);
+        return await sender.Send(command, cancellationToken);
     }
 
     /// <summary>

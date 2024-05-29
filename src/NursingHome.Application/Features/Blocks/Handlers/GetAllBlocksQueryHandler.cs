@@ -17,7 +17,7 @@ internal sealed class GetAllBlocksQueryHandler(
             pageIndex: request.PageNumber,
             pageSize: request.PageSize,
             expression: x =>
-                (string.IsNullOrEmpty(request.Search) || x.Name.Contains(request.Search)) &&
+                (string.IsNullOrEmpty(request.Search) || string.IsNullOrEmpty(x.Name) || x.Name.Contains(request.Search)) &&
                 (!request.TotalFloor.HasValue || x.TotalFloor == request.TotalFloor),
             orderBy: x => x.OrderBy(x => x.Name),
             cancellationToken: cancellationToken

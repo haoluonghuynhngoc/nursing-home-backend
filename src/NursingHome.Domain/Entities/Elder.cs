@@ -17,10 +17,11 @@ public class Elder : BaseEntity<Guid>
     public string? Nationality { get; set; }
     public string? Status { get; set; }
     public string? Notes { get; set; }
+    public decimal? Price { get; set; }
     public DateTime InDate { get; set; }
     public DateTime OutDate { get; set; }
-    public int BedId { get; set; }
-    public virtual Bed? Bed { get; set; }
+    public int? RoomId { get; set; }
+    public Room? Room { get; set; } = default!;
     public virtual ICollection<NurseElder> NurseElders { get; set; } = new HashSet<NurseElder>();
     public virtual ICollection<ElderPackage> ElderPackages { get; set; } = new HashSet<ElderPackage>();
     [Projectable]

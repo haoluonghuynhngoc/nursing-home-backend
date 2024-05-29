@@ -6,7 +6,7 @@ using NursingHome.Application.Features.Users.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Constants;
 using NursingHome.Domain.Entities.Identities;
-using NursingHome.Shared.Extensions;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Users.Handlers;
 internal class RegisterRequetsHandler(
@@ -17,16 +17,16 @@ internal class RegisterRequetsHandler(
     public async Task<MessageResponse> Handle(RegisterRequest request, CancellationToken cancellationToken)
     {
         var accountLogin = request.UserName;
-        if (request.RoleName.IsNullOrEmpty() || request.RoleName == RoleName.Customer)
+        if (request.RoleRegister == null || request.RoleRegister == RoleRegister.Customer)
         {
             accountLogin = request.PhoneNumber;
         }
-        var roleUser = request.RoleName switch
+        var roleUser = request.RoleRegister switch
         {
-            "director" => RoleName.Director,
-            "manager" => RoleName.Manager,
-            "staff" => RoleName.Staff,
-            "nurse" => RoleName.Nurse,
+            RoleRegister.Director => RoleName.Director,
+            RoleRegister.Manager => RoleName.Manager,
+            RoleRegister.Staff => RoleName.Staff,
+            RoleRegister.Nurse => RoleName.Nurse,
             _ => RoleName.Customer,
         };
 

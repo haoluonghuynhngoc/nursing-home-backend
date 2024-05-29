@@ -27,7 +27,6 @@ internal sealed class CreateElderCommandHandler(
             Notes = request.Notes,
             InDate = request.InDate,
             OutDate = request.OutDate,
-            BedId = request.BedId,
 
         };
         await _elderRepository.CreateAsync(elder);

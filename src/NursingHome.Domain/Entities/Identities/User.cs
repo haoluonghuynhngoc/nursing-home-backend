@@ -38,7 +38,7 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     [NotMapped]
     public IEnumerable<Elder> Elders => ElderUsers.Select(eu => eu.Elder);
     public virtual ICollection<Payment> Payments { get; set; } = new HashSet<Payment>();
-    public virtual ICollection<Room> Rooms { get; set; } = new HashSet<Room>();
+    //public virtual ICollection<Room> Rooms { get; set; } = new HashSet<Room>();
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new HashSet<HealthReport>();
     public virtual ICollection<UserCareSchedule> UserCareSchedules { get; set; } = new HashSet<UserCareSchedule>();
     [Projectable]
