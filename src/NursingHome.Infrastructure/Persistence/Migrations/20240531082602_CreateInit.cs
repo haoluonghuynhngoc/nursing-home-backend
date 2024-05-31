@@ -66,7 +66,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(24)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,6 +99,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Address = table.Column<string>(type: "longtext", nullable: true),
                     CCCD = table.Column<string>(type: "longtext", nullable: true),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(24)", nullable: false),
                     DateOfBirth = table.Column<string>(type: "longtext", nullable: true),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetime", nullable: true),
@@ -165,8 +166,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Status = table.Column<string>(type: "longtext", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Color = table.Column<string>(type: "longtext", nullable: true),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    NumberBed = table.Column<int>(type: "int", nullable: false),
                     Currency = table.Column<string>(type: "longtext", nullable: true),
+                    EffectiveDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DurationTime = table.Column<int>(type: "int", nullable: false),
                     DurationMonth = table.Column<int>(type: "int", nullable: false),
                     PackageTypeId = table.Column<int>(type: "int", nullable: false)
@@ -443,16 +446,18 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: true),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
                     AvailableBed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Type = table.Column<string>(type: "longtext", nullable: true),
-                    Status = table.Column<string>(type: "longtext", nullable: true),
+                    TotalBed = table.Column<int>(type: "int", nullable: false),
+                    UnusedBed = table.Column<int>(type: "int", nullable: false),
+                    UserBed = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(24)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(24)", nullable: true),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
                     Width = table.Column<float>(type: "float", nullable: false),
                     Height = table.Column<float>(type: "float", nullable: false),
                     Length = table.Column<float>(type: "float", nullable: false),
                     BlockId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    PackageId = table.Column<Guid>(type: "char(36)", nullable: true),
-                    UserId = table.Column<Guid>(type: "char(36)", nullable: true)
+                    PackageId = table.Column<Guid>(type: "char(36)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -467,11 +472,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         name: "FK_Rooms_Packages_PackageId",
                         column: x => x.PackageId,
                         principalTable: "Packages",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Rooms_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
                         principalColumn: "Id");
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
@@ -542,27 +542,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Beds",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Status = table.Column<string>(type: "longtext", nullable: true),
-                    RoomId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Beds", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Beds_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "CareSchedules",
                 columns: table => new
                 {
@@ -597,25 +576,27 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     FullName = table.Column<string>(type: "longtext", nullable: true),
                     IdentityNumber = table.Column<string>(type: "longtext", nullable: true),
                     DateOfBirth = table.Column<string>(type: "longtext", nullable: true),
-                    Gender = table.Column<string>(type: "longtext", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(24)", nullable: false),
                     ImageUrl = table.Column<string>(type: "longtext", nullable: true),
                     Address = table.Column<string>(type: "longtext", nullable: true),
                     Nationality = table.Column<string>(type: "longtext", nullable: true),
                     Status = table.Column<string>(type: "longtext", nullable: true),
                     Notes = table.Column<string>(type: "longtext", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    EffectiveDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     InDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     OutDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    BedId = table.Column<int>(type: "int", nullable: false)
+                    RoomId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Elders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Elders_Beds_BedId",
-                        column: x => x.BedId,
-                        principalTable: "Beds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Elders_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id");
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -625,7 +606,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false),
+                    Name = table.Column<string>(type: "longtext", nullable: true),
                     Description = table.Column<string>(type: "longtext", nullable: true),
                     Notes = table.Column<string>(type: "longtext", nullable: true),
                     IsDone = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -688,7 +669,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Description = table.Column<string>(type: "longtext", nullable: true),
                     Notes = table.Column<string>(type: "longtext", nullable: true),
                     ElderId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    PackageId = table.Column<Guid>(type: "char(36)", nullable: false),
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false)
                 },
                 constraints: table =>
@@ -701,15 +681,40 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Contracts_Packages_PackageId",
-                        column: x => x.PackageId,
-                        principalTable: "Packages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Contracts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ElderPackageRegisters",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    NamePackage = table.Column<string>(type: "longtext", nullable: true),
+                    Status = table.Column<string>(type: "longtext", nullable: true),
+                    EffectiveDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    ElderId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    PackageId = table.Column<Guid>(type: "char(36)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ElderPackageRegisters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ElderPackageRegisters_Elders_ElderId",
+                        column: x => x.ElderId,
+                        principalTable: "Elders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ElderPackageRegisters_Packages_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Packages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -794,6 +799,38 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "NurseElders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    DutyDay = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(24)", nullable: false),
+                    ElderId = table.Column<Guid>(type: "char(36)", nullable: true),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "longtext", nullable: true),
+                    ModifiedAt = table.Column<DateTimeOffset>(type: "datetime", nullable: true),
+                    DeletedBy = table.Column<string>(type: "longtext", nullable: true),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NurseElders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NurseElders_Elders_ElderId",
+                        column: x => x.ElderId,
+                        principalTable: "Elders",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_NurseElders_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "HealthReportDetails",
                 columns: table => new
                 {
@@ -836,11 +873,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Beds_RoomId",
-                table: "Beds",
-                column: "RoomId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_BillDetails_BillId",
                 table: "BillDetails",
                 column: "BillId");
@@ -871,11 +903,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 column: "ElderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Contracts_PackageId",
-                table: "Contracts",
-                column: "PackageId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Contracts_UserId",
                 table: "Contracts",
                 column: "UserId");
@@ -886,15 +913,24 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ElderPackageRegisters_ElderId",
+                table: "ElderPackageRegisters",
+                column: "ElderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ElderPackageRegisters_PackageId",
+                table: "ElderPackageRegisters",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ElderPackages_PackageId",
                 table: "ElderPackages",
                 column: "PackageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Elders_BedId",
+                name: "IX_Elders_RoomId",
                 table: "Elders",
-                column: "BedId",
-                unique: true);
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ElderUsers_UserId",
@@ -937,6 +973,16 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NurseElders_ElderId",
+                table: "NurseElders",
+                column: "ElderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NurseElders_UserId",
+                table: "NurseElders",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Packages_PackageTypeId",
                 table: "Packages",
                 column: "PackageTypeId");
@@ -971,11 +1017,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "IX_Rooms_PackageId",
                 table: "Rooms",
                 column: "PackageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rooms_UserId",
-                table: "Rooms",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserCareSchedules_CareScheduleId",
@@ -1028,6 +1069,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "Devices");
 
             migrationBuilder.DropTable(
+                name: "ElderPackageRegisters");
+
+            migrationBuilder.DropTable(
                 name: "ElderPackages");
 
             migrationBuilder.DropTable(
@@ -1041,6 +1085,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "NurseElders");
 
             migrationBuilder.DropTable(
                 name: "Payments");
@@ -1088,7 +1135,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "Elders");
 
             migrationBuilder.DropTable(
-                name: "Beds");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Rooms");
@@ -1098,9 +1145,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Packages");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "PackageTypes");

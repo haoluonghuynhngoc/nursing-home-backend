@@ -7,12 +7,12 @@ using NursingHome.Domain.Entities;
 using NursingHome.Shared.Pages;
 
 namespace NursingHome.Application.Features.Rooms.Handlers;
-internal sealed class GetAllRoomCommandHandler(
+internal sealed class GetAllRoomQueryHandler(
     IUnitOfWork unitOfWork
-    ) : IRequestHandler<GetAllRoomCommand, PaginatedResponse<RoomResponse>>
+    ) : IRequestHandler<GetAllRoomQuery, PaginatedResponse<RoomResponse>>
 {
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
-    public async Task<PaginatedResponse<RoomResponse>> Handle(GetAllRoomCommand request, CancellationToken cancellationToken)
+    public async Task<PaginatedResponse<RoomResponse>> Handle(GetAllRoomQuery request, CancellationToken cancellationToken)
     {
 
         var expression = request.GetExpressions();

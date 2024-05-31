@@ -9,7 +9,7 @@ using NursingHome.Shared.Pages;
 using System.Linq.Expressions;
 
 namespace NursingHome.Application.Features.Rooms.Queries;
-public sealed record GetAllRoomCommand : PaginationRequest<Room>, IRequest<PaginatedResponse<RoomResponse>>
+public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<PaginatedResponse<RoomResponse>>
 {
     /// <summary>
     /// Search field is search for name, status

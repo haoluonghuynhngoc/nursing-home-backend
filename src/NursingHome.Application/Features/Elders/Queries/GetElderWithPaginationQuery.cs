@@ -17,6 +17,7 @@ public sealed record GetElderWithPaginationQuery : PaginationRequest<Elder>, IRe
     public string? Search { get; set; }
     public string? Status { get; set; }
     public GenderStatus? Gender { get; set; }
+    public bool? HasContract { get; set; }
     public DateTime? InDate { get; set; }
     public DateTime? OutDate { get; set; }
     public override Expression<Func<Elder, bool>> GetExpressions()
@@ -29,6 +30,11 @@ public sealed record GetElderWithPaginationQuery : PaginationRequest<Elder>, IRe
                 .Or(u => EF.Functions.Like(u.IdentityNumber, $"%{Search}%"))
                 .Or(u => EF.Functions.Like(u.Nationality, $"%{Search}%"));
         }
+        Expression = Expression
+            .Or(e =>
+            (HasContract == false && !e.Contracts.Any()) ||
+            (HasContract == true && e.Contracts.Any()) ||
+             HasContract == null);
         return Expression;
     }
 }

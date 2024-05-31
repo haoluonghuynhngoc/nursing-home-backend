@@ -9,10 +9,6 @@ public sealed record UpdateRoomCommand : IRequest<MessageResponse>
     [JsonIgnore]
     public int Id { get; set; }
     public string? Name { get; set; }
-    public bool AvailableBed { get; set; }
-    public int TotalBed { get; set; }
-    public int UnusedBed { get; set; }
-    public int UserBed { get; set; }
     public TypeEnum Type { get; set; } = TypeEnum.Basic;
     public RoomStatus Status { get; set; } = RoomStatus.Available;
     public int Capacity { get; set; }

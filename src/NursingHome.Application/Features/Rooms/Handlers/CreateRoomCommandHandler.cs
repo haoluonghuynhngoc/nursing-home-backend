@@ -26,11 +26,11 @@ internal sealed class CreateRoomCommandHandler(
         var room = new Room
         {
             Name = request.Name,
-            TotalBed = request.TotalBed,
-            AvailableBed = request.AvailableBed,
+            // TotalBed = request.TotalBed,
+            //AvailableBed = request.AvailableBed,
             Capacity = request.Capacity,
-            UnusedBed = request.TotalBed,
-            UserBed = request.UserBed,
+            // UnusedBed = request.TotalBed,
+            //UserBed = request.UserBed,
             Status = request.Status,
             Type = request.Type,
             Width = request.Width,

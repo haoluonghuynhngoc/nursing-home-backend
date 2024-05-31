@@ -11,7 +11,7 @@ public class Package : BaseEntity<Guid>
     public string? Status { get; set; }
     public decimal Price { get; set; }
     public string? Color { get; set; }
-    public int Capacity { get; set; }
+    public int NumberBed { get; set; }
     public string? Currency { get; set; }
     public DateTime EffectiveDate { get; set; }
     public DateTime ExpiryDate { get; set; }
@@ -22,6 +22,7 @@ public class Package : BaseEntity<Guid>
     public virtual ICollection<Room> Rooms { get; set; } = new HashSet<Room>();
     public virtual ICollection<BillDetail> BillDetails { get; set; } = new HashSet<BillDetail>();
     public virtual ICollection<FeedBack> FeedBacks { get; set; } = new HashSet<FeedBack>();
+    public virtual ICollection<ElderPackageRegister> ElderPackageRegisters { get; set; } = new HashSet<ElderPackageRegister>();
     public virtual ICollection<ElderPackage> ElderPackages { get; set; } = new HashSet<ElderPackage>();
     [Projectable]
     [NotMapped]

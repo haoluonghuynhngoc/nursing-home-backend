@@ -14,11 +14,18 @@ public class RoomController(ISender sender) : ControllerBase
     /// 
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> GetRooms([FromQuery] GetAllRoomCommand getAllRoomCommand, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetRooms([FromQuery] GetAllRoomQuery getAllRoomCommand, CancellationToken cancellationToken)
     {
         return Ok(await sender.Send(getAllRoomCommand, cancellationToken));
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetRoomsById(int id, CancellationToken cancellationToken)
+    {
+        return Ok(await sender.Send(new GetRoomByIdQuery(id), cancellationToken));
+    }
     /// <summary>
     /// 
     /// </summary>

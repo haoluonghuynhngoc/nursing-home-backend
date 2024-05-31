@@ -332,6 +332,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("DateOfBirth")
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("FullName")
                         .HasColumnType("longtext");
 
@@ -386,6 +392,39 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasIndex("PackageId");
 
                     b.ToTable("ElderPackages");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.ElderPackageRegister", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("EffectiveDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ElderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NamePackage")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("PackageId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ElderId");
+
+                    b.HasIndex("PackageId");
+
+                    b.ToTable("ElderPackageRegisters");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.ElderUser", b =>
@@ -866,9 +905,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
                     b.Property<string>("Color")
                         .HasColumnType("longtext");
 
@@ -895,6 +931,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("NumberBed")
+                        .HasColumnType("int");
 
                     b.Property<int>("PackageTypeId")
                         .HasColumnType("int");
@@ -1200,6 +1239,25 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("Package");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.ElderPackageRegister", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Elder", "Elder")
+                        .WithMany("ElderPackageRegisters")
+                        .HasForeignKey("ElderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NursingHome.Domain.Entities.Package", "Package")
+                        .WithMany("ElderPackageRegisters")
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Elder");
+
+                    b.Navigation("Package");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.ElderUser", b =>
                 {
                     b.HasOne("NursingHome.Domain.Entities.Elder", "Elder")
@@ -1456,6 +1514,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("Contracts");
 
+                    b.Navigation("ElderPackageRegisters");
+
                     b.Navigation("ElderPackages");
 
                     b.Navigation("ElderUsers");
@@ -1510,6 +1570,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("NursingHome.Domain.Entities.Package", b =>
                 {
                     b.Navigation("BillDetails");
+
+                    b.Navigation("ElderPackageRegisters");
 
                     b.Navigation("ElderPackages");
 

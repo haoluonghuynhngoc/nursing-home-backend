@@ -28,6 +28,10 @@ internal sealed class AddPackageRegisterRoomCommandHandler(
                 var room = await _roomRepository.FindByAsync(
                     expression: _ => _.Id == roomId)
                     ?? throw new NotFoundException($"Room Have Id {roomId} Is Not Found");
+                room.TotalBed = package.NumberBed;
+                room.UserBed = 0;
+                room.UnusedBed = room.TotalBed - room.UserBed;
+                room.AvailableBed = room.UserBed < room.TotalBed;
                 package.Rooms?.Add(room);
             }
         }
