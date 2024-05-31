@@ -18,6 +18,8 @@ public class Elder : BaseEntity<Guid>
     public string? Status { get; set; }
     public string? Notes { get; set; }
     public decimal? Price { get; set; }
+    public DateTime EffectiveDate { get; set; }
+    public DateTime ExpiryDate { get; set; }
     public DateTime InDate { get; set; }
     public DateTime OutDate { get; set; }
     public int? RoomId { get; set; }
@@ -32,6 +34,7 @@ public class Elder : BaseEntity<Guid>
     [Projectable]
     [NotMapped]
     public IEnumerable<User> Users => ElderUsers.Select(eu => eu.User);
+    public virtual ICollection<ElderPackageRegister> ElderPackageRegisters { get; set; } = new HashSet<ElderPackageRegister>();
     public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new HashSet<HealthReport>();
 }

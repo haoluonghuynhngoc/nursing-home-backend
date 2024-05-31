@@ -14,8 +14,6 @@ public sealed record GetAllPackageServiceQuery : PaginationRequest<Package>, IRe
     /// Search field is search for Name, Status 
     /// </summary>
     public string? Search { get; set; }
-    public DateTime EffectiveDate { get; set; }
-    public DateTime ExpiryDate { get; set; }
     public override Expression<Func<Package, bool>> GetExpressions()
     {
         if (!string.IsNullOrWhiteSpace(Search))

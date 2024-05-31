@@ -25,12 +25,15 @@ internal sealed class CreatePackageRegisterCommandHandler(
             Name = request.Name,
             Description = request.Description,
             ImagePackage = request.ImagePackage,
-            Status = request.Status,
             Color = request.Color,
             Price = request.Price,
+            NumberBed = request.NumberBed,
+            //EffectiveDate = request.EffectiveDate,
+            //ExpiryDate = request.ExpiryDate,
             Currency = request.Currency,
-            DurationMonth = request.DurationMonth,
+            //DurationMonth = UtilitiesExtensions.GetMonthsDifference(request.EffectiveDate, request.ExpiryDate),
             PackageType = packageType
+
         };
         await _packageRepository.CreateAsync(package);
         await unitOfWork.CommitAsync();

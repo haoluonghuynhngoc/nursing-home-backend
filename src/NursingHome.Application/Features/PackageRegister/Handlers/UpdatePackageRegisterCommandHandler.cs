@@ -7,7 +7,6 @@ using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Features.PackageRegister.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
-using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.PackageRegister.Handlers;
 internal sealed class UpdatePackageRegisterCommandHandler(
@@ -24,6 +23,7 @@ internal sealed class UpdatePackageRegisterCommandHandler(
         var package = await _packageRepository.FindByAsync(
     expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Package Have Id {request.Id} Is Not Found");
         request.Adapt(package);
+        //package.DurationMonth = UtilitiesExtensions.GetMonthsDifference(request.EffectiveDate, request.ExpiryDate);
         await _packageRepository.UpdateAsync(package);
         await unitOfWork.CommitAsync();
 

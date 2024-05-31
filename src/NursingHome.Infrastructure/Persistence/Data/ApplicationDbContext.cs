@@ -35,7 +35,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<PackageType> PackageTypes { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<NurseElder> NurseElders { get; set; }
-
+    public DbSet<ElderPackageRegister> ElderPackageRegisters { get; set; }
     // join Table HealthReportDetail
 
     public DbSet<AppointmentUser> AppointmentUsers { get; set; }
@@ -43,7 +43,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ElderUser> ElderUsers { get; set; }
     public DbSet<UserCareSchedule> UserCareSchedules { get; set; }
 
-    //dotnet ef migrations add CreateInit --output-dir Persistence/Migrations
+    ////dotnet ef migrations add CreateInit --output-dir Persistence/Migrations
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //{
     //    // Mysql In Digital Ocean

@@ -1,5 +1,4 @@
-﻿using NursingHome.Domain.Entities;
-using NursingHome.Domain.Enums;
+﻿using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Rooms.Models;
 public sealed record RoomResponse
@@ -16,6 +15,8 @@ public sealed record RoomResponse
     public float Width { get; set; }
     public float Height { get; set; }
     public float Length { get; set; }
+    public RoomPackage Package { get; set; } = default!;
+    public RoomBlock Block { get; set; } = default!;
     public ICollection<RoomElderResponse> Elders { get; set; } = new HashSet<RoomElderResponse>();
     public ICollection<RoomCareScheduleResponse>? CareSchedules { get; set; } = new HashSet<RoomCareScheduleResponse>();
 }

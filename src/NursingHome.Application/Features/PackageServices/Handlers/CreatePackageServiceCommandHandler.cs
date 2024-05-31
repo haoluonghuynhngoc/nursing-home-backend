@@ -30,7 +30,7 @@ internal sealed class CreatePackageServiceCommandHandler(
             Price = request.Price,
             Currency = request.Currency,
             DurationTime = request.DurationTime,
-            DurationMonth = request.DurationMonth,
+            //DurationMonth = request.DurationMonth,
             PackageType = packageType
         };
         await _packageRepository.CreateAsync(package);

@@ -48,7 +48,7 @@ public class PackageRegisterController(ISender sender) : ControllerBase
     /// <summary>
     /// 
     /// </summary>
-    [HttpPut]
+    [HttpPost("room")]
     public async Task<ActionResult<MessageResponse>> AddPackageToRoom(
         [FromQuery] List<int> rooms,
         [FromQuery] Guid package,

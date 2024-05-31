@@ -1,5 +1,5 @@
-﻿namespace NursingHome.Application.Features.PackageServices.Models;
-public sealed record PackageServiceResponse
+﻿namespace NursingHome.Application.Features.Rooms.Models;
+public sealed record RoomPackage
 {
     public Guid Id { get; set; }
     public string? Name { get; set; }
@@ -8,8 +8,10 @@ public sealed record PackageServiceResponse
     public string? Status { get; set; }
     public decimal Price { get; set; }
     public string? Color { get; set; }
-    public int Capacity { get; set; }
+    public int NumberBed { get; set; }
     public string? Currency { get; set; }
+    public DateTime EffectiveDate { get; set; }
+    public DateTime ExpiryDate { get; set; }
     public int DurationTime { get; set; }
     public int DurationMonth { get; set; }
 }

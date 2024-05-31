@@ -61,6 +61,15 @@ namespace NursingHome.Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Elder To Room Successfully.
+        /// </summary>
+        public static string AddElderSuccess {
+            get {
+                return ResourceManager.GetString("AddElderSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid request. Please provide valid data..
         /// </summary>
         public static string BadRequest {
@@ -345,6 +354,15 @@ namespace NursingHome.Application.Common.Resources {
         public static string OtpSendSuccess {
             get {
                 return ResourceManager.GetString("OtpSendSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This Is Not A Subscription Please Enter The Register Package Id.
+        /// </summary>
+        public static string PackageRegisterIsNotAvailable {
+            get {
+                return ResourceManager.GetString("PackageRegisterIsNotAvailable", resourceCulture);
             }
         }
         

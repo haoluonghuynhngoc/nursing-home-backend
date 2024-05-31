@@ -48,4 +48,5 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     [Projectable]
     [NotMapped]
     public IEnumerable<Role> Roles => UserRoles.Select(ur => ur.Role);
+
 }

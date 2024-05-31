@@ -100,5 +100,16 @@ public static class UtilitiesExtensions
 
         return "127.0.0.1";
     }
+    public static int GetMonthsDifference(DateTime start, DateTime end)
+    {
+        int monthsApart = 12 * (end.Year - start.Year) + end.Month - start.Month;
 
+        // Điều chỉnh nếu ngày kết thúc trước ngày bắt đầu trong tháng.
+        if (end.Day < start.Day)
+        {
+            monthsApart--;
+        }
+
+        return monthsApart;
+    }
 }

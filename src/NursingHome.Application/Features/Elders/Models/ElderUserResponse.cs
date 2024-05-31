@@ -1,5 +1,5 @@
 ﻿namespace NursingHome.Application.Features.Elders.Models;
-internal class ElderUserResponse
+public sealed record ElderUserResponse
 {
     public Guid Id { get; set; }
     public string? FullName { get; set; }

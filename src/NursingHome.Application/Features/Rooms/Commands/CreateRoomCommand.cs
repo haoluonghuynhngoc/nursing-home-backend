@@ -7,10 +7,6 @@ namespace NursingHome.Application.Features.Rooms.Commands;
 public sealed record CreateRoomCommand : IRequest<MessageResponse>
 {
     public string? Name { get; set; }
-    public bool AvailableBed { get; set; }
-    public int TotalBed { get; set; }
-    public int UnusedBed { get; set; }
-    public int UserBed { get; set; }
     public TypeEnum Type { get; set; } = TypeEnum.Basic;
     public RoomStatus Status { get; set; } = RoomStatus.Available;
     public int Capacity { get; set; }
