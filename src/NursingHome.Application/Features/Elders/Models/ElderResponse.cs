@@ -11,7 +11,7 @@ public sealed record ElderResponse
     public string? ImageUrl { get; set; }
     public string? Address { get; set; }
     public string? Nationality { get; set; }
-    public string? Status { get; set; }
+    public ElderStatus Status { get; set; }
     public string? Notes { get; set; }
     public DateTime EffectiveDate { get; set; }
     public DateTime ExpiryDate { get; set; }

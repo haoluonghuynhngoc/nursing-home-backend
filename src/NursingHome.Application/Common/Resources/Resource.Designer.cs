@@ -529,6 +529,15 @@ namespace NursingHome.Application.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User Already Exists In Data.
+        /// </summary>
+        public static string UserAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You account is haved password.
         /// </summary>
         public static string UserHavePassword {

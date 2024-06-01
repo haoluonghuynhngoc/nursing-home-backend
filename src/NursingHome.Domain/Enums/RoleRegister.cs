@@ -4,6 +4,6 @@ public enum RoleRegister
     Director,
     Manager,
     Staff,
-    Nurse,
-    Customer
+    Nurse
+
 }

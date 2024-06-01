@@ -16,14 +16,17 @@ internal sealed class UpdateRoomCommandHandler(
     private readonly IGenericRepository<Block> _blockRepository = unitOfWork.Repository<Block>();
     public async Task<MessageResponse> Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
     {
-        var block = await _blockRepository.FindByAsync(
-            expression: _ => _.Id == request.BlockId)
-            ?? throw new NotFoundException(nameof(Block), request.BlockId);
-
         var room = await _roomRepository.FindByAsync(
             expression: _ => _.Id == request.Id)
              ?? throw new NotFoundException(nameof(Room), request.Id);
 
+        if (request.BlockId != null)
+        {
+            var block = await _blockRepository.FindByAsync(
+               expression: _ => _.Id == request.BlockId)
+               ?? throw new NotFoundException(nameof(Block), request.BlockId);
+            room.Block = block;
+        }
         request.Adapt(room);
         await _roomRepository.UpdateAsync(room);
         await unitOfWork.CommitAsync();

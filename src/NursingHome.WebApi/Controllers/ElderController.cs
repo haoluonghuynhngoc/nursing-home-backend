@@ -38,23 +38,17 @@ public class ElderController(ISender sender) : ControllerBase
     public async Task<ActionResult<MessageResponse>> CreateElder(
         Guid customerId,
         Guid packageRegisterId,
+        int roomId,
         CreateElderCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(
             command with
             {
                 UserCustomerId = customerId,
-                PackageRegisterId = packageRegisterId
+                PackageRegisterId = packageRegisterId,
+                RoomId = roomId
             },
             cancellationToken);
-    }
-    /// <summary>
-    /// 
-    /// </summary>
-    [HttpPost("add-room")]
-    public async Task<ActionResult<MessageResponse>> AddElderToRoom(AddElderToRoomCommand command, CancellationToken cancellationToken)
-    {
-        return await sender.Send(command, cancellationToken);
     }
 
     /// <summary>

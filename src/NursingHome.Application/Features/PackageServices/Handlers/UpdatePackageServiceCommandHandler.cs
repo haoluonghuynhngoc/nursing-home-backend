@@ -14,10 +14,22 @@ internal sealed class UpdatePackageServiceCommandHandler(
     ICurrentUserService currentUserService) : IRequestHandler<UpdatePackageServiceCommand, MessageResponse>
 {
     private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
+    private readonly IGenericRepository<PackageServiceType> _packageServicesTypesRepository = unitOfWork.Repository<PackageServiceType>();
     public async Task<MessageResponse> Handle(UpdatePackageServiceCommand request, CancellationToken cancellationToken)
     {
-        var package = await _packageRepository.FindByAsync(
-     expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Package Have Id {request.Id} Is Not Found");
+        var package = await _packageRepository.FindByAsync(_ => _.Id == request.Id)
+            ?? throw new NotFoundException($"Package Have Id {request.Id} Is Not Found");
+        if (request.PackageServiceTypes != null)
+        {
+            // có thể xảy ra lỗi ở đây
+            package.PackageServiceTypes.Clear();
+            foreach (var item in request.PackageServiceTypes)
+            {
+                package.PackageServiceTypes.Add(await _packageServicesTypesRepository.FindByAsync(_ => _.Id == item)
+                 ?? throw new NotFoundException($"Package Service Type Have Id {item} Is Not Found"));
+            }
+        }
+
         request.Adapt(package);
         await _packageRepository.UpdateAsync(package);
         await unitOfWork.CommitAsync();

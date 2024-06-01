@@ -8,8 +8,8 @@ public sealed record PackageServiceResponse
     public string? Status { get; set; }
     public decimal Price { get; set; }
     public string? Color { get; set; }
-    public int Capacity { get; set; }
     public string? Currency { get; set; }
     public int DurationTime { get; set; }
-    public int DurationMonth { get; set; }
+    public PackageServiceServiceBooking ServiceBooking { get; set; } = default!;
+    public ICollection<PackageServicePackageServiceTypes> PackageServiceTypes { get; set; } = new HashSet<PackageServicePackageServiceTypes>();
 }

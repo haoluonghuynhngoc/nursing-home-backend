@@ -99,6 +99,70 @@ public class ApplicationDbContextInitialiser(
             }
         }
 
+        if (!await unitOfWork.Repository<PackageServiceType>().ExistsByAsync())
+        {
+            var listPackageType = new List<PackageServiceType>() {
+            new PackageServiceType { Name = "Service 1" },
+            new PackageServiceType { Name = "Service 2" },
+            new PackageServiceType { Name = "Service 3" },
+            new PackageServiceType { Name = "Service 4" },
+            new PackageServiceType { Name = "Service 5" }
+            };
+            foreach (var item in listPackageType)
+            {
+                await unitOfWork.Repository<PackageServiceType>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
+
+        if (await unitOfWork.Repository<PackageType>().ExistsByAsync())
+        {
+            if (!await unitOfWork.Repository<Package>().ExistsByAsync())
+            {
+                var packageType = await unitOfWork.Repository<PackageType>().FindByAsync(_ => _.Name == PackageTypeName.RegisterPackage);
+                foreach (var item in ElderSeed.DefaultPackage)
+                {
+                    if (packageType != null)
+                    {
+                        item.PackageType = packageType;
+                    }
+                    await unitOfWork.Repository<Package>().CreateAsync(item);
+                }
+            }
+        }
+        if (await unitOfWork.Repository<Package>().ExistsByAsync())
+        {
+            if (await unitOfWork.Repository<Room>().ExistsByAsync())
+            {
+                var packageRegister = await unitOfWork.Repository<Package>().Entities.FirstOrDefaultAsync();
+                var listRoom = await unitOfWork.Repository<Room>().Entities.ToListAsync();
+                if (packageRegister != null)
+                {
+                    foreach (var item in listRoom)
+                    {
+                        item.Package = packageRegister;
+                    }
+                }
+            }
+        }
+        if (!await unitOfWork.Repository<Elder>().ExistsByAsync())
+        {
+            if (await unitOfWork.Repository<Room>().ExistsByAsync())
+            {
+                var elders = ElderSeed.Default.ToList();
+                var listRoom = await unitOfWork.Repository<Room>().Entities.ToListAsync();
+
+                for (int i = 0; i < listRoom.Count && i < elders.Count; i++)
+                {
+                    var room = listRoom[i];
+                    var elder = elders[i];
+
+                    elder.Room = room;
+                    await unitOfWork.Repository<Elder>().CreateAsync(elder);
+                }
+            }
+        }
+
         if (!await unitOfWork.Repository<User>().ExistsByAsync())
         {
             var user = new User
