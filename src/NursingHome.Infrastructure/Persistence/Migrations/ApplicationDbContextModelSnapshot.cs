@@ -193,6 +193,31 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.ToTable("Blocks");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.Calendar", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("Date")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DayOfWeek")
+                        .HasColumnType("nvarchar(24)");
+
+                    b.Property<DateTime?>("EventDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("ServiceBookingId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceBookingId");
+
+                    b.ToTable("Calendars");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.CareSchedule", b =>
                 {
                     b.Property<long>("Id")
@@ -264,6 +289,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("AddressCustomer")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CCCD")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Content")
                         .HasColumnType("longtext");
 
@@ -279,8 +310,20 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("ImageContract")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("NameCustomer")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReasonForCanceling")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("SigningDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
@@ -363,14 +406,15 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("OutDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal?>("PriceRegister")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.HasKey("Id");
 
@@ -908,6 +952,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("Content")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Currency")
                         .HasColumnType("longtext");
 
@@ -949,6 +996,25 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasIndex("PackageTypeId");
 
                     b.ToTable("Packages");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.PackageServiceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid?>("PackageId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PackageId");
+
+                    b.ToTable("PackageServiceTypes");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.PackageType", b =>
@@ -1063,6 +1129,37 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.ToTable("Rooms");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.ServiceBooking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MaxCapacity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
+
+                    b.Property<Guid?>("PackageId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("RepeatType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PackageId")
+                        .IsUnique();
+
+                    b.ToTable("ServiceBookings");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.UserCareSchedule", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -1157,6 +1254,15 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("Bill");
 
                     b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.Calendar", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.ServiceBooking", "ServiceBooking")
+                        .WithMany("Calendars")
+                        .HasForeignKey("ServiceBookingId");
+
+                    b.Navigation("ServiceBooking");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.CareSchedule", b =>
@@ -1426,6 +1532,15 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("PackageType");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.PackageServiceType", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Package", "Package")
+                        .WithMany("PackageServiceTypes")
+                        .HasForeignKey("PackageId");
+
+                    b.Navigation("Package");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.Payment", b =>
                 {
                     b.HasOne("NursingHome.Domain.Entities.Bill", "Bill")
@@ -1458,6 +1573,15 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .HasForeignKey("PackageId");
 
                     b.Navigation("Block");
+
+                    b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.ServiceBooking", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Package", "Package")
+                        .WithOne("ServiceBooking")
+                        .HasForeignKey("NursingHome.Domain.Entities.ServiceBooking", "PackageId");
 
                     b.Navigation("Package");
                 });
@@ -1577,7 +1701,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.Navigation("FeedBacks");
 
+                    b.Navigation("PackageServiceTypes");
+
                     b.Navigation("Rooms");
+
+                    b.Navigation("ServiceBooking")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.PackageType", b =>
@@ -1590,6 +1719,11 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("CareSchedules");
 
                     b.Navigation("Elders");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.ServiceBooking", b =>
+                {
+                    b.Navigation("Calendars");
                 });
 #pragma warning restore 612, 618
         }

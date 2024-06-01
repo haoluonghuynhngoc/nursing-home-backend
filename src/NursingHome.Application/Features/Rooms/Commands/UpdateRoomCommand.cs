@@ -15,5 +15,5 @@ public sealed record UpdateRoomCommand : IRequest<MessageResponse>
     public float Width { get; set; }
     public float Height { get; set; }
     public float Length { get; set; }
-    public Guid BlockId { get; set; }
+    public Guid? BlockId { get; set; }
 }

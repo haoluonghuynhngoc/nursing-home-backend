@@ -15,9 +15,12 @@ public sealed record GetElderWithPaginationQuery : PaginationRequest<Elder>, IRe
     /// Search field is search for fullName or IdentityNumber or Nationality 
     /// </summary>
     public string? Search { get; set; }
-    public string? Status { get; set; }
     public GenderStatus? Gender { get; set; }
-    public bool? HasContract { get; set; }
+    /// <summary>
+    /// Cái này lọc theo người già có hợp đồng hay không
+    /// </summary>
+    public ElderStatus? Status { get; set; }
+    //    public bool? HasContract { get; set; }
     public DateTime? InDate { get; set; }
     public DateTime? OutDate { get; set; }
     public override Expression<Func<Elder, bool>> GetExpressions()
@@ -31,10 +34,12 @@ public sealed record GetElderWithPaginationQuery : PaginationRequest<Elder>, IRe
                 .Or(u => EF.Functions.Like(u.Nationality, $"%{Search}%"));
         }
         Expression = Expression
-            .Or(e =>
-            (HasContract == false && !e.Contracts.Any()) ||
-            (HasContract == true && e.Contracts.Any()) ||
-             HasContract == null);
+           .Or(e => e.Status == Status || Status == null);
+        //Expression = Expression
+        //    .Or(e =>
+        //    (HasContract == false && !e.Contracts.Any()) ||
+        //    (HasContract == true && e.Contracts.Any()) ||
+        //     HasContract == null);
         return Expression;
     }
 }

@@ -4,6 +4,7 @@ using NursingHome.Application.Features.PackageServices.Commands;
 using NursingHome.Application.Features.PackageServices.Models;
 using NursingHome.Application.Features.PackageServices.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
@@ -29,12 +30,21 @@ public class PackageServiceController(ISender sender) : ControllerBase
     }
 
     /// <summary>
-    /// Create Package Service
+    /// OneTime thì cần trường EventDate trường SubscriberLimit , Daily thì cần trường DailyRepeat
+    /// , Weekly thì cần trường DayOfWeeks và nó Có định dạng (Sunday/Monday/Tuesday/Wednesday/Thursday/Friday/Saturday)
     /// </summary>
     [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreatePackageService(CreatePackageServiceCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreatePackageService(
+        [FromQuery] RepeatPatternType repeatPatternTypes,
+        [FromQuery] List<int> packageType,
+        CreatePackageServiceCommand command,
+        CancellationToken cancellationToken)
     {
-        return await sender.Send(command, cancellationToken);
+        return await sender.Send(command with
+        {
+            PackageServiceTypes = packageType,
+            RepeatPatternTypes = repeatPatternTypes
+        }, cancellationToken);
     }
 
     /// <summary>

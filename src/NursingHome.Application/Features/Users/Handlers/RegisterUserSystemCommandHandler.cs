@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.Users.Commands;
@@ -9,30 +10,28 @@ using NursingHome.Domain.Entities.Identities;
 using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Users.Handlers;
-internal class RegisterRequetsHandler(
+internal class RegisterUserSystemCommandHandler(
     UserManager<User> userManager,
-    IUnitOfWork unitOfWork
-    ) : IRequestHandler<RegisterRequest, MessageResponse>
+    IUnitOfWork unitOfWork) : IRequestHandler<RegisterUserSystemCommand, MessageResponse>
 {
-    public async Task<MessageResponse> Handle(RegisterRequest request, CancellationToken cancellationToken)
+    public async Task<MessageResponse> Handle(RegisterUserSystemCommand request, CancellationToken cancellationToken)
     {
-        var accountLogin = request.UserName;
-        if (request.RoleRegister == null || request.RoleRegister == RoleRegister.Customer)
+        var userCheck = await userManager.FindByNameAsync(request.UserName);
+        if (userCheck != null)
         {
-            accountLogin = request.PhoneNumber;
+            throw new BadRequestException(Resource.UserAlreadyExists);
         }
         var roleUser = request.RoleRegister switch
         {
             RoleRegister.Director => RoleName.Director,
             RoleRegister.Manager => RoleName.Manager,
             RoleRegister.Staff => RoleName.Staff,
-            RoleRegister.Nurse => RoleName.Nurse,
-            _ => RoleName.Customer,
+            _ => RoleName.Nurse,
         };
 
         var user = new User
         {
-            UserName = accountLogin,
+            UserName = request.UserName,
             Email = request.Email,
             PhoneNumber = request.PhoneNumber,
             FullName = request.FullName,

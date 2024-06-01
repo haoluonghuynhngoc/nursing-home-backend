@@ -10,6 +10,8 @@ public sealed record CreateElderCommand : IRequest<MessageResponse>
     public Guid UserCustomerId { get; set; }
     [JsonIgnore]
     public Guid PackageRegisterId { get; set; }
+    [JsonIgnore]
+    public int RoomId { get; set; }
     public DateTime UserPackageDay { get; set; }
     public string? FullName { get; set; }
     public string? IdentityNumber { get; set; }
@@ -20,7 +22,6 @@ public sealed record CreateElderCommand : IRequest<MessageResponse>
     public string? Nationality { get; set; }
     public DateTime EffectiveDate { get; set; }
     public DateTime ExpiryDate { get; set; }
-    public string? Status { get; set; }
     public string? Notes { get; set; }
     public DateTime InDate { get; set; }
     public DateTime OutDate { get; set; }

@@ -273,6 +273,9 @@
   <data name="UpdatedSuccess" xml:space="preserve">
     <value>Updated successfully</value>
   </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>User Already Exists In Data</value>
+  </data>
   <data name="UserHavePassword" xml:space="preserve">
     <value>You account is haved password</value>
   </data>

@@ -18,7 +18,7 @@ internal sealed class GetElderWithPaginationQueryHandler(
     {
         var expression = request.GetExpressions();
         expression = expression.Or(e =>
-        (e.Status == request.Status || request.Status == null) &&
+        //(e.Status == request.Status || request.Status == null) &&
         (e.Gender == request.Gender || request.Gender == null) &&
         (e.InDate == request.InDate || request.InDate == null) &&
         (e.OutDate == request.OutDate || request.OutDate == null));

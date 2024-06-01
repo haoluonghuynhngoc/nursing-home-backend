@@ -10,5 +10,5 @@ public sealed record PackageRegisterResponse
     public string? Color { get; set; }
     public int NumberBed { get; set; }
     public string? Currency { get; set; }
-
+    public ICollection<PackageRegisterRoom> Rooms { get; set; } = new HashSet<PackageRegisterRoom>();
 }

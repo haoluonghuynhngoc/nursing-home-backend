@@ -11,7 +11,7 @@ using NursingHome.Infrastructure.Persistence.Data;
 namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240531082602_CreateInit")]
+    [Migration("20240601190302_CreateInit")]
     partial class CreateInit
     {
         /// <inheritdoc />
@@ -267,6 +267,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("AddressCustomer")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CCCD")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Content")
                         .HasColumnType("longtext");
 
@@ -282,8 +288,20 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("ImageContract")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("NameCustomer")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ReasonForCanceling")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("SigningDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
@@ -366,14 +384,15 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("OutDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal?>("PriceRegister")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.HasKey("Id");
 
@@ -909,6 +928,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Color")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Content")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Currency")
