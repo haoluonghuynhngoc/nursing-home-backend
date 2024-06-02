@@ -5,46 +5,47 @@ using NursingHome.Domain.Entities.Identities;
 using System.Reflection;
 
 namespace NursingHome.Infrastructure.Persistence.Data;
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>(options)
-//public class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+//public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>(options)
+public class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
 {
 
     private const string Prefix = "AspNet";
 
-    //public ApplicationDbContext()
-    //{
-    //}
+    public ApplicationDbContext()
+    {
+    }
 
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Device> Devices { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<AppointmentType> AppointmentTypes { get; set; }
     public DbSet<Block> Blocks { get; set; }
-    public DbSet<Room> Rooms { get; set; }
-    public DbSet<Bill> Bills { get; set; }
-    public DbSet<BillDetail> BillDetails { get; set; }
+    public DbSet<Calendar> Calendars { get; set; }
     public DbSet<CareSchedule> CareSchedules { get; set; }
     public DbSet<CareScheduleTask> CareScheduleTasks { get; set; }
     public DbSet<Contract> Contracts { get; set; }
-    public DbSet<Elder> Elders { get; set; }
     public DbSet<FeedBack> FeedBacks { get; set; }
     public DbSet<HealthReport> HealthReports { get; set; }
     public DbSet<HealthReportCategory> HealthReportCategories { get; set; }
     public DbSet<HealthReportDetail> HealthReportDetails { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderDetail> OrderDetails { get; set; }
     public DbSet<Package> Packages { get; set; }
-    public DbSet<PackageType> PackageTypes { get; set; }
-    public DbSet<Payment> Payments { get; set; }
-    public DbSet<NurseElder> NurseElders { get; set; }
-    public DbSet<ElderPackageRegister> ElderPackageRegisters { get; set; }
+    public DbSet<PackageCategory> PackageCategories { get; set; }
+    public DbSet<PackageRegisterType> PackageRegisterTypes { get; set; }
     public DbSet<PackageServiceType> PackageServiceTypes { get; set; }
-    public DbSet<ServiceBooking> ServiceBookings { get; set; }
-    public DbSet<Calendar> Calendars { get; set; }
+    public DbSet<Elder> Elders { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<Record> Records { get; set; }
+    public DbSet<Room> Rooms { get; set; }
+
     // join Table HealthReportDetail
 
+    public DbSet<PackageUser> PackageUsers { get; set; }
     public DbSet<AppointmentUser> AppointmentUsers { get; set; }
     public DbSet<ElderPackage> ElderPackages { get; set; }
     public DbSet<ElderUser> ElderUsers { get; set; }
-    public DbSet<UserCareSchedule> UserCareSchedules { get; set; }
+    public DbSet<CareScheduleUser> CareScheduleUsers { get; set; }
 
     ////dotnet ef migrations add CreateInit --output-dir Persistence/Migrations
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -144,16 +145,27 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
              .WithMany(a => a.ElderUsers)
              .HasForeignKey(a => a.UserId);
         });
-        modelBuilder.Entity<UserCareSchedule>(entity =>
+        modelBuilder.Entity<CareScheduleUser>(entity =>
         {
             entity.HasKey(a => new { a.UserId, a.CareScheduleId });
             entity.HasOne(a => a.User)
-             .WithMany(a => a.UserCareSchedules)
+             .WithMany(a => a.CareScheduleUsers)
              .HasForeignKey(a => a.UserId);
 
             entity.HasOne(a => a.CareSchedule)
-             .WithMany(a => a.UserCareSchedules)
+             .WithMany(a => a.CareScheduleUsers)
              .HasForeignKey(a => a.CareScheduleId);
+        });
+        modelBuilder.Entity<PackageUser>(entity =>
+        {
+            entity.HasKey(a => new { a.UserId, a.PackageId });
+            entity.HasOne(a => a.User)
+             .WithMany(a => a.PackageUsers)
+             .HasForeignKey(a => a.UserId);
+
+            entity.HasOne(a => a.Package)
+             .WithMany(a => a.PackageUsers)
+             .HasForeignKey(a => a.PackageId);
         });
     }
 }

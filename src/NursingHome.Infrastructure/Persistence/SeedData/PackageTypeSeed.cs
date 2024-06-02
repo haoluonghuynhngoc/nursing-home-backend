@@ -4,10 +4,10 @@ using NursingHome.Domain.Enums;
 namespace NursingHome.Infrastructure.Persistence.SeedData;
 internal static class PackageTypeSeed
 {
-    public static List<PackageType> Default =>
-     new List<PackageType>
+    public static List<PackageCategory> Default =>
+     new List<PackageCategory>
      {
-            new PackageType { Name = PackageTypeName.ServicePackage },
-            new PackageType { Name = PackageTypeName.RegisterPackage }
+            new PackageCategory { Name = PackageCategoryName.ServicePackage },
+            new PackageCategory { Name = PackageCategoryName.RegisterPackage }
      };
 }

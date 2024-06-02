@@ -14,8 +14,8 @@ public class Payment : BaseEntity<Guid>
     [Column(TypeName = "nvarchar(24)")]
     public TransactionMethod Method { get; set; }
     public string? Note { get; set; }
-    public Guid BillId { get; set; }
-    public virtual Bill Bill { get; set; } = default!;
+    public Guid OrderId { get; set; }
+    public virtual Order Order { get; set; } = default!;
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
 }

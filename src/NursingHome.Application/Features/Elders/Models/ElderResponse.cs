@@ -18,6 +18,7 @@ public sealed record ElderResponse
     public decimal? Price { get; set; }
     public DateTime InDate { get; set; }
     public DateTime OutDate { get; set; }
+    public ElderRoom Room { get; set; } = default!;
     public ICollection<ElderUserResponse> Users { get; set; } = new HashSet<ElderUserResponse>();
     public ICollection<ElderElderPackageRegister> ElderPackageRegisters { get; set; } = new HashSet<ElderElderPackageRegister>();
 }

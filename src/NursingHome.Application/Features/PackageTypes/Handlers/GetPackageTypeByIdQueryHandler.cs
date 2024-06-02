@@ -10,7 +10,7 @@ internal sealed class GetPackageTypeByIdQueryHandler(
     IUnitOfWork unitOfWork
     ) : IRequestHandler<GetPackageTypeByIdQuery, PackageTypeResponse>
 {
-    private readonly IGenericRepository<PackageType> _packageTypeRepository = unitOfWork.Repository<PackageType>();
+    private readonly IGenericRepository<PackageCategory> _packageTypeRepository = unitOfWork.Repository<PackageCategory>();
     public async Task<PackageTypeResponse> Handle(GetPackageTypeByIdQuery request, CancellationToken cancellationToken)
     {
         var packageType = await _packageTypeRepository.FindByAsync<PackageTypeResponse>(x => x.Id == request.Id)

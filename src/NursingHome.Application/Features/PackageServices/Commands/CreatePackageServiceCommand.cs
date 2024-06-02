@@ -21,6 +21,6 @@ public sealed record CreatePackageServiceCommand : IRequest<MessageResponse>
     public RepeatPatternType RepeatPatternTypes { get; set; }
     public DateTime? EventDate { get; set; }
     public int? SubscriberLimit { get; set; }
-    public int? DailyRepeat { get; set; }
+    public int? DateRepeat { get; set; }
     public List<DayOfWeekEnum>? DayOfWeeks { get; set; }
 }

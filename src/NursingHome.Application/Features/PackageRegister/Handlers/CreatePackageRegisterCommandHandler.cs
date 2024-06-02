@@ -14,11 +14,11 @@ internal sealed class CreatePackageRegisterCommandHandler(
     ICurrentUserService currentUserService) : IRequestHandler<CreatePackageRegisterCommand, MessageResponse>
 {
     private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
-    private readonly IGenericRepository<PackageType> _packageTypeRepository = unitOfWork.Repository<PackageType>();
+    private readonly IGenericRepository<PackageCategory> _packageTypeRepository = unitOfWork.Repository<PackageCategory>();
     public async Task<MessageResponse> Handle(CreatePackageRegisterCommand request, CancellationToken cancellationToken)
     {
-        var packageType = await _packageTypeRepository.FindByAsync(_ => _.Name == PackageTypeName.RegisterPackage)
-            ?? throw new NotFoundException($"Package Type Have Name {PackageTypeName.RegisterPackage} Is Not Found");
+        var packageCategory = await _packageTypeRepository.FindByAsync(_ => _.Name == PackageCategoryName.RegisterPackage)
+            ?? throw new NotFoundException($"Package Type Have Name {PackageCategoryName.RegisterPackage} Is Not Found");
 
         var package = new Package
         {
@@ -32,7 +32,7 @@ internal sealed class CreatePackageRegisterCommandHandler(
             //ExpiryDate = request.ExpiryDate,
             Currency = request.Currency,
             //DurationMonth = UtilitiesExtensions.GetMonthsDifference(request.EffectiveDate, request.ExpiryDate),
-            PackageType = packageType
+            PackageCategory = packageCategory
 
         };
         await _packageRepository.CreateAsync(package);

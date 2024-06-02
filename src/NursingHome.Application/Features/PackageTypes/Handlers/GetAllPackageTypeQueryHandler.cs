@@ -9,7 +9,7 @@ namespace NursingHome.Application.Features.PackageTypes.Handlers;
 internal sealed class GetAllPackageTypeQueryHandler(
     IUnitOfWork unitOfWork) : IRequestHandler<GetAllPackageTypeQuery, PaginatedResponse<PackageTypeResponse>>
 {
-    private readonly IGenericRepository<PackageType> _packageTypeRepository = unitOfWork.Repository<PackageType>();
+    private readonly IGenericRepository<PackageCategory> _packageTypeRepository = unitOfWork.Repository<PackageCategory>();
     public async Task<PaginatedResponse<PackageTypeResponse>> Handle(GetAllPackageTypeQuery request, CancellationToken cancellationToken)
     {
         var paginListPackageType = await _packageTypeRepository.FindAsync<PackageTypeResponse>(

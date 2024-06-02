@@ -10,6 +10,7 @@ public sealed record PackageServiceResponse
     public string? Color { get; set; }
     public string? Currency { get; set; }
     public int DurationTime { get; set; }
-    public PackageServiceServiceBooking ServiceBooking { get; set; } = default!;
+    public PackageServiceCalendar Calendar { get; set; } = default!;
+    //public ICollection<PackageServiceElder> Elders { get; set; } = new HashSet<PackageServiceElder>();
     public ICollection<PackageServicePackageServiceTypes> PackageServiceTypes { get; set; } = new HashSet<PackageServicePackageServiceTypes>();
 }

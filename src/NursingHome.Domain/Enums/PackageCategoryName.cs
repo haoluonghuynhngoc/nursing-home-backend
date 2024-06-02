@@ -1,5 +1,5 @@
 ﻿namespace NursingHome.Domain.Enums;
-public enum PackageTypeName
+public enum PackageCategoryName
 {
     ServicePackage,
     RegisterPackage

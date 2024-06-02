@@ -13,14 +13,14 @@ internal sealed class GetAllPackageServiceQueryHandler(
     IUnitOfWork unitOfWork) : IRequestHandler<GetAllPackageServiceQuery, PaginatedResponse<PackageServiceResponse>>
 {
     private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
-    private readonly IGenericRepository<PackageType> _packageTypeRepository = unitOfWork.Repository<PackageType>();
+    private readonly IGenericRepository<PackageCategory> _packageTypeRepository = unitOfWork.Repository<PackageCategory>();
     public async Task<PaginatedResponse<PackageServiceResponse>> Handle(GetAllPackageServiceQuery request, CancellationToken cancellationToken)
     {
-        var packageType = await _packageTypeRepository.FindByAsync(_ => _.Name == PackageTypeName.ServicePackage)
-    ?? throw new NotFoundException($"Package Type Have Name {PackageTypeName.ServicePackage} Is Not Found");
+        var packageType = await _packageTypeRepository.FindByAsync(_ => _.Name == PackageCategoryName.ServicePackage)
+    ?? throw new NotFoundException($"Package Type Have Name {PackageCategoryName.ServicePackage} Is Not Found");
 
         var expression = request.GetExpressions();
-        expression = expression.And(_ => _.PackageTypeId == packageType.Id);
+        expression = expression.And(_ => _.PackageRegisterTypeId == packageType.Id);
 
         var users = await _packageRepository.FindAsync<PackageServiceResponse>(
             request.PageIndex,

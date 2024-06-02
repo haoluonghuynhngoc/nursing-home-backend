@@ -82,11 +82,11 @@ public class ApplicationDbContextInitialiser(
             await unitOfWork.CommitAsync();
         }
 
-        if (!await unitOfWork.Repository<PackageType>().ExistsByAsync())
+        if (!await unitOfWork.Repository<PackageCategory>().ExistsByAsync())
         {
             foreach (var item in PackageTypeSeed.Default)
             {
-                await unitOfWork.Repository<PackageType>().CreateAsync(item);
+                await unitOfWork.Repository<PackageCategory>().CreateAsync(item);
             }
             await unitOfWork.CommitAsync();
         }
@@ -115,16 +115,16 @@ public class ApplicationDbContextInitialiser(
             await unitOfWork.CommitAsync();
         }
 
-        if (await unitOfWork.Repository<PackageType>().ExistsByAsync())
+        if (await unitOfWork.Repository<PackageCategory>().ExistsByAsync())
         {
             if (!await unitOfWork.Repository<Package>().ExistsByAsync())
             {
-                var packageType = await unitOfWork.Repository<PackageType>().FindByAsync(_ => _.Name == PackageTypeName.RegisterPackage);
+                var packageCategory = await unitOfWork.Repository<PackageCategory>().FindByAsync(_ => _.Name == PackageCategoryName.RegisterPackage);
                 foreach (var item in ElderSeed.DefaultPackage)
                 {
-                    if (packageType != null)
+                    if (packageCategory != null)
                     {
-                        item.PackageType = packageType;
+                        item.PackageCategory = packageCategory;
                     }
                     await unitOfWork.Repository<Package>().CreateAsync(item);
                 }

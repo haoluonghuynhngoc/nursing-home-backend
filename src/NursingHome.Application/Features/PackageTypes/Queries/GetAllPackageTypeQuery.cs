@@ -9,7 +9,7 @@ public sealed record GetAllPackageTypeQuery : IRequest<PaginatedResponse<Package
     /// <summary>
     /// Search field is search for  Name
     /// </summary>
-    public PackageTypeName? Search { get; set; }
+    public PackageCategoryName? Search { get; set; }
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
 }

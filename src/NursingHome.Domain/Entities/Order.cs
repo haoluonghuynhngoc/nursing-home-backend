@@ -4,7 +4,7 @@ using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingHome.Domain.Entities;
-public class Bill : BaseEntity<Guid>
+public class Order : BaseEntity<Guid>
 {
     public double TotalAmount { get; set; }
     public int TotalQuantity { get; set; }
@@ -15,6 +15,6 @@ public class Bill : BaseEntity<Guid>
     public string? Note { get; set; }
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
-    public virtual ICollection<BillDetail> BillDetails { get; set; } = new HashSet<BillDetail>();
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
     public virtual ICollection<Payment> Payments { get; set; } = new HashSet<Payment>();
 }

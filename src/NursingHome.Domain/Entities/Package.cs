@@ -18,13 +18,15 @@ public class Package : BaseEntity<Guid>
     public DateTime ExpiryDate { get; set; }
     public int DurationTime { get; set; }
     public int DurationMonth { get; set; }
-    public int PackageTypeId { get; set; }
-    public PackageType PackageType { get; set; } = default!;
-    public ServiceBooking ServiceBooking { get; set; } = default!;
+    public int PackageCategoryId { get; set; }
+    public PackageCategory PackageCategory { get; set; } = default!;
+    public int? PackageRegisterTypeId { get; set; }
+    public PackageRegisterType PackageRegisterType { get; set; } = default!;
+    public Calendar Calendar { get; set; } = default!;
+    public virtual ICollection<PackageUser> PackageUsers { get; set; } = new HashSet<PackageUser>();
     public virtual ICollection<Room> Rooms { get; set; } = new HashSet<Room>();
-    public virtual ICollection<BillDetail> BillDetails { get; set; } = new HashSet<BillDetail>();
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
     public virtual ICollection<FeedBack> FeedBacks { get; set; } = new HashSet<FeedBack>();
-    public virtual ICollection<ElderPackageRegister> ElderPackageRegisters { get; set; } = new HashSet<ElderPackageRegister>();
     public virtual ICollection<PackageServiceType> PackageServiceTypes { get; set; } = new HashSet<PackageServiceType>();
     public virtual ICollection<ElderPackage> ElderPackages { get; set; } = new HashSet<ElderPackage>();
     [Projectable]
