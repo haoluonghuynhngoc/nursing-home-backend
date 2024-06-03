@@ -3,6 +3,7 @@
 namespace NursingHome.Domain.Entities;
 public class Record : BaseEntity<Guid>
 {
+    public string? Name { get; set; }
     public string? BloodType { get; set; }
     public string? Gender { get; set; }
     public DateTime DateOfBirth { get; set; }
@@ -12,4 +13,6 @@ public class Record : BaseEntity<Guid>
     public string? CurrentMedications { get; set; }
     public string? Allergy { get; set; }
     public string? Note { get; set; }
+    public Guid ElderId { get; set; }
+    public virtual Elder Elder { get; set; } = default!;
 }

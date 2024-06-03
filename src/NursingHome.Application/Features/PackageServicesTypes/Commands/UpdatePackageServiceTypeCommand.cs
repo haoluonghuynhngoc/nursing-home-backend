@@ -7,5 +7,5 @@ public sealed record UpdatePackageServiceTypeCommand : IRequest<MessageResponse>
 {
     [JsonIgnore]
     public int Id { get; set; }
-    public string? Name { get; set; }
+    public string? NameService { get; set; }
 }

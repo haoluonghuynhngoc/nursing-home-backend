@@ -21,7 +21,7 @@ internal sealed class UpdatePackageServiceCommandHandler(
             ?? throw new NotFoundException($"Package Have Id {request.Id} Is Not Found");
         if (request.PackageServiceTypes != null)
         {
-            // có thể xảy ra lỗi ở đây
+            // có thể xảy ra lỗi ở đây nếu lỗi thì cho nó 1 cái List<Hasset>
             package.PackageServiceTypes.Clear();
             foreach (var item in request.PackageServiceTypes)
             {

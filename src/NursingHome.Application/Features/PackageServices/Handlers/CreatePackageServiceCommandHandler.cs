@@ -20,8 +20,8 @@ internal sealed class CreatePackageServiceCommandHandler(
     {
         var packageCategory = await _packageTypeRepository.FindByAsync(_ => _.Name == PackageCategoryName.ServicePackage)
              ?? throw new NotFoundException($"Package Type Have Name {PackageCategoryName.ServicePackage} Is Not Found");
-        var listPackageServiceType = new HashSet<PackageServiceType>();
 
+        var listPackageServiceType = new HashSet<PackageServiceType>();
         foreach (var item in request.PackageServiceTypes)
         {
             listPackageServiceType.Add(await _packageServicesTypesRepository.FindByAsync(_ => _.Id == item)
@@ -34,8 +34,6 @@ internal sealed class CreatePackageServiceCommandHandler(
         {
             case RepeatPatternType.OneTime:
                 calendar.RepeatType = RepeatPatternType.OneTime;
-                calendar.LimitedRegistrants = request.SubscriberLimit ?? 0;
-                calendar.CurrentRegistrants = 0;
                 calendar.status = ResourceStatus.Active;
                 calendar.EventDate = request.EventDate;
                 break;
@@ -62,14 +60,16 @@ internal sealed class CreatePackageServiceCommandHandler(
                 calendar.status = ResourceStatus.Active;
                 break;
         }
-
         var package = new Package
         {
             Name = request.Name,
             Description = request.Description,
             ImagePackage = request.ImagePackage,
+            LimitedRegistration = request.LimitedRegistration,
+            CurrentRegistrants = 0,
             Color = request.Color,
             Price = request.Price,
+            Status = PackageStatusEnum.Active,
             Currency = request.Currency,
             DurationTime = request.DurationTime,
             PackageServiceTypes = listPackageServiceType,

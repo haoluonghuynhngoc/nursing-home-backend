@@ -15,4 +15,5 @@ public sealed record PackageRegisterRoom
     public float Width { get; set; }
     public float Height { get; set; }
     public float Length { get; set; }
+    public PackageRegisterBlock Block { get; set; } = default!;
 }

@@ -5,15 +5,15 @@ using NursingHome.Domain.Entities.Identities;
 using System.Reflection;
 
 namespace NursingHome.Infrastructure.Persistence.Data;
-//public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>(options)
-public class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>(options)
+//public class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
 {
 
     private const string Prefix = "AspNet";
 
-    public ApplicationDbContext()
-    {
-    }
+    //public ApplicationDbContext()
+    //{
+    //}
 
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Device> Devices { get; set; }

@@ -66,7 +66,8 @@ internal sealed class CreateElderCommandHandler(
             ElderUsers = new HashSet<ElderUser>
             {
                new() {
-                   User = customer
+                   User = customer,
+                   Relationship= request.RelationshipElderWithCustomer
                }
             },
             //ElderPackageRegisters = new HashSet<ElderPackageRegister>

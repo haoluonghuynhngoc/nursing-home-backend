@@ -14,5 +14,6 @@ public sealed record BlockRoomResponse
     public int Capacity { get; set; }
     public float Width { get; set; }
     public float Height { get; set; }
+    public int TotalRoom { get; set; }
     public float Length { get; set; }
 }

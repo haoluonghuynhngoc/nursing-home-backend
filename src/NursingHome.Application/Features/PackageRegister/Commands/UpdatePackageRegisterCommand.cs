@@ -11,6 +11,7 @@ public sealed record UpdatePackageRegisterCommand : IRequest<MessageResponse>
     public string? Description { get; set; }
     public string? ImagePackage { get; set; }
     public int NumberBed { get; set; }
+    public int LimitedRegistration { get; set; }
     public decimal Price { get; set; }
     public string? Color { get; set; }
     public string? Currency { get; set; }

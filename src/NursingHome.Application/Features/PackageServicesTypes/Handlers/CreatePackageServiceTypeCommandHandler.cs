@@ -14,14 +14,14 @@ internal sealed class CreatePackageServiceTypeCommandHandler(
     private readonly IGenericRepository<PackageServiceType> _packageServiceTypeRepository = unitOfWork.Repository<PackageServiceType>();
     public async Task<MessageResponse> Handle(CreatePackageServiceTypeCommand request, CancellationToken cancellationToken)
     {
-        var packageRegisterType = await _packageServiceTypeRepository.FindByAsync(_ => _.Name == request.Name);
-        if (packageRegisterType != null)
+        var packageServiceTypeDb = await _packageServiceTypeRepository.FindByAsync(_ => _.NameService == request.NameService);
+        if (packageServiceTypeDb != null)
         {
-            throw new BadRequestException($"Package Register Type In Data Base Have Name {request.Name}");
+            throw new BadRequestException($"Package Service Type In Data Base Have Name {request.NameService}");
         }
         var packageServiceType = new PackageServiceType
         {
-            Name = request.Name
+            NameService = request.NameService
         };
         await _packageServiceTypeRepository.CreateAsync(packageServiceType);
         await unitOfWork.CommitAsync();

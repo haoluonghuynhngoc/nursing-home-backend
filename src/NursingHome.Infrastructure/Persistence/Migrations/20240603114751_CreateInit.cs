@@ -82,32 +82,11 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
+                    NameRegister = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PackageRegisterTypes", x => x.Id);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Records",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
-                    BloodType = table.Column<string>(type: "longtext", nullable: true),
-                    Gender = table.Column<string>(type: "longtext", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Height = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<string>(type: "longtext", nullable: true),
-                    CurrentMedications = table.Column<string>(type: "longtext", nullable: true),
-                    Allergy = table.Column<string>(type: "longtext", nullable: true),
-                    Note = table.Column<string>(type: "longtext", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Records", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -200,11 +179,14 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Name = table.Column<string>(type: "longtext", nullable: true),
                     Description = table.Column<string>(type: "longtext", nullable: true),
                     ImagePackage = table.Column<string>(type: "longtext", nullable: true),
-                    Status = table.Column<string>(type: "longtext", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(24)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Color = table.Column<string>(type: "longtext", nullable: true),
                     Content = table.Column<string>(type: "longtext", nullable: true),
                     NumberBed = table.Column<int>(type: "int", nullable: false),
+                    LimitedRegistration = table.Column<int>(type: "int", nullable: false),
+                    CurrentRegistrants = table.Column<int>(type: "int", nullable: false),
+                    Promotion = table.Column<string>(type: "longtext", nullable: true),
                     Currency = table.Column<string>(type: "longtext", nullable: true),
                     EffectiveDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -454,9 +436,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     RepeatType = table.Column<string>(type: "nvarchar(24)", nullable: false),
-                    LimitedRegistrants = table.Column<int>(type: "int", nullable: true),
-                    CurrentRegistrants = table.Column<int>(type: "int", nullable: true),
-                    status = table.Column<int>(type: "int", nullable: false),
+                    status = table.Column<string>(type: "nvarchar(24)", nullable: false),
                     EventDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     DateRepeat = table.Column<int>(type: "int", nullable: true),
                     PackageId = table.Column<Guid>(type: "char(36)", nullable: true),
@@ -515,7 +495,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true),
+                    NameService = table.Column<string>(type: "longtext", nullable: true),
                     PackageId = table.Column<Guid>(type: "char(36)", nullable: true)
                 },
                 constraints: table =>
@@ -894,6 +874,35 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Records",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Name = table.Column<string>(type: "longtext", nullable: true),
+                    BloodType = table.Column<string>(type: "longtext", nullable: true),
+                    Gender = table.Column<string>(type: "longtext", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Height = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Status = table.Column<string>(type: "longtext", nullable: true),
+                    CurrentMedications = table.Column<string>(type: "longtext", nullable: true),
+                    Allergy = table.Column<string>(type: "longtext", nullable: true),
+                    Note = table.Column<string>(type: "longtext", nullable: true),
+                    ElderId = table.Column<Guid>(type: "char(36)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Records", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Records_Elders_ElderId",
+                        column: x => x.ElderId,
+                        principalTable: "Elders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "HealthReportDetails",
                 columns: table => new
                 {
@@ -1065,6 +1074,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "IX_Payments_UserId",
                 table: "Payments",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Records_ElderId",
+                table: "Records",
+                column: "ElderId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",

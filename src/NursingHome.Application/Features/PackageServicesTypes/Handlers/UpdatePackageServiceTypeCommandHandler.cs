@@ -15,10 +15,10 @@ internal sealed class UpdatePackageServiceTypeCommandHandler(
     private readonly IGenericRepository<PackageServiceType> _packageServiceTypeRepository = unitOfWork.Repository<PackageServiceType>();
     public async Task<MessageResponse> Handle(UpdatePackageServiceTypeCommand request, CancellationToken cancellationToken)
     {
-        var packageRegisterType = await _packageServiceTypeRepository.FindByAsync(_ => _.Name == request.Name);
-        if (packageRegisterType != null)
+        var packageServiceTypeDb = await _packageServiceTypeRepository.FindByAsync(_ => _.NameService == request.NameService);
+        if (packageServiceTypeDb != null)
         {
-            throw new BadRequestException($"Package Register Type In Data Base Have Name {request.Name}");
+            throw new BadRequestException($"Package Service Type In Data Base Have Name {request.NameService}");
         }
         var packageServiceType = await _packageServiceTypeRepository.FindByAsync(
              expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Package Type Have Id {request.Id} Is Not Found");

@@ -129,9 +129,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("CurrentRegistrants")
-                        .HasColumnType("int");
-
                     b.Property<int?>("DateRepeat")
                         .HasColumnType("int");
 
@@ -141,9 +138,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("EventDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("LimitedRegistrants")
-                        .HasColumnType("int");
-
                     b.Property<Guid?>("PackageId")
                         .HasColumnType("char(36)");
 
@@ -151,8 +145,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(24)");
 
-                    b.Property<int>("status")
-                        .HasColumnType("int");
+                    b.Property<string>("status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.HasKey("Id");
 
@@ -953,6 +948,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Currency")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("CurrentRegistrants")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
@@ -971,6 +969,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("ImagePackage")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("LimitedRegistration")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -986,8 +987,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("Promotion")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.HasKey("Id");
 
@@ -1019,7 +1024,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameRegister")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
@@ -1033,7 +1038,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameService")
                         .HasColumnType("longtext");
 
                     b.Property<Guid?>("PackageId")
@@ -1122,11 +1127,17 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<Guid>("ElderId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Gender")
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Height")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Note")
                         .HasColumnType("longtext");
@@ -1138,6 +1149,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ElderId")
+                        .IsUnique();
 
                     b.ToTable("Records");
                 });
@@ -1568,6 +1582,17 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.Record", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Elder", "Elder")
+                        .WithOne("Record")
+                        .HasForeignKey("NursingHome.Domain.Entities.Record", "ElderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Elder");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.Room", b =>
                 {
                     b.HasOne("NursingHome.Domain.Entities.Block", "Block")
@@ -1616,6 +1641,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("ElderUsers");
 
                     b.Navigation("HealthReports");
+
+                    b.Navigation("Record")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.HealthReport", b =>

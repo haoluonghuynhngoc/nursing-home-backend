@@ -7,5 +7,6 @@ public sealed record BlockResponse
     public string? Status { get; set; }
     public string? Type { get; set; }
     public int TotalFloor { get; set; }
+    public int TotalRoom => Rooms?.Count ?? 0;
     public ICollection<BlockRoomResponse> Rooms { get; set; } = new HashSet<BlockRoomResponse>();
 }

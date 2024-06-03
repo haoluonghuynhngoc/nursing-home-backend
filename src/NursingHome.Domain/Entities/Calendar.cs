@@ -7,8 +7,7 @@ public class Calendar
     public long Id { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public RepeatPatternType RepeatType { get; set; } = default!;
-    public int? LimitedRegistrants { get; set; }
-    public int? CurrentRegistrants { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
     public ResourceStatus status { get; set; } = default!;
     public DateTime? EventDate { get; set; }
     public int? DateRepeat { get; set; }
