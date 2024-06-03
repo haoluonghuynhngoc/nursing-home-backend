@@ -16,7 +16,7 @@ internal sealed class GetAllPackageServiceTypeQueryHandler(
             pageIndex: request.PageNumber,
             pageSize: request.PageSize,
             expression: x =>
-                (string.IsNullOrEmpty(request.Search) || string.IsNullOrEmpty(x.Name) || x.Name.Contains(request.Search)),
+                (string.IsNullOrEmpty(request.Search) || string.IsNullOrEmpty(x.NameService) || x.NameService.Contains(request.Search)),
             orderBy: x => x.OrderByDescending(x => x.Id),
             cancellationToken: cancellationToken
             );

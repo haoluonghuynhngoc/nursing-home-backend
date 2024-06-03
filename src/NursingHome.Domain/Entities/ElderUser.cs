@@ -3,6 +3,7 @@
 namespace NursingHome.Domain.Entities;
 public class ElderUser
 {
+    public string? Relationship { get; set; }
     public Guid ElderId { get; set; }
     public virtual Elder Elder { get; set; } = default!;
     public Guid UserId { get; set; }

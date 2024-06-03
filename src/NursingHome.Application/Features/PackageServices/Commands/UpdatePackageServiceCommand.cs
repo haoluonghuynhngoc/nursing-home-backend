@@ -16,5 +16,6 @@ public sealed record UpdatePackageServiceCommand : IRequest<MessageResponse>
     public string? Color { get; set; }
     public decimal Price { get; set; }
     public string? Currency { get; set; }
+    public int LimitedRegistration { get; set; }
     public int DurationTime { get; set; }
 }

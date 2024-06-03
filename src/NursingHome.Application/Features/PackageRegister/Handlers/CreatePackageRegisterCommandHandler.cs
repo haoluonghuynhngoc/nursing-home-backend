@@ -14,11 +14,12 @@ internal sealed class CreatePackageRegisterCommandHandler(
     ICurrentUserService currentUserService) : IRequestHandler<CreatePackageRegisterCommand, MessageResponse>
 {
     private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
-    private readonly IGenericRepository<PackageType> _packageTypeRepository = unitOfWork.Repository<PackageType>();
+    private readonly IGenericRepository<PackageCategory> _packageTypeRepository = unitOfWork.Repository<PackageCategory>();
+    private readonly IGenericRepository<PackageRegisterType> _packageRegisterTypeRepository = unitOfWork.Repository<PackageRegisterType>();
     public async Task<MessageResponse> Handle(CreatePackageRegisterCommand request, CancellationToken cancellationToken)
     {
-        var packageType = await _packageTypeRepository.FindByAsync(_ => _.Name == PackageTypeName.RegisterPackage)
-            ?? throw new NotFoundException($"Package Type Have Name {PackageTypeName.RegisterPackage} Is Not Found");
+        var packageCategory = await _packageTypeRepository.FindByAsync(_ => _.Name == PackageCategoryName.RegisterPackage)
+            ?? throw new NotFoundException($"Package Type Have Name {PackageCategoryName.RegisterPackage} Is Not Found");
 
         var package = new Package
         {
@@ -27,14 +28,22 @@ internal sealed class CreatePackageRegisterCommandHandler(
             ImagePackage = request.ImagePackage,
             Color = request.Color,
             Price = request.Price,
+            LimitedRegistration = request.LimitedRegistration,
+            CurrentRegistrants = 0,
             NumberBed = request.NumberBed,
+            Promotion = request.Promotion,
+            Status = PackageStatusEnum.Active,
             //EffectiveDate = request.EffectiveDate,
             //ExpiryDate = request.ExpiryDate,
             Currency = request.Currency,
             //DurationMonth = UtilitiesExtensions.GetMonthsDifference(request.EffectiveDate, request.ExpiryDate),
-            PackageType = packageType
-
+            PackageCategory = packageCategory
         };
+        if (request.PackageRegisterTypeId != null)
+        {
+            package.PackageRegisterType = await _packageRegisterTypeRepository.FindByAsync(_ => _.Id == request.PackageRegisterTypeId)
+                ?? throw new NotFoundException($"Package Register Type Have Id {request.PackageRegisterTypeId} Is Not Found");
+        }
         await _packageRepository.CreateAsync(package);
         await unitOfWork.CommitAsync();
         return new MessageResponse(Resource.CreatedSuccess);

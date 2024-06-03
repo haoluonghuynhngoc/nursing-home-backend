@@ -17,7 +17,7 @@ internal sealed class CreateElderCommandHandler(
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
-    private readonly IGenericRepository<PackageType> _packageTypeRepository = unitOfWork.Repository<PackageType>();
+    private readonly IGenericRepository<PackageCategory> _packageTypeRepository = unitOfWork.Repository<PackageCategory>();
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
     public async Task<MessageResponse> Handle(CreateElderCommand request, CancellationToken cancellationToken)
     {
@@ -25,8 +25,8 @@ internal sealed class CreateElderCommandHandler(
              ?? throw new NotFoundException($"Package Register Have Id {request.PackageRegisterId} Is Not Found");
         var customer = await _userRepository.FindByAsync(_ => _.Id == request.UserCustomerId)
              ?? throw new NotFoundException($"User Customer Have Id {request.UserCustomerId} Is Not Found");
-        var packageType = await _packageTypeRepository.FindByAsync(_ => _.Id == packageRegister.PackageTypeId)
-             ?? throw new NotFoundException($"Package Type Have Id {packageRegister.PackageTypeId} Is Not Found");
+        var packageType = await _packageTypeRepository.FindByAsync(_ => _.Id == packageRegister.PackageRegisterTypeId)
+             ?? throw new NotFoundException($"Package Type Have Id {packageRegister.PackageRegisterTypeId} Is Not Found");
         var room = await _roomRepository.FindByAsync(_ => _.Id == request.RoomId)
              ?? throw new NotFoundException(nameof(Room), request.RoomId);
         if (room.PackageId != packageRegister.Id)
@@ -43,7 +43,7 @@ internal sealed class CreateElderCommandHandler(
         {
             throw new BadRequestException("The room is full, please choose another room");
         }
-        if (packageType.Name != PackageTypeName.RegisterPackage)
+        if (packageType.Name != PackageCategoryName.RegisterPackage)
         {
             throw new BadRequestException(Resource.PackageRegisterIsNotAvailable);
         }
@@ -66,20 +66,21 @@ internal sealed class CreateElderCommandHandler(
             ElderUsers = new HashSet<ElderUser>
             {
                new() {
-                   User = customer
+                   User = customer,
+                   Relationship= request.RelationshipElderWithCustomer
                }
             },
-            ElderPackageRegisters = new HashSet<ElderPackageRegister>
-            {
-                new()
-                {
-                    NamePackage = PackageTypeName.RegisterPackage.ToString(),
-                    Package = packageRegister,
-                   // EffectiveDate = request.UserPackageDay,
-                   // ExpiryDate = request.UserPackageDay.AddMonths(packageRegster.DurationMonth),
-                   // Status = request.UserPackageDay <= DateTime.Now ? "Hasn't Started Yet" : "Started"
-                }
-            }
+            //ElderPackageRegisters = new HashSet<ElderPackageRegister>
+            //{
+            //    new()
+            //    {
+            //        NamePackage = PackageTypeName.RegisterPackage.ToString(),
+            //        Package = packageRegister,
+            //       // EffectiveDate = request.UserPackageDay,
+            //       // ExpiryDate = request.UserPackageDay.AddMonths(packageRegster.DurationMonth),
+            //       // Status = request.UserPackageDay <= DateTime.Now ? "Hasn't Started Yet" : "Started"
+            //    }
+            //}
         };
         await _elderRepository.CreateAsync(elder);
         await unitOfWork.CommitAsync();

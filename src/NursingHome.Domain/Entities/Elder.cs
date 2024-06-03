@@ -25,7 +25,7 @@ public class Elder : BaseEntity<Guid>
     public DateTime OutDate { get; set; }
     public int? RoomId { get; set; }
     public Room? Room { get; set; } = default!;
-    public virtual ICollection<NurseElder> NurseElders { get; set; } = new HashSet<NurseElder>();
+    public virtual Record Record { get; set; } = default!;
     public virtual ICollection<ElderPackage> ElderPackages { get; set; } = new HashSet<ElderPackage>();
     [Projectable]
     [NotMapped]
@@ -35,7 +35,6 @@ public class Elder : BaseEntity<Guid>
     [Projectable]
     [NotMapped]
     public IEnumerable<User> Users => ElderUsers.Select(eu => eu.User);
-    public virtual ICollection<ElderPackageRegister> ElderPackageRegisters { get; set; } = new HashSet<ElderPackageRegister>();
     public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new HashSet<HealthReport>();
 }

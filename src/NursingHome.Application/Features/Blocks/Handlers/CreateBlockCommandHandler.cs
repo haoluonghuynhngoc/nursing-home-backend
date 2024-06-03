@@ -17,7 +17,7 @@ internal sealed class CreateBlockCommandHandler(
         {
             Name = request.Name,
             Description = request.Description,
-            Status = request.Status,
+            Status = "Active",
             Type = request.Type,
             TotalFloor = request.TotalFloor
         };

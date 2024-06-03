@@ -23,14 +23,4 @@ internal static class ElderSeed
                 .RuleFor(e => e.OutDate, (f, e) => e.InDate.AddDays(f.Random.Int(1, 30)))
                 .Generate(5);
 
-    public static List<Package> DefaultPackage =>
-    new Faker<Package>()
-        .RuleFor(p => p.Name, f => f.Commerce.ProductName())
-        .RuleFor(p => p.Description, f => f.Lorem.Paragraph())
-        .RuleFor(p => p.ImagePackage, f => f.Image.PicsumUrl())
-        .RuleFor(p => p.NumberBed, f => f.Random.Int(1, 5))
-        .RuleFor(p => p.Price, f => f.Finance.Amount())
-        .RuleFor(p => p.Color, f => f.Commerce.Color())
-        .RuleFor(p => p.Currency, f => "VND")
-        .Generate(3);
 }

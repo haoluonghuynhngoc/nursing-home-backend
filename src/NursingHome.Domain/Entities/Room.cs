@@ -25,5 +25,5 @@ public class Room : BaseEntity<int>
     //public Guid? UserId { get; set; }
     //public virtual User User { get; set; } = default!;
     public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();
-    public virtual ICollection<CareSchedule>? CareSchedules { get; set; } = new HashSet<CareSchedule>();
+    public virtual ICollection<CareSchedule> CareSchedules { get; set; } = new HashSet<CareSchedule>();
 }

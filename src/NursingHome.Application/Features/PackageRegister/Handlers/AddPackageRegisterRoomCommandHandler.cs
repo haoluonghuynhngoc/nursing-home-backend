@@ -13,7 +13,7 @@ internal sealed class AddPackageRegisterRoomCommandHandler(
     ICurrentUserService currentUserService) : IRequestHandler<AddPackageRegisterRoomCommand, MessageResponse>
 {
     private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
-    private readonly IGenericRepository<PackageType> _packageTypeRepository = unitOfWork.Repository<PackageType>();
+    private readonly IGenericRepository<PackageCategory> _packageTypeRepository = unitOfWork.Repository<PackageCategory>();
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
     public async Task<MessageResponse> Handle(AddPackageRegisterRoomCommand request, CancellationToken cancellationToken)
     {

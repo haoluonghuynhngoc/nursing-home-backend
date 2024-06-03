@@ -8,6 +8,8 @@ public sealed record CreatePackageServiceCommand : IRequest<MessageResponse>
 {
     [JsonIgnore]
     public List<int> PackageServiceTypes { get; set; } = new();
+    [JsonIgnore]
+    public RepeatPatternType RepeatPatternTypes { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
     public string? Content { get; set; }
@@ -15,12 +17,10 @@ public sealed record CreatePackageServiceCommand : IRequest<MessageResponse>
     public string? Color { get; set; }
     public decimal Price { get; set; }
     public string? Currency { get; set; }
+    public int LimitedRegistration { get; set; }
     public int DurationTime { get; set; }
-
-    [JsonIgnore]
-    public RepeatPatternType RepeatPatternTypes { get; set; }
+    // Ngày lập lại ở đây 
     public DateTime? EventDate { get; set; }
-    public int? SubscriberLimit { get; set; }
-    public int? DailyRepeat { get; set; }
+    public int? DateRepeat { get; set; }
     public List<DayOfWeekEnum>? DayOfWeeks { get; set; }
 }

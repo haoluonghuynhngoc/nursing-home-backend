@@ -82,11 +82,11 @@ public class ApplicationDbContextInitialiser(
             await unitOfWork.CommitAsync();
         }
 
-        if (!await unitOfWork.Repository<PackageType>().ExistsByAsync())
+        if (!await unitOfWork.Repository<PackageCategory>().ExistsByAsync())
         {
-            foreach (var item in PackageTypeSeed.Default)
+            foreach (var item in CategoryPackageSeed.Default)
             {
-                await unitOfWork.Repository<PackageType>().CreateAsync(item);
+                await unitOfWork.Repository<PackageCategory>().CreateAsync(item);
             }
             await unitOfWork.CommitAsync();
         }
@@ -102,11 +102,11 @@ public class ApplicationDbContextInitialiser(
         if (!await unitOfWork.Repository<PackageServiceType>().ExistsByAsync())
         {
             var listPackageType = new List<PackageServiceType>() {
-            new PackageServiceType { Name = "Service 1" },
-            new PackageServiceType { Name = "Service 2" },
-            new PackageServiceType { Name = "Service 3" },
-            new PackageServiceType { Name = "Service 4" },
-            new PackageServiceType { Name = "Service 5" }
+            new PackageServiceType { NameService = "Service 1" },
+            new PackageServiceType { NameService = "Service 2" },
+            new PackageServiceType { NameService = "Service 3" },
+            new PackageServiceType { NameService = "Service 4" },
+            new PackageServiceType { NameService = "Service 5" }
             };
             foreach (var item in listPackageType)
             {
@@ -115,21 +115,37 @@ public class ApplicationDbContextInitialiser(
             await unitOfWork.CommitAsync();
         }
 
-        if (await unitOfWork.Repository<PackageType>().ExistsByAsync())
+        if (!await unitOfWork.Repository<PackageRegisterType>().ExistsByAsync())
         {
-            if (!await unitOfWork.Repository<Package>().ExistsByAsync())
+            var listPackageType = new List<PackageRegisterType>() {
+            new PackageRegisterType { NameRegister = "Vip 1" },
+            new PackageRegisterType { NameRegister = "Vip 2" },
+            new PackageRegisterType { NameRegister = "Vip 3" },
+            };
+            foreach (var item in listPackageType)
             {
-                var packageType = await unitOfWork.Repository<PackageType>().FindByAsync(_ => _.Name == PackageTypeName.RegisterPackage);
-                foreach (var item in ElderSeed.DefaultPackage)
+                await unitOfWork.Repository<PackageRegisterType>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
+
+        if (!await unitOfWork.Repository<Package>().ExistsByAsync())
+        {
+            if (await unitOfWork.Repository<PackageCategory>().ExistsByAsync())
+            {
+                var packageCategory = await unitOfWork.Repository<PackageCategory>()
+                                .FindByAsync(_ => _.Name == PackageCategoryName.RegisterPackage);
+                foreach (var item in PackageSeed.DefaultPackage)
                 {
-                    if (packageType != null)
+                    if (packageCategory != null)
                     {
-                        item.PackageType = packageType;
+                        item.PackageCategory = packageCategory;
                     }
                     await unitOfWork.Repository<Package>().CreateAsync(item);
                 }
             }
         }
+
         if (await unitOfWork.Repository<Package>().ExistsByAsync())
         {
             if (await unitOfWork.Repository<Room>().ExistsByAsync())
@@ -145,6 +161,7 @@ public class ApplicationDbContextInitialiser(
                 }
             }
         }
+
         if (!await unitOfWork.Repository<Elder>().ExistsByAsync())
         {
             if (await unitOfWork.Repository<Room>().ExistsByAsync())
@@ -156,7 +173,6 @@ public class ApplicationDbContextInitialiser(
                 {
                     var room = listRoom[i];
                     var elder = elders[i];
-
                     elder.Room = room;
                     await unitOfWork.Repository<Elder>().CreateAsync(elder);
                 }
