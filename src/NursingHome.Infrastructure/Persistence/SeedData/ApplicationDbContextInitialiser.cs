@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Domain.Constants;
-using NursingHome.Domain.Entities;
 using NursingHome.Domain.Entities.Identities;
 using NursingHome.Domain.Enums;
 using NursingHome.Infrastructure.Persistence.Data;
@@ -58,126 +57,6 @@ public class ApplicationDbContextInitialiser(
 
     private async Task TrySeedAsync()
     {
-        if (!await unitOfWork.Repository<Block>().ExistsByAsync())
-        {
-            var block = BlockSeed.Default;
-            foreach (var itemBlock in block)
-            {
-                var room = BlockSeed.DefaultRoom;
-                foreach (var itemRoom in room)
-                {
-                    itemBlock.Rooms.Add(itemRoom);
-                }
-                await unitOfWork.Repository<Block>().CreateAsync(itemBlock);
-            }
-            await unitOfWork.CommitAsync();
-        }
-
-        if (!await unitOfWork.Repository<HealthReportCategory>().ExistsByAsync())
-        {
-            foreach (var item in HealthCaterorySeed.Default)
-            {
-                await unitOfWork.Repository<HealthReportCategory>().CreateAsync(item);
-            }
-            await unitOfWork.CommitAsync();
-        }
-
-        if (!await unitOfWork.Repository<PackageCategory>().ExistsByAsync())
-        {
-            foreach (var item in CategoryPackageSeed.Default)
-            {
-                await unitOfWork.Repository<PackageCategory>().CreateAsync(item);
-            }
-            await unitOfWork.CommitAsync();
-        }
-
-        if (!await unitOfWork.Repository<Role>().ExistsByAsync())
-        {
-            foreach (var item in RoleSeed.Default)
-            {
-                await roleManager.CreateAsync(item);
-            }
-        }
-
-        if (!await unitOfWork.Repository<PackageServiceType>().ExistsByAsync())
-        {
-            var listPackageType = new List<PackageServiceType>() {
-            new PackageServiceType { NameService = "Service 1" },
-            new PackageServiceType { NameService = "Service 2" },
-            new PackageServiceType { NameService = "Service 3" },
-            new PackageServiceType { NameService = "Service 4" },
-            new PackageServiceType { NameService = "Service 5" }
-            };
-            foreach (var item in listPackageType)
-            {
-                await unitOfWork.Repository<PackageServiceType>().CreateAsync(item);
-            }
-            await unitOfWork.CommitAsync();
-        }
-
-        if (!await unitOfWork.Repository<PackageRegisterType>().ExistsByAsync())
-        {
-            var listPackageType = new List<PackageRegisterType>() {
-            new PackageRegisterType { NameRegister = "Vip 1" },
-            new PackageRegisterType { NameRegister = "Vip 2" },
-            new PackageRegisterType { NameRegister = "Vip 3" },
-            };
-            foreach (var item in listPackageType)
-            {
-                await unitOfWork.Repository<PackageRegisterType>().CreateAsync(item);
-            }
-            await unitOfWork.CommitAsync();
-        }
-
-        if (!await unitOfWork.Repository<Package>().ExistsByAsync())
-        {
-            if (await unitOfWork.Repository<PackageCategory>().ExistsByAsync())
-            {
-                var packageCategory = await unitOfWork.Repository<PackageCategory>()
-                                .FindByAsync(_ => _.Name == PackageCategoryName.RegisterPackage);
-                foreach (var item in PackageSeed.DefaultPackage)
-                {
-                    if (packageCategory != null)
-                    {
-                        item.PackageCategory = packageCategory;
-                    }
-                    await unitOfWork.Repository<Package>().CreateAsync(item);
-                }
-            }
-        }
-
-        if (await unitOfWork.Repository<Package>().ExistsByAsync())
-        {
-            if (await unitOfWork.Repository<Room>().ExistsByAsync())
-            {
-                var packageRegister = await unitOfWork.Repository<Package>().Entities.FirstOrDefaultAsync();
-                var listRoom = await unitOfWork.Repository<Room>().Entities.ToListAsync();
-                if (packageRegister != null)
-                {
-                    foreach (var item in listRoom)
-                    {
-                        item.Package = packageRegister;
-                    }
-                }
-            }
-        }
-
-        if (!await unitOfWork.Repository<Elder>().ExistsByAsync())
-        {
-            if (await unitOfWork.Repository<Room>().ExistsByAsync())
-            {
-                var elders = ElderSeed.Default.ToList();
-                var listRoom = await unitOfWork.Repository<Room>().Entities.ToListAsync();
-
-                for (int i = 0; i < listRoom.Count && i < elders.Count; i++)
-                {
-                    var room = listRoom[i];
-                    var elder = elders[i];
-                    elder.Room = room;
-                    await unitOfWork.Repository<Elder>().CreateAsync(elder);
-                }
-            }
-        }
 
         if (!await unitOfWork.Repository<User>().ExistsByAsync())
         {

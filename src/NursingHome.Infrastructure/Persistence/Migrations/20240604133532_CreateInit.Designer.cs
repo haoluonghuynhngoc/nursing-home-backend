@@ -11,7 +11,7 @@ using NursingHome.Infrastructure.Persistence.Data;
 namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240603114751_CreateInit")]
+    [Migration("20240604133532_CreateInit")]
     partial class CreateInit
     {
         /// <inheritdoc />
@@ -118,8 +118,17 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int>("TotalFloor")
                         .HasColumnType("int");
 
+                    b.Property<int>("TotalRoom")
+                        .HasColumnType("int");
+
                     b.Property<string>("Type")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("UnUsedRooms")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsedRooms")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -550,11 +559,14 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<int>("HealthReportCategoryId")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
 
                     b.Property<Guid>("HealthReportId")
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
@@ -572,8 +584,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HealthReportCategoryId");
 
                     b.HasIndex("HealthReportId");
 
@@ -1130,7 +1140,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("ElderId")
+                    b.Property<Guid?>("ElderId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Gender")
@@ -1408,12 +1418,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("NursingHome.Domain.Entities.HealthReportDetail", b =>
                 {
-                    b.HasOne("NursingHome.Domain.Entities.HealthReportCategory", "HealthReportCategory")
-                        .WithMany("HealthReportDetails")
-                        .HasForeignKey("HealthReportCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("NursingHome.Domain.Entities.HealthReport", "HealthReport")
                         .WithMany("HealthReportDetails")
                         .HasForeignKey("HealthReportId")
@@ -1421,8 +1425,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("HealthReport");
-
-                    b.Navigation("HealthReportCategory");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Identities.RoleClaim", b =>
@@ -1589,9 +1591,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("NursingHome.Domain.Entities.Elder", "Elder")
                         .WithOne("Record")
-                        .HasForeignKey("NursingHome.Domain.Entities.Record", "ElderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NursingHome.Domain.Entities.Record", "ElderId");
 
                     b.Navigation("Elder");
                 });
@@ -1650,11 +1650,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.HealthReport", b =>
-                {
-                    b.Navigation("HealthReportDetails");
-                });
-
-            modelBuilder.Entity("NursingHome.Domain.Entities.HealthReportCategory", b =>
                 {
                     b.Navigation("HealthReportDetails");
                 });

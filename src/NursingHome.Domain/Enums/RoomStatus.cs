@@ -2,8 +2,8 @@
 public enum RoomStatus
 {
     Available,
-    Occupied,
-    Reserved,
+    // Occupied, //  Phòng đã được sử dụng
+    // Reserved, // Phòng đã được đặt trước
     Maintenance,
-
+    Removed,
 }
