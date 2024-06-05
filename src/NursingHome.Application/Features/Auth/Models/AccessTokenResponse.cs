@@ -1,6 +1,5 @@
-﻿using NursingHome.Application.Common.Constants;
-
-namespace NursingHome.Application.Features.Auth.Models;
+﻿namespace NursingHome.Application.Features.Auth.Models;
+using NursingHome.Application.Common.Constants;
 
 public sealed record AccessTokenResponse
 {

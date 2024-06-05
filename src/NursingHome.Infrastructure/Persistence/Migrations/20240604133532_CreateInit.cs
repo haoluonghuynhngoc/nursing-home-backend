@@ -36,9 +36,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false),
                     Name = table.Column<string>(type: "longtext", nullable: true),
                     Description = table.Column<string>(type: "longtext", nullable: true),
+                    UsedRooms = table.Column<int>(type: "int", nullable: false),
+                    UnUsedRooms = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "longtext", nullable: true),
                     Type = table.Column<string>(type: "longtext", nullable: true),
-                    TotalFloor = table.Column<int>(type: "int", nullable: false)
+                    TotalFloor = table.Column<int>(type: "int", nullable: false),
+                    TotalRoom = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -888,7 +891,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     CurrentMedications = table.Column<string>(type: "longtext", nullable: true),
                     Allergy = table.Column<string>(type: "longtext", nullable: true),
                     Note = table.Column<string>(type: "longtext", nullable: true),
-                    ElderId = table.Column<Guid>(type: "char(36)", nullable: false)
+                    ElderId = table.Column<Guid>(type: "char(36)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -897,8 +900,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         name: "FK_Records_Elders_ElderId",
                         column: x => x.ElderId,
                         principalTable: "Elders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -913,18 +915,13 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Unit = table.Column<string>(type: "longtext", nullable: true),
                     Status = table.Column<string>(type: "longtext", nullable: true),
                     Note = table.Column<string>(type: "longtext", nullable: true),
-                    HealthReportId = table.Column<Guid>(type: "char(36)", nullable: false),
-                    HealthReportCategoryId = table.Column<int>(type: "int", nullable: false)
+                    Description = table.Column<string>(type: "longtext", nullable: true),
+                    ImageUrl = table.Column<string>(type: "longtext", nullable: true),
+                    HealthReportId = table.Column<Guid>(type: "char(36)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HealthReportDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_HealthReportDetails_HealthReportCategories_HealthReportCateg~",
-                        column: x => x.HealthReportCategoryId,
-                        principalTable: "HealthReportCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_HealthReportDetails_HealthReports_HealthReportId",
                         column: x => x.HealthReportId,
@@ -1004,11 +1001,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "IX_FeedBacks_UserId",
                 table: "FeedBacks",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HealthReportDetails_HealthReportCategoryId",
-                table: "HealthReportDetails",
-                column: "HealthReportCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HealthReportDetails_HealthReportId",
@@ -1160,6 +1152,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "FeedBacks");
 
             migrationBuilder.DropTable(
+                name: "HealthReportCategories");
+
+            migrationBuilder.DropTable(
                 name: "HealthReportDetails");
 
             migrationBuilder.DropTable(
@@ -1200,9 +1195,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "CareSchedules");
-
-            migrationBuilder.DropTable(
-                name: "HealthReportCategories");
 
             migrationBuilder.DropTable(
                 name: "HealthReports");

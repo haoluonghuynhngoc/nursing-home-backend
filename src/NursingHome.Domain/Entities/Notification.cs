@@ -5,7 +5,6 @@ using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingHome.Domain.Entities;
-
 public class Notification : BaseAuditableEntity<int>
 {
     public string? Title { get; set; }
