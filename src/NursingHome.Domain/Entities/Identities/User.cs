@@ -23,8 +23,14 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public DateTimeOffset? DeletedAt { get; set; }
     [Projectable]
     public bool IsDeleted => DeletedAt != null;
+    public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();
+    public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     public virtual ICollection<Notification> Notifications { get; set; } = new HashSet<Notification>();
     public virtual ICollection<Device> Devices { get; set; } = new HashSet<Device>();
+    public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+    public virtual ICollection<ServicePackageUser> ServicePackageUsers { get; set; } = new HashSet<ServicePackageUser>();
+    public virtual ICollection<NursingPackageUser> NursingPackageUsers { get; set; } = new HashSet<NursingPackageUser>();
     public virtual ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     [Projectable]
     [NotMapped]

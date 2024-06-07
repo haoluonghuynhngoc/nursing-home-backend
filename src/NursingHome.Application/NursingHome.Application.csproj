@@ -21,9 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Features\Auth\Commands\" />
-	  <Folder Include="Features\Auth\Events\" />
-	  <Folder Include="Features\Auth\Handlers\" />
+	  <Folder Include="Features\Rooms\Handlers\" />
 	</ItemGroup>
 
 </Project>
