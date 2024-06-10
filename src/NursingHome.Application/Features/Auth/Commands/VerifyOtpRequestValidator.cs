@@ -1,10 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using NursingHome.Application.Common.Resources;
+using NursingHome.Shared.Extensions;
 
 namespace NursingHome.Application.Features.Auth.Commands;
-internal class VerifyOtpRequestValidator
+public sealed class VerifyOtpRequestValidator : AbstractValidator<VerifyOtpRequest>
 {
+    public VerifyOtpRequestValidator()
+    {
+        RuleFor(x => x.PhoneNumber)
+            .NotEmpty()
+            .WithMessage(Resource.PhoneNumberRequired)
+            .Matches(RegexExtensions.PhoneRegex)
+            .WithMessage(Resource.PhoneNumberInvalid);
+
+        RuleFor(x => x.Otp)
+            .NotEmpty()
+            .WithMessage(Resource.OtpRequired)
+            .Matches(RegexExtensions.OtpRegex)
+            .WithMessage(Resource.OtpInvalid);
+    }
 }

@@ -23,19 +23,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<MeasureUnit> MeasureUnits { get; set; }
     public DbSet<MedicalRecord> MedicalRecords { get; set; }
     public DbSet<Notification> Notifications { get; set; }
-    public DbSet<NursingPackage> NursingPackages { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDate> OrderDates { get; set; }
-    public DbSet<ServicePackage> ServicePackages { get; set; }
+    public DbSet<Package> Packages { get; set; }
     public DbSet<Room> Rooms { get; set; }
-    public DbSet<ServicePackageCategory> ServicePackageCategories { get; set; }
-    public DbSet<ServicePackageDate> ServicePackageDates { get; set; }
-
-    // Join Tables
-    public DbSet<NursingPackageUser> NursingPackageUsers { get; set; }
-    public DbSet<ServicePackageUser> ServicePackageUsers { get; set; }
-    public DbSet<ElderNursingPackage> ElderNursingPackages { get; set; }
-    public DbSet<ElderServicePackage> ElderServicePackages { get; set; }
+    public DbSet<PackageCategory> PackageCategories { get; set; }
+    public DbSet<PackageDate> PackageDates { get; set; }
+    public DbSet<NurseScheduler> NurseSchedulers { get; set; }
+    public DbSet<Shift> Shifts { get; set; }
+    public DbSet<CareSchedule> CareSchedules { get; set; }
 
     //public ApplicationDbContext()
     //{
@@ -74,49 +70,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .WithMany(e => e.UserRoles)
                 .HasForeignKey(ur => ur.UserId);
         });
-        modelBuilder.Entity<NursingPackageUser>(_ =>
-        {
-            _.HasKey(a => new { a.UserId, a.NursingPackageId });
-            _.HasOne(e => e.User)
-                .WithMany(e => e.NursingPackageUsers)
-                .HasForeignKey(ur => ur.UserId);
 
-            _.HasOne(e => e.NursingPackage)
-                .WithMany(e => e.NursingPackageUsers)
-                .HasForeignKey(ur => ur.NursingPackageId);
-        });
-        modelBuilder.Entity<ServicePackageUser>(_ =>
-        {
-            _.HasKey(a => new { a.UserId, a.ServicePackageId });
-            _.HasOne(e => e.User)
-                .WithMany(e => e.ServicePackageUsers)
-                .HasForeignKey(ur => ur.UserId);
-
-            _.HasOne(e => e.ServicePackage)
-                .WithMany(e => e.ServicePackageUsers)
-                .HasForeignKey(ur => ur.ServicePackageId);
-        });
-        modelBuilder.Entity<ElderNursingPackage>(_ =>
-        {
-            _.HasKey(a => new { a.ElderId, a.NursingPackageId });
-            _.HasOne(e => e.Elder)
-                .WithMany(e => e.ElderNursingPackages)
-                .HasForeignKey(ur => ur.ElderId);
-
-            _.HasOne(e => e.NursingPackage)
-                .WithMany(e => e.ElderNursingPackages)
-                .HasForeignKey(ur => ur.NursingPackageId);
-        });
-        modelBuilder.Entity<ElderServicePackage>(_ =>
-        {
-            _.HasKey(a => new { a.ElderId, a.ServicePackageId });
-            _.HasOne(e => e.Elder)
-                .WithMany(e => e.ElderServicePackages)
-                .HasForeignKey(ur => ur.ElderId);
-
-            _.HasOne(e => e.ServicePackage)
-                .WithMany(e => e.ElderServicePackages)
-                .HasForeignKey(ur => ur.ServicePackageId);
-        });
     }
 }

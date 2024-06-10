@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using NursingHome.Application.Common.Resources;
+using NursingHome.Shared.Extensions;
 
 namespace NursingHome.Application.Features.Auth.Commands;
-internal class SendOtpRequestValidator
+public sealed class SendOtpRequestValidator : AbstractValidator<SendOtpRequest>
 {
+    public SendOtpRequestValidator()
+    {
+        RuleFor(x => x.PhoneNumber)
+            .NotEmpty()
+            .WithMessage(Resource.PhoneNumberRequired)
+            .Matches(RegexExtensions.PhoneRegex)
+            .WithMessage(Resource.PhoneNumberInvalid);
+    }
 }

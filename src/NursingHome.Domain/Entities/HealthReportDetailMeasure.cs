@@ -6,6 +6,6 @@ public class HealthReportDetailMeasure
     public float Value { get; set; }
     public int MeasureUnitId { get; set; }
     public virtual MeasureUnit MeasureUnit { get; set; } = default!;
-    public long HealthReportDetailId { get; set; }
+    public int HealthReportDetailId { get; set; }
     public virtual HealthReportDetail HealthReportDetail { get; set; } = default!;
 }

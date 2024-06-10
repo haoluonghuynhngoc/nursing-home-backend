@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NursingHome.Domain.Common;
 
 namespace NursingHome.Application.Features.Auth.Events;
-internal class SendOtpEvent
-{
-}
+internal sealed record SendOtpEvent(string PhoneNumber, string Otp) : BaseEvent;

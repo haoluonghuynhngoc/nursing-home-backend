@@ -7,7 +7,7 @@ public sealed record CreateAutoCommand : IRequest<MessageResponse>
 {
     public int TotalRoom { get; set; }
     [JsonIgnore]
-    public Guid BlockId { get; set; }
+    public int BlockId { get; set; }
     [JsonIgnore]
-    public Guid PackageId { get; set; }
+    public int PackageId { get; set; }
 }
