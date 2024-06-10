@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using NursingHome.Application.Common.Resources;
 
 namespace NursingHome.Application.Features.Auth.Commands;
-internal class RefreshTokenRequestValidator
+public class RefreshTokenRequestValidator : AbstractValidator<RefreshTokenRequest>
 {
+    public RefreshTokenRequestValidator()
+    {
+        RuleFor(x => x.RefreshToken).NotEmpty().WithMessage(Resource.RefreshTokenRequired);
+    }
 }
+

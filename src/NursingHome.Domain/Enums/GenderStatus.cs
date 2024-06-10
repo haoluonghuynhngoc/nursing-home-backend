@@ -2,6 +2,6 @@
 public enum GenderStatus
 {
     Male,
-    FeMale,
+    Female,
     Other
 }

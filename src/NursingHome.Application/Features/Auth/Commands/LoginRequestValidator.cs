@@ -10,4 +10,3 @@ public sealed class LoginRequestValidator : AbstractValidator<LoginRequest>
         RuleFor(x => x.Password).NotEmpty().WithMessage(Resource.PasswordRequired);
     }
 }
-

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Mapster;
+using MediatR;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.Blocks.Commands;
@@ -13,11 +14,9 @@ internal sealed class CreateBlockCommandHandler(
     private readonly IGenericRepository<Block> _blockRepository = unitOfWork.Repository<Block>();
     public async Task<MessageResponse> Handle(CreateBlockCommand request, CancellationToken cancellationToken)
     {
-        var block = new Block
-        {
-            Name = request.Name,
-            TotalRoom = request.TotalRoom
-        };
+        var block = new Block();
+        request.Adapt(block);
+
         await _blockRepository.CreateAsync(block);
         await unitOfWork.CommitAsync();
         return new MessageResponse(Resource.CreatedSuccess);

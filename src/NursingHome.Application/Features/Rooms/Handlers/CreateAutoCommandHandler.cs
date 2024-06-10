@@ -24,9 +24,6 @@ internal sealed class CreateAutoCommandHandler(
         List<Room> DefaultRoom = new Faker<Room>()
          .RuleFor(a => a.Name, r => $"Room Temporary {r.Random.Number(0, 100)}")
          .RuleFor(a => a.TotalBed, r => 0)
-         .RuleFor(r => r.UnusedBed, r => 0)
-         .RuleFor(r => r.UserBed, r => 0)
-         .RuleFor(r => r.AvailableBed, r => false)
          .RuleFor(a => a.Type, f => RoomType.VacantRoom)
          .RuleFor(a => a.Block, f => block)
          .Generate(request.TotalRoom);

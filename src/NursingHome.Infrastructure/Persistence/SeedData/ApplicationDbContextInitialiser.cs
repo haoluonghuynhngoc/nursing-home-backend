@@ -57,6 +57,13 @@ public class ApplicationDbContextInitialiser(
 
     private async Task TrySeedAsync()
     {
+        if (!await unitOfWork.Repository<Role>().ExistsByAsync())
+        {
+            foreach (var item in RoleSeed.Default)
+            {
+                await roleManager.CreateAsync(item);
+            }
+        }
 
         if (!await unitOfWork.Repository<User>().ExistsByAsync())
         {

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using MediatR;
+using NursingHome.Application.Models;
+using NursingHome.Shared.Converters;
 namespace NursingHome.Application.Features.Auth.Commands;
-internal class SendOtpRequest
+public sealed record SendOtpRequest : IRequest<MessageResponse>
 {
+    [NormalizePhone]
+    public string PhoneNumber { get; init; } = default!;
 }

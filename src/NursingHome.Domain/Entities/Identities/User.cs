@@ -13,7 +13,7 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public string? CCCD { get; set; }
     public bool IsActive { get; set; }
     [Column(TypeName = "nvarchar(24)")]
-    public GenderStatus Gender { get; set; } = GenderStatus.Male;
+    public GenderStatus Gender { get; set; }
     public string? DateOfBirth { get; set; }
     public string? CreatedBy { get; set; }
     public DateTimeOffset? CreatedAt { get; set; }
@@ -23,14 +23,14 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public DateTimeOffset? DeletedAt { get; set; }
     [Projectable]
     public bool IsDeleted => DeletedAt != null;
+
     public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();
     public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     public virtual ICollection<Notification> Notifications { get; set; } = new HashSet<Notification>();
     public virtual ICollection<Device> Devices { get; set; } = new HashSet<Device>();
     public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-    public virtual ICollection<ServicePackageUser> ServicePackageUsers { get; set; } = new HashSet<ServicePackageUser>();
-    public virtual ICollection<NursingPackageUser> NursingPackageUsers { get; set; } = new HashSet<NursingPackageUser>();
+    public virtual ICollection<NurseScheduler> NurseSchedulers { get; set; } = new HashSet<NurseScheduler>();
     public virtual ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     [Projectable]
     [NotMapped]

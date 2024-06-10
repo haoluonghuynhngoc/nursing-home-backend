@@ -22,8 +22,8 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
             Expression = Expression
                 .And(u => EF.Functions.Like(u.Name, $"%{Search}%"));
         }
-        Expression = Expression.Or(
-            r => r.Type == Type);
+        Expression = Expression
+            .And(r => !Type.HasValue || r.Type == Type);
         return Expression;
     }
 

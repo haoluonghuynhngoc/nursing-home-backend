@@ -23,10 +23,7 @@ internal sealed class CreateRoomCommandHandler(
         {
             Name = request.Name,
             BlockId = request.BlockId,
-            AvailableBed = false,
             TotalBed = 0,
-            UnusedBed = 0,
-            UserBed = 0,
         };
 
         await _roomRepository.CreateAsync(room);

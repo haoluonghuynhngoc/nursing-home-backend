@@ -1,7 +1,7 @@
 ﻿namespace NursingHome.Application.Features.Blocks.Models;
 public sealed record BlockResponse
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string? Name { get; set; }
     public int UsedRooms { get; set; }
     public int UnUsedRooms { get; set; }
