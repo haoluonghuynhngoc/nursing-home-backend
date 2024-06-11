@@ -25,11 +25,10 @@ internal sealed class GetAllBlocksQueryHandler(
         //}
 
         var paginListBlock = await _blockRepository.FindAsync<BlockResponse>(
-            pageIndex: request.PageNumber,
+            pageIndex: request.PageIndex,
             pageSize: request.PageSize,
-            expression: x =>
-                (string.IsNullOrEmpty(request.Search) || string.IsNullOrEmpty(x.Name) || x.Name.Contains(request.Search)),
-            orderBy: x => x.OrderBy(x => x.Name),
+            expression: request.GetExpressions(),
+            orderBy: request.GetOrder(),
             cancellationToken: cancellationToken
             );
         return await paginListBlock.ToPaginatedResponseAsync();

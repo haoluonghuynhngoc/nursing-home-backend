@@ -1,7 +1,8 @@
-﻿namespace NursingHome.Domain.Entities;
-public class MeasureUnit
+﻿using NursingHome.Domain.Common;
+
+namespace NursingHome.Domain.Entities;
+public class MeasureUnit : BaseEntity<int>
 {
-    public int Id { get; set; }
     public string Name { get; set; } = default!;
     public int HealthCategoryId { get; set; }
     public virtual HealthCategory HealthCategory { get; set; } = default!;

@@ -1,7 +1,8 @@
-﻿namespace NursingHome.Domain.Entities;
-public class HealthReportDetailMeasure
+﻿using NursingHome.Domain.Common;
+
+namespace NursingHome.Domain.Entities;
+public class HealthReportDetailMeasure : BaseEntity<int>
 {
-    public int Id { get; set; }
     public string Name { get; set; } = default!;
     public float Value { get; set; }
     public int MeasureUnitId { get; set; }

@@ -211,7 +211,8 @@ public static class DependencyInjection
                 var problemDetails = _factory.CreateProblemDetails(
                              httpContext: context,
                              statusCode: context.Response.StatusCode,
-                             detail: exception?.Message);
+                             detail: exception?.Message,
+                             title: exception?.Message);
 
                 var options = JsonSerializerUtils.GetGlobalJsonSerializerOptions();
 
