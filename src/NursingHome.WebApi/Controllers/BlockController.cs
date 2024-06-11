@@ -15,7 +15,7 @@ public class BlockController(ISender sender) : ControllerBase
 {
 
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<BlockResponse>>> GetBlocksAsync(
+    public async Task<ActionResult<PaginatedResponse<BlockResponse>>> GetAllBlocksWithPaginAsync(
         [FromQuery] GetAllBlocksQuery request,
         CancellationToken cancellationToken)
     {
@@ -23,7 +23,7 @@ public class BlockController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<BlockResponse>> GetBlocksByIdAsync(
+    public async Task<ActionResult<BlockResponse>> GetBlockByIdAsync(
         int id,
         CancellationToken cancellationToken)
     {

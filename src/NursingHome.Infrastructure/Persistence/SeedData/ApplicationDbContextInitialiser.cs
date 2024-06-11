@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Domain.Constants;
+using NursingHome.Domain.Entities;
 using NursingHome.Domain.Entities.Identities;
 using NursingHome.Domain.Enums;
 using NursingHome.Infrastructure.Persistence.Data;
@@ -57,6 +58,22 @@ public class ApplicationDbContextInitialiser(
 
     private async Task TrySeedAsync()
     {
+        if (!await unitOfWork.Repository<Block>().ExistsByAsync())
+        {
+            foreach (var item in BlockSeed.Default)
+            {
+                await unitOfWork.Repository<Block>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
+        if (!await unitOfWork.Repository<HealthCategory>().ExistsByAsync())
+        {
+            foreach (var item in HealthCaterorySeed.Default)
+            {
+                await unitOfWork.Repository<HealthCategory>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
         if (!await unitOfWork.Repository<Role>().ExistsByAsync())
         {
             foreach (var item in RoleSeed.Default)
@@ -64,7 +81,6 @@ public class ApplicationDbContextInitialiser(
                 await roleManager.CreateAsync(item);
             }
         }
-
         if (!await unitOfWork.Repository<User>().ExistsByAsync())
         {
             var user = new User

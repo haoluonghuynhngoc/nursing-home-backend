@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NursingHome.Application.Features.Rooms.Commands;
+using NursingHome.Application.Features.Rooms.Models;
 using NursingHome.Application.Features.Rooms.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Shared.Pages;
 
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
@@ -13,7 +15,7 @@ public class RoomController(ISender sender) : ControllerBase
 {
 
     [HttpGet]
-    public async Task<IActionResult> GetAllRoomsAsync(
+    public async Task<ActionResult<PaginatedResponse<RoomResponse>>> GetAllRoomsWithPaginAsync(
         [FromQuery] GetAllRoomQuery request,
         CancellationToken cancellationToken)
     {
@@ -21,7 +23,7 @@ public class RoomController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetRoomsByIdAsync(
+    public async Task<ActionResult<RoomResponse>> GetRoomByIdAsync(
         int id,
         CancellationToken cancellationToken)
     {
@@ -37,7 +39,7 @@ public class RoomController(ISender sender) : ControllerBase
     }
 
     [HttpPost("/auto")]
-    public async Task<ActionResult<MessageResponse>> CreateRoomAutoAsync(
+    public async Task<ActionResult<MessageResponse>> CreateRoomsAutoAsync(
         int blockId,
         int packageId,
         CreateAutoCommand command,

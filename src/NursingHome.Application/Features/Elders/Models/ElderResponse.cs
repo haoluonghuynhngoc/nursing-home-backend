@@ -12,8 +12,6 @@ public sealed record ElderResponse
     public string? Nationality { get; set; }
     public ElderStatus Status { get; set; }
     public string? Notes { get; set; }
-    public ElderRoom Room { get; set; } = default!;
+
     public ElderUser User { get; set; } = default!;
-    public ElderMedicalRecord MedicalRecord { get; set; } = default!;
-    public IEnumerable<ElderNursingPackages> NursingPackages = default!;
 }

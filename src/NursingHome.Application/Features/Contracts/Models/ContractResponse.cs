@@ -12,6 +12,7 @@ public sealed record ContractResponse
     public string? Notes { get; set; }
     public string Status { get; set; } = default!;
     public string? Description { get; set; }
-    public ContractElder Elder { get; set; } = default!;
-    public ContractUser User { get; set; } = default!;
+    public int ElderId { get; set; }
+    public int UserId { get; set; }
+
 }

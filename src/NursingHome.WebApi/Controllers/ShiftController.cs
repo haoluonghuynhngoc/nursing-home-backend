@@ -5,6 +5,7 @@ using NursingHome.Application.Features.Shifts.Commands;
 using NursingHome.Application.Features.Shifts.Models;
 using NursingHome.Application.Features.Shifts.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Shared.Pages;
 
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
@@ -13,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class ShiftController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetShiftWithPaginAsync(
+    public async Task<ActionResult<PaginatedResponse<ShiftResponse>>> GetAllShiftsWithPaginAsync(
    [FromQuery] GetAllShiftQuery request,
    CancellationToken cancellationToken)
     {

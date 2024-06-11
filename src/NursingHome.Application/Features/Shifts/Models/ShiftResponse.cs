@@ -5,5 +5,5 @@ public sealed record ShiftResponse
     public string Name { get; set; } = default!;
     public TimeOnly StartTime { get; set; } = default!;
     public TimeOnly EndTime { get; set; } = default!;
-    public ICollection<ShiftNurseSchedulers> NurseSchedulers { get; set; } = new HashSet<ShiftNurseSchedulers>();
+
 }

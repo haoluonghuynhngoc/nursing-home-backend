@@ -22,7 +22,6 @@ internal class RemoveContractCommandHandler(
         var elder = await _elderRepository.FindByAsync(
                 expression: _ => _.Id == contract.ElderId)
                  ?? throw new NotFoundException(nameof(Elder), contract.ElderId);
-        elder.Status = ElderStatus.CancelledContract;
         contract.ReasonForCanceling = request.ReasonForCanceling;
 
         contract.Status = ContractStatus.Cancelled;

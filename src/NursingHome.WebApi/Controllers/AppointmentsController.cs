@@ -14,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class AppointmentsController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<AppointmentResponse>>> GetAppointments(
+    public async Task<ActionResult<PaginatedResponse<AppointmentResponse>>> GetAllAppointmentsWithPaginAsync(
          [FromQuery] GetAppointmentsQuery query,
          CancellationToken cancellationToken)
     {
@@ -22,25 +22,25 @@ public class AppointmentsController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<AppointmentResponse>> GetAppointmentById(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<AppointmentResponse>> GetAppointmentByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new GetAppointmentByIdQuery(id), cancellationToken);
     }
 
     [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreateAppointment(CreateAppointmentCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreateAppointmentAsync(CreateAppointmentCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<MessageResponse>> UpdateAppointment(int id, UpdateAppointmentCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> UpdateAppointmentAsync(int id, UpdateAppointmentCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<MessageResponse>> DeleteAppointment(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> DeleteAppointmentAsync(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new DeleteAppointmentCommand(id), cancellationToken);
     }
