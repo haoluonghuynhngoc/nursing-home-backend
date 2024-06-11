@@ -11,14 +11,14 @@ namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class PackageCategoryController(ISender sender) : ControllerBase
+public class PackageCategoriesController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<PackageCategoryResponse>>> GetAllPackageCategoryWithPaginAsync(
+    public async Task<ActionResult<PaginatedResponse<PackageCategoryResponse>>> GetPackageCategoryWithPaginAsync(
     [FromQuery] GetAllPackageCategoriesQuery request,
     CancellationToken cancellationToken)
     {
-        return Ok(await sender.Send(request, cancellationToken));
+        return await sender.Send(request, cancellationToken);
     }
 
     [HttpGet("{id}")]
