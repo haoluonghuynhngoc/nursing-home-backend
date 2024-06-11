@@ -1,7 +1,8 @@
-﻿namespace NursingHome.Domain.Entities;
-public class Shift
+﻿using NursingHome.Domain.Common;
+
+namespace NursingHome.Domain.Entities;
+public class Shift : BaseEntity<int>
 {
-    public int Id { get; set; }
     public string Name { get; set; } = default!;
     public TimeOnly StartTime { get; set; } = default!;
     public TimeOnly EndTime { get; set; } = default!;

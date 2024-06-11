@@ -1,7 +1,8 @@
-﻿namespace NursingHome.Domain.Entities;
-public class HealthReportDetail
+﻿using NursingHome.Domain.Common;
+
+namespace NursingHome.Domain.Entities;
+public class HealthReportDetail : BaseEntity<int>
 {
-    public int Id { get; set; }
     public int HealthCategoryId { get; set; }
     public virtual HealthCategory HealthCategory { get; set; } = default!;
     public int HealthReportId { get; set; }

@@ -5,6 +5,7 @@ using NursingHome.Application.Features.Blocks.Commands;
 using NursingHome.Application.Features.Blocks.Models;
 using NursingHome.Application.Features.Blocks.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Shared.Pages;
 
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
@@ -14,11 +15,11 @@ public class BlockController(ISender sender) : ControllerBase
 {
 
     [HttpGet]
-    public async Task<IActionResult> GetBlocksAsync(
+    public async Task<ActionResult<PaginatedResponse<BlockResponse>>> GetBlocksAsync(
         [FromQuery] GetAllBlocksQuery request,
         CancellationToken cancellationToken)
     {
-        return Ok(await sender.Send(request, cancellationToken));
+        return await sender.Send(request, cancellationToken);
     }
 
     [HttpGet("{id}")]

@@ -1,9 +1,9 @@
-﻿using NursingHome.Domain.Entities.Identities;
+﻿using NursingHome.Domain.Common;
+using NursingHome.Domain.Entities.Identities;
 
 namespace NursingHome.Domain.Entities;
-public class NurseScheduler
+public class NurseScheduler : BaseEntity<int>
 {
-    public int Id { get; set; }
     public int CareScheduleId { get; set; }
     public virtual CareSchedule CareSchedule { get; set; } = default!;
     public int ShiftId { get; set; }

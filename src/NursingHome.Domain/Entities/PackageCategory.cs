@@ -1,10 +1,10 @@
-﻿using NursingHome.Domain.Enums;
+﻿using NursingHome.Domain.Common;
+using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingHome.Domain.Entities;
-public class PackageCategory
+public class PackageCategory : BaseEntity<int>
 {
-    public int Id { get; set; }
     public string Name { get; set; } = default!;
     [Column(TypeName = "nvarchar(24)")]
     public PackageCategoryType Type { get; set; }

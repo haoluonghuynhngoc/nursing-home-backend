@@ -1,7 +1,7 @@
 ﻿using NursingHome.Domain.Common;
 
 namespace NursingHome.Domain.Entities;
-public class CareSchedule : BaseAuditableEntity<int>
+public class CareSchedule : BaseEntity<int>
 {
     public DateOnly Date { get; set; }
     public string? Notes { get; set; }

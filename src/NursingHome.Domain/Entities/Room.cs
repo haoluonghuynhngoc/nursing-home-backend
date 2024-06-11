@@ -3,7 +3,7 @@ using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingHome.Domain.Entities;
-public class Room : BaseAuditableEntity<int>
+public class Room : BaseEntity<int>
 {
     public string Name { get; set; } = default!;
     //public bool AvailableBed { get; set; }

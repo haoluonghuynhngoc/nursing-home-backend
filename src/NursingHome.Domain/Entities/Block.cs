@@ -2,7 +2,7 @@
 using NursingHome.Domain.Common;
 
 namespace NursingHome.Domain.Entities;
-public class Block : BaseAuditableEntity<int>
+public class Block : BaseEntity<int>
 {
     public string Name { get; set; } = default!;
     //[Projectable]
