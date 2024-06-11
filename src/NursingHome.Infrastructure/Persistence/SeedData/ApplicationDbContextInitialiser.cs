@@ -87,6 +87,11 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "admin",
                 IsActive = true,
+                AvatarUrl = "",
+                FullName = "Admin",
+                Address = "Hanoi",
+                CCCD = "123456789",
+                DateOfBirth = "01/01/1990",
                 Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "admin");
@@ -96,6 +101,10 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "user",
                 IsActive = true,
+                FullName = "user",
+                Address = "Ho Chi Minh",
+                CCCD = "123456789",
+                DateOfBirth = "01/01/1999",
                 Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "user");
@@ -105,6 +114,10 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "director",
                 IsActive = true,
+                FullName = "Director",
+                Address = "Da Nang",
+                CCCD = "123456789",
+                DateOfBirth = "01/01/1999",
                 Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "director");
@@ -114,6 +127,10 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "manager",
                 IsActive = true,
+                FullName = "Manager",
+                Address = "Long An",
+                CCCD = "123456789",
+                DateOfBirth = "01/01/1990",
                 Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "manager");
@@ -123,6 +140,10 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "staff",
                 IsActive = true,
+                FullName = "Staff",
+                Address = "Da Lat",
+                CCCD = "123456789",
+                DateOfBirth = "01/01/1990",
                 Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "staff");
@@ -132,6 +153,10 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "nurses",
                 IsActive = true,
+                FullName = "Nurses",
+                Address = "Ca Mau",
+                CCCD = "123456789",
+                DateOfBirth = "01/01/1990",
                 Gender = GenderStatus.Male,
             };
             await userManager.CreateAsync(user, "nurses");
