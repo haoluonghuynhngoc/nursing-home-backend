@@ -23,8 +23,6 @@ public sealed record GetAllElderQuery : PaginationRequest<Elder>, IRequest<Pagin
             Expression = Expression
                 .And(u => EF.Functions.Like(u.Name, $"%{Search}%"));
         }
-        Expression = Expression
-            .And(e => !Status.HasValue || e.Status == Status);
 
         return Expression;
     }

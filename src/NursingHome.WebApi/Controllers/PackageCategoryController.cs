@@ -5,6 +5,7 @@ using NursingHome.Application.Features.PackageCategories.Commands;
 using NursingHome.Application.Features.PackageCategories.Models;
 using NursingHome.Application.Features.PackageCategories.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Shared.Pages;
 
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
@@ -13,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class PackageCategoryController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetPackageCategoryWithPaginAsync(
+    public async Task<ActionResult<PaginatedResponse<PackageCategoryResponse>>> GetAllPackageCategoryWithPaginAsync(
     [FromQuery] GetAllPackageCategoriesQuery request,
     CancellationToken cancellationToken)
     {

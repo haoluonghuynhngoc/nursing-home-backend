@@ -13,8 +13,7 @@ public class Elder : BaseAuditableEntity<int>
     public string? ImageUrl { get; set; }
     public string? Address { get; set; }
     public string? Nationality { get; set; }
-    [Column(TypeName = "nvarchar(24)")]
-    public ElderStatus Status { get; set; }
+
     public string? Notes { get; set; }
     public int RoomId { get; set; }
     public virtual Room Room { get; set; } = default!;

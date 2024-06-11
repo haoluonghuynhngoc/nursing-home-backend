@@ -5,6 +5,7 @@ using NursingHome.Application.Features.Contracts.Commands;
 using NursingHome.Application.Features.Contracts.Models;
 using NursingHome.Application.Features.Contracts.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Shared.Pages;
 
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
@@ -13,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class ContractController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetContractsAsync(
+    public async Task<ActionResult<PaginatedResponse<ContractResponse>>> GetAllContractsAllBlocksWithAsync(
         [FromQuery] GetAllContractQuery request,
         CancellationToken cancellationToken)
     {
@@ -21,7 +22,7 @@ public class ContractController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ContractResponse>> GetContractsByIdAsync(
+    public async Task<ActionResult<ContractResponse>> GetContractByIdAsync(
         int id,
         CancellationToken cancellationToken)
     {

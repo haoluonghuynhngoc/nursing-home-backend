@@ -1,4 +1,6 @@
-﻿namespace NursingHome.Application.Features.Blocks.Models;
+﻿using NursingHome.Application.Features.Rooms.Models;
+
+namespace NursingHome.Application.Features.Blocks.Models;
 public sealed record BlockResponse
 {
     public int Id { get; set; }
@@ -6,5 +8,5 @@ public sealed record BlockResponse
     //public int UsedRooms { get; set; }
     //public int UnUsedRooms { get; set; }
     public int TotalRoom { get; set; }
-    public ICollection<BlockRoom> Rooms { get; set; } = new HashSet<BlockRoom>();
+    public ICollection<RoomResponse> Rooms { get; set; } = new HashSet<RoomResponse>();
 }

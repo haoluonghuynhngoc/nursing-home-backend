@@ -11,7 +11,5 @@ public sealed record RoomResponse
     //public int UserBed { get; set; }
     public RoomType? Type { get; set; }
     public int BlockId { get; set; }
-    public RoomBlock Block { get; set; } = default!;
-    public ICollection<RoomElder> Elders { get; set; } = new HashSet<RoomElder>();
 
 }

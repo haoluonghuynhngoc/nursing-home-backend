@@ -14,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class MedicalRecordsController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<MedicalRecordResponse>>> GetMedicalRecords(
+    public async Task<ActionResult<PaginatedResponse<MedicalRecordResponse>>> GetAllMedicalRecordsWithPaginAsync(
      [FromQuery] GetMedicalRecordsQuery query,
      CancellationToken cancellationToken)
     {
@@ -22,25 +22,32 @@ public class MedicalRecordsController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<MedicalRecordResponse>> GetMedicalRecordById(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<MedicalRecordResponse>> GetMedicalRecordByIdAsync(
+        int id,
+        CancellationToken cancellationToken)
     {
         return await sender.Send(new GetMedicalRecordByIdQuery(id), cancellationToken);
     }
 
     [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreateMedicalRecord(CreateMedicalRecordCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreateMedicalRecordAsync(
+        CreateMedicalRecordCommand command,
+        CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<MessageResponse>> UpdateMedicalRecord(int id, UpdateMedicalRecordCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> UpdateMedicalRecordAsync(
+        int id,
+        UpdateMedicalRecordCommand command,
+        CancellationToken cancellationToken)
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<MessageResponse>> DeleteMedicalRecord(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> DeleteMedicalRecordAsync(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new DeleteMedicalRecordCommand(id), cancellationToken);
     }

@@ -32,7 +32,6 @@ internal sealed class CreateContractCommandHandler(
         request.Adapt(contract);
 
         contract.Status = ContractStatus.InUse;
-        elder.Status = ElderStatus.AddedContract;
 
         await _contractRepository.CreateAsync(contract);
         await unitOfWork.CommitAsync();

@@ -6,7 +6,6 @@ using NursingHome.Application.Features.Elders.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
 using NursingHome.Domain.Entities.Identities;
-using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Elders.Handlers;
 internal sealed class CreateElderCommandHandler(
@@ -34,7 +33,6 @@ internal sealed class CreateElderCommandHandler(
             ImageUrl = request.ImageUrl,
             Address = request.Address,
             Nationality = request.Nationality,
-            Status = ElderStatus.NotAddedContract,
             Notes = request.Notes,
             Room = room,
             User = customer,
