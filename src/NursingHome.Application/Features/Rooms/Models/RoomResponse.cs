@@ -10,6 +10,7 @@ public sealed record RoomResponse
     //public int UnusedBed { get; set; }
     //public int UserBed { get; set; }
     public RoomType? Type { get; set; }
+    public int TotalElder { get; set; }
     public int BlockId { get; set; }
 
 }

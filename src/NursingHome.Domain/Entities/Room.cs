@@ -1,4 +1,5 @@
-﻿using NursingHome.Domain.Common;
+﻿using EntityFrameworkCore.Projectables;
+using NursingHome.Domain.Common;
 using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,6 +13,9 @@ public class Room : BaseEntity<int>
     //public int UserBed { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public RoomType? Type { get; set; }
+    [Projectable]
+    [NotMapped]
+    public int TotalElder => Elders.Count;
     public int BlockId { get; set; }
     public virtual Block Block { get; set; } = default!;
     public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();
