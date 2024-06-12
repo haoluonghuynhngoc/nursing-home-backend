@@ -1,5 +1,5 @@
 ﻿namespace NursingHome.Domain.Enums;
-public enum RoleRegister
+public enum RoleUserName
 {
     Director,
     Manager,

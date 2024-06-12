@@ -23,9 +23,9 @@ internal class RegisterUserSystemCommandHandler(
         }
         var roleUser = request.RoleRegister switch
         {
-            RoleRegister.Director => RoleName.Director,
-            RoleRegister.Manager => RoleName.Manager,
-            RoleRegister.Staff => RoleName.Staff,
+            RoleUserName.Director => RoleName.Director,
+            RoleUserName.Manager => RoleName.Manager,
+            RoleUserName.Staff => RoleName.Staff,
             _ => RoleName.Nurse,
         };
 

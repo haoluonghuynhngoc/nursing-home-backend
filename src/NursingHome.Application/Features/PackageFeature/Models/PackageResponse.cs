@@ -14,6 +14,6 @@ public record PackageResponse : BaseEntityResponse<int>
     public int Capacity { get; set; }
     public PackageType Type { get; set; } = default!;
     public int PackageCategoryId { get; set; }
-    public virtual PackageCategoryResponse PackageCategory { get; set; } = default!;
+    // public virtual PackageCategoryResponse PackageCategory { get; set; } = default!;
     public virtual ICollection<PackageDateResponse> PackageDates { get; set; } = new HashSet<PackageDateResponse>();
 }

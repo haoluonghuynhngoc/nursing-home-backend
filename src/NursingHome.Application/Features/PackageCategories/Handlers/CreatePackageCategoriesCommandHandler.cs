@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.PackageCategories.Commands;
@@ -14,6 +15,13 @@ internal sealed class CreatePackageCategoriesCommandHandler(
     private readonly IGenericRepository<PackageCategory> _packageCategoryRepository = unitOfWork.Repository<PackageCategory>();
     public async Task<MessageResponse> Handle(CreatePackageCategoriesCommand request, CancellationToken cancellationToken)
     {
+        var packageCategoryCheckName = await _packageCategoryRepository.FindByAsync(x => x.Name == request.Name);
+
+        if (packageCategoryCheckName != null)
+        {
+            throw new ConflictException($"Package Category Have Name {request.Name} In DataBase");
+        }
+
         var packageCategory = new PackageCategory();
         request.Adapt(packageCategory);
 
