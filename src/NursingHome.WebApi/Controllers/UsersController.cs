@@ -52,7 +52,7 @@ public class UsersController(ISender sender) : ControllerBase
     /// Đăng ký được tất cả các loai tài khoản như : Admin, Manager, Staff trừ customer 
     /// </summary>
     [HttpPost("system-register")]
-    public async Task<ActionResult<MessageResponse>> RegisterSystemProfile(RoleRegister roleRegister, RegisterUserSystemCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> RegisterSystemProfile(RoleUserName roleRegister, RegisterUserSystemCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command with { RoleRegister = roleRegister }, cancellationToken);
     }

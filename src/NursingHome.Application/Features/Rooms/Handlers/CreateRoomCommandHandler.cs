@@ -16,6 +16,13 @@ internal sealed class CreateRoomCommandHandler(
     private readonly IGenericRepository<Block> _blockRepository = unitOfWork.Repository<Block>();
     public async Task<MessageResponse> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
     {
+        var roomCheckName = await _roomRepository.FindByAsync(x => x.Name == request.Name);
+
+        if (roomCheckName != null)
+        {
+            throw new ConflictException($"Room Have Name {request.Name} In DataBase");
+        }
+
         var block = await _blockRepository.FindByAsync(expression: _ => _.Id == request.BlockId)
            ?? throw new NotFoundException(nameof(Block), request.BlockId);
 

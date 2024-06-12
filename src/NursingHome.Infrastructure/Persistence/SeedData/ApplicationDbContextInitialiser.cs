@@ -87,7 +87,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "admin",
                 IsActive = true,
-                AvatarUrl = "",
+                AvatarUrl = "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474110FMI/anh-buon-phong-canh_060206013.jpg",
                 FullName = "Admin",
                 Address = "Hanoi",
                 CCCD = "123456789",
@@ -101,6 +101,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "user",
                 IsActive = true,
+                AvatarUrl = "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474110FMI/anh-buon-phong-canh_060206013.jpg",
                 FullName = "user",
                 Address = "Ho Chi Minh",
                 CCCD = "123456789",
@@ -114,6 +115,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "director",
                 IsActive = true,
+                AvatarUrl = "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474110FMI/anh-buon-phong-canh_060206013.jpg",
                 FullName = "Director",
                 Address = "Da Nang",
                 CCCD = "123456789",
@@ -127,6 +129,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "manager",
                 IsActive = true,
+                AvatarUrl = "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474110FMI/anh-buon-phong-canh_060206013.jpg",
                 FullName = "Manager",
                 Address = "Long An",
                 CCCD = "123456789",
@@ -140,6 +143,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "staff",
                 IsActive = true,
+                AvatarUrl = "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474110FMI/anh-buon-phong-canh_060206013.jpg",
                 FullName = "Staff",
                 Address = "Da Lat",
                 CCCD = "123456789",
@@ -153,6 +157,7 @@ public class ApplicationDbContextInitialiser(
             {
                 UserName = "nurses",
                 IsActive = true,
+                AvatarUrl = "https://gcs.tripi.vn/public-tripi/tripi-feed/img/474110FMI/anh-buon-phong-canh_060206013.jpg",
                 FullName = "Nurses",
                 Address = "Ca Mau",
                 CCCD = "123456789",

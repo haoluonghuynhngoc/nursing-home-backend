@@ -8,5 +8,5 @@ public class PackageCategory : BaseEntity<int>
     public string Name { get; set; } = default!;
     [Column(TypeName = "nvarchar(24)")]
     public PackageCategoryType Type { get; set; }
-    public ICollection<Package> Packages { get; set; } = new HashSet<Package>();
+    public virtual ICollection<Package> Packages { get; set; } = new HashSet<Package>();
 }
