@@ -6,16 +6,20 @@ using NursingHome.Application.Features.Elders.Queries;
 using NursingHome.Domain.Entities;
 
 namespace NursingHome.Application.Features.Elders.Handlers;
-internal sealed class GetElderByIdCommandHandler(
-    IUnitOfWork unitOfWork
-    ) : IRequestHandler<GetElderByIdCommand, ElderResponse>
+internal class GetElderByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetElderByIdQuery, ElderResponse>
 {
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
 
-    public async Task<ElderResponse> Handle(GetElderByIdCommand request, CancellationToken cancellationToken)
+    public async Task<ElderResponse> Handle(GetElderByIdQuery request, CancellationToken cancellationToken)
     {
-        var elder = await _elderRepository.FindByAsync<ElderResponse>(x => x.Id == request.Id)
-          ?? throw new NotFoundException($"Elder Have Id {request.Id} Is Not Found");
+        var elder = await _elderRepository.FindByAsync<ElderResponse>(x => x.Id == request.Id, cancellationToken);
+
+        if (elder == null)
+        {
+            throw new NotFoundException(nameof(Elder), request.Id);
+        }
+
         return elder;
     }
 }
+
