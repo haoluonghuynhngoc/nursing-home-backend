@@ -40,6 +40,15 @@ public class UsersController(ISender sender) : ControllerBase
     {
         return await sender.Send(request, cancellationToken);
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<MessageResponse>> UpdateShiftAsync(
+           Guid id,
+           UpdateUserCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { Id = id }, cancellationToken);
+    }
+
     /// <summary>
     /// Update the currently logged in user
     /// </summary>
@@ -49,7 +58,8 @@ public class UsersController(ISender sender) : ControllerBase
         return await sender.Send(command, cancellationToken);
     }
     /// <summary>
-    /// Đăng ký được tất cả các loai tài khoản như : Admin, Manager, Staff trừ customer 
+    /// Đăng ký được tất cả các loai tài khoản như : Admin, Manager, Staff  nếu để RoleUserName là Customer thì hệ thống sẽ
+    /// mặt định là role Nurse
     /// </summary>
     [HttpPost("system-register")]
     public async Task<ActionResult<MessageResponse>> RegisterSystemProfile(RoleUserName roleRegister, RegisterUserSystemCommand command, CancellationToken cancellationToken)

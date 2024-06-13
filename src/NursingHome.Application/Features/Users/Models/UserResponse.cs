@@ -1,4 +1,5 @@
-﻿using NursingHome.Application.Features.Roles.Models;
+﻿using NursingHome.Application.Features.Elders.Models;
+using NursingHome.Application.Features.Roles.Models;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Enums;
 
@@ -15,4 +16,5 @@ public record UserResponse : BaseAuditableEntityResponse<Guid>
     public GenderStatus Gender { get; set; }
     public string? DateOfBirth { get; set; }
     public ICollection<RoleResponse> Roles { get; set; } = new HashSet<RoleResponse>();
+    public virtual ICollection<ElderResponse> Elders { get; set; } = new HashSet<ElderResponse>();
 }
