@@ -14,17 +14,23 @@ internal class RegisterCutomerCommandHandler(
     UserManager<User> userManager,
     IUnitOfWork unitOfWork) : IRequestHandler<RegisterCutomerCommand, MessageResponse>
 {
+    private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     public async Task<MessageResponse> Handle(RegisterCutomerCommand request, CancellationToken cancellationToken)
     {
-
+        if (await _userRepository.ExistsByAsync(_ => _.PhoneNumber == request.PhoneNumber))
+        {
+            throw new ConflictException("User Have Phone Number is ", request.PhoneNumber);
+        }
         var user = await userManager.FindByNameAsync(request.PhoneNumber);
         if (user != null)
         {
             throw new BadRequestException(Resource.UserAlreadyExists);
         }
-        var customer = new User();
-        request.Adapt(customer);
+
+        var customer = request.Adapt<User>();
+        customer.UserName = request.PhoneNumber;
         customer.IsActive = true;
+        customer.PhoneNumberConfirmed = true;
 
         if (request.Password == null)
         {

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Enums;
+using NursingHome.Shared.Converters;
 using System.Text.Json.Serialization;
 
 namespace NursingHome.Application.Features.Users.Commands;
