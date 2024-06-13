@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Mapster;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
@@ -21,15 +22,10 @@ internal class RegisterCutomerCommandHandler(
         {
             throw new BadRequestException(Resource.UserAlreadyExists);
         }
-        var customer = new User
-        {
-            UserName = request.PhoneNumber,
-            FullName = request.FullName,
-            Email = request.Email,
-            PhoneNumber = request.PhoneNumber,
-            Address = request.Address,
-            IsActive = true,
-        };
+        var customer = new User();
+        request.Adapt(customer);
+        customer.IsActive = true;
+
         if (request.Password == null)
         {
             await userManager.CreateAsync(customer, "1"); // sau này sẽ randome password bằng otp sms 

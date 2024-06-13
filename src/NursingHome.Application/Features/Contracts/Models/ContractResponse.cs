@@ -1,18 +1,20 @@
-﻿namespace NursingHome.Application.Features.Contracts.Models;
+﻿using NursingHome.Domain.Enums;
+
+namespace NursingHome.Application.Features.Contracts.Models;
 public sealed record ContractResponse
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; } = default!;
-    public DateTime SigningDate { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public string? ReasonForCanceling { get; set; }
-    public string Content { get; set; } = default!;
-    public string ImageUrl { get; set; } = default!;
+    public DateOnly SigningDate { get; set; }
+    public DateOnly StartDate { get; set; }
+    public DateOnly EndDate { get; set; }
+    public string? Content { get; set; } = default!;
+    public string? ImageUrl { get; set; }
     public string? Notes { get; set; }
-    public string Status { get; set; } = default!;
+    public string? ReasonForCanceling { get; set; }
+    public ContractStatus Status { get; set; } = default!;
     public string? Description { get; set; }
     public int ElderId { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
 
 }

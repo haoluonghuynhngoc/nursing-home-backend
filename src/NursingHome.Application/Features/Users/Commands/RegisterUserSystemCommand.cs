@@ -13,5 +13,9 @@ public sealed record RegisterUserSystemCommand : IRequest<MessageResponse>
     public string? Email { get; init; }
     public string? PhoneNumber { get; init; }
     public string? FullName { get; init; }
-
+    public string? AvatarUrl { get; set; }
+    public string? Address { get; set; }
+    public string? CCCD { get; set; }
+    public GenderStatus Gender { get; set; }
+    public string? DateOfBirth { get; set; }
 }

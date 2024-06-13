@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Mapster;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
@@ -29,14 +30,10 @@ internal class RegisterUserSystemCommandHandler(
             _ => RoleName.Nurse,
         };
 
-        var user = new User
-        {
-            UserName = request.UserName,
-            Email = request.Email,
-            PhoneNumber = request.PhoneNumber,
-            FullName = request.FullName,
-            IsActive = true,
-        };
+        var user = new User();
+        request.Adapt(user);
+        user.IsActive = true;
+
         await userManager.CreateAsync(user, request.Password);
         await userManager.AddToRolesAsync(user, new[] { roleUser });
         await unitOfWork.CommitAsync();

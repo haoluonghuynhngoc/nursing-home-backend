@@ -14,6 +14,8 @@ public class Package : BaseAuditableEntity<int>
     public int Capacity { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public PackageType Type { get; set; } = default!;
+    //[Column(TypeName = "nvarchar(24)")]
+    //public NursingPackageType nursingPackageType { get; set; } = default!;
     public int PackageCategoryId { get; set; }
     public virtual PackageCategory PackageCategory { get; set; } = default!;
     public virtual ICollection<PackageDate> PackageDates { get; set; } = new HashSet<PackageDate>();
