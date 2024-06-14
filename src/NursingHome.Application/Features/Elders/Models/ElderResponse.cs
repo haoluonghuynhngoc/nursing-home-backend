@@ -1,18 +1,9 @@
 ﻿using NursingHome.Application.Features.MedicalRecords.Models;
-using NursingHome.Application.Models;
-using NursingHome.Domain.Enums;
+using NursingHome.Application.Features.Users.Models;
 
 namespace NursingHome.Application.Features.Elders.Models;
-public record ElderResponse : BaseAuditableEntityResponse<int>
+public record ElderResponse : BaseElderResponse
 {
-    public string Name { get; set; } = default!;
-    public string? DateOfBirth { get; set; }
-    public GenderStatus Gender { get; set; }
-    public string? ImageUrl { get; set; }
-    public string? Address { get; set; }
-    public string? Nationality { get; set; }
-    public string? Notes { get; set; }
-    public int RoomId { get; set; }
-    public Guid UserId { get; set; }
     public MedicalRecordResponse MedicalRecord { get; set; } = default!;
+    public BaseUserResponse User { get; set; } = default!;
 }
