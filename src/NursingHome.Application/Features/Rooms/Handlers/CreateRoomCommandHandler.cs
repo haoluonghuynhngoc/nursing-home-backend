@@ -5,6 +5,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.Rooms.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Rooms.Handlers;
 internal sealed class CreateRoomCommandHandler(
@@ -31,6 +32,7 @@ internal sealed class CreateRoomCommandHandler(
             Name = request.Name,
             BlockId = request.BlockId,
             TotalBed = 0,
+            Type = RoomType.VacantRoom,
         };
 
         await _roomRepository.CreateAsync(room);

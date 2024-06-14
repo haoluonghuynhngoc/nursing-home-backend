@@ -11,8 +11,10 @@ public class Order : BaseAuditableEntity<int>
     public string? Notes { get; set; }
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
-    public int PackageId { get; set; }
+    public int? PackageId { get; set; }
     public virtual Package Package { get; set; } = default!;
+    public int? NursingPackageId { get; set; }
+    public virtual NursingPackage NursingPackage { get; set; } = default!;
     public int ElderId { get; set; }
     public virtual Elder Elder { get; set; } = default!;
     public virtual ICollection<OrderDate> OrderDates { get; set; } = new List<OrderDate>();

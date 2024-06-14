@@ -12,8 +12,8 @@ using NursingHome.Infrastructure.Persistence.Data;
 namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240612100540_Remove-Status-Elder")]
-    partial class RemoveStatusElder
+    [Migration("20240614204224_CreateInit")]
+    partial class CreateInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -833,6 +833,61 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.ToTable("NurseSchedulers");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.NursingPackage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("RegistrationLimit")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NursingPackages");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -874,7 +929,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PackageId")
+                    b.Property<int?>("NursingPackageId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PackageId")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -887,6 +945,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ElderId");
+
+                    b.HasIndex("NursingPackageId");
 
                     b.HasIndex("PackageId");
 
@@ -1039,6 +1099,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("NursingPackageId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TotalBed")
                         .HasColumnType("int");
 
@@ -1048,6 +1111,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BlockId");
+
+                    b.HasIndex("NursingPackageId");
 
                     b.ToTable("Rooms");
                 });
@@ -1329,11 +1394,13 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NursingHome.Domain.Entities.NursingPackage", "NursingPackage")
+                        .WithMany("Orders")
+                        .HasForeignKey("NursingPackageId");
+
                     b.HasOne("NursingHome.Domain.Entities.Package", "Package")
                         .WithMany("Orders")
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PackageId");
 
                     b.HasOne("NursingHome.Domain.Entities.Identities.User", "User")
                         .WithMany("Orders")
@@ -1342,6 +1409,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Elder");
+
+                    b.Navigation("NursingPackage");
 
                     b.Navigation("Package");
 
@@ -1389,7 +1458,13 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NursingHome.Domain.Entities.NursingPackage", "NursingPackage")
+                        .WithMany("Rooms")
+                        .HasForeignKey("NursingPackageId");
+
                     b.Navigation("Block");
+
+                    b.Navigation("NursingPackage");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Block", b =>
@@ -1458,6 +1533,13 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("NursingHome.Domain.Entities.MeasureUnit", b =>
                 {
                     b.Navigation("HealthReportDetailMeasures");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.NursingPackage", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Rooms");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Order", b =>

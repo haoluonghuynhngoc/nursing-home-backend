@@ -74,6 +74,14 @@ public class ApplicationDbContextInitialiser(
             }
             await unitOfWork.CommitAsync();
         }
+        if (!await unitOfWork.Repository<NursingPackage>().ExistsByAsync())
+        {
+            foreach (var item in NursingPackageSeed.DefaultNursingPackage)
+            {
+                await unitOfWork.Repository<NursingPackage>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
         if (!await unitOfWork.Repository<Role>().ExistsByAsync())
         {
             foreach (var item in RoleSeed.Default)

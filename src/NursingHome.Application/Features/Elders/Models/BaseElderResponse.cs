@@ -11,6 +11,6 @@ public record BaseElderResponse : BaseAuditableEntityResponse<int>
     public string? Address { get; set; }
     public string? Nationality { get; set; }
     public string? Notes { get; set; }
-    public int RoomId { get; set; }
+    //public int RoomId { get; set; }
     public Guid UserId { get; set; }
 }
