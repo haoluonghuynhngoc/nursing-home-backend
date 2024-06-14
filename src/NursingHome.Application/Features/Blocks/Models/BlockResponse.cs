@@ -8,5 +8,5 @@ public sealed record BlockResponse
     //public int UsedRooms { get; set; }
     //public int UnUsedRooms { get; set; }
     public int TotalRoom { get; set; }
-    public ICollection<RoomResponse> Rooms { get; set; } = new HashSet<RoomResponse>();
+    public ICollection<BaseRoomResponse> Rooms { get; set; } = new HashSet<BaseRoomResponse>();
 }

@@ -32,7 +32,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<NurseScheduler> NurseSchedulers { get; set; }
     public DbSet<Shift> Shifts { get; set; }
     public DbSet<CareSchedule> CareSchedules { get; set; }
-
+    public DbSet<NursingPackage> NursingPackages { get; set; }
     //public ApplicationDbContext()
     //{
     //}
