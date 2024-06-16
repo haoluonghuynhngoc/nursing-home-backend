@@ -10,18 +10,18 @@ using NursingHome.Domain.Entities;
 namespace NursingHome.Application.Features.PackageFeature.Handlers;
 internal class CreatePackageCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreatePackageCommand, MessageResponse>
 {
-    private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
-    private readonly IGenericRepository<PackageCategory> _packageCategoryRepository = unitOfWork.Repository<PackageCategory>();
+    private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
+    private readonly IGenericRepository<ServicePackageCategory> _packageCategoryRepository = unitOfWork.Repository<ServicePackageCategory>();
 
     public async Task<MessageResponse> Handle(CreatePackageCommand request, CancellationToken cancellationToken)
     {
-        if (!await _packageCategoryRepository.ExistsByAsync(_ => _.Id == request.PackageCategoryId, cancellationToken))
+        if (!await _packageCategoryRepository.ExistsByAsync(_ => _.Id == request.ServicePackageCategoryId, cancellationToken))
         {
-            throw new NotFoundException(nameof(PackageCategory), request.PackageCategoryId);
+            throw new NotFoundException(nameof(ServicePackageCategory), request.ServicePackageCategoryId);
         }
 
-        var package = request.Adapt<Package>();
-        await _packageRepository.CreateAsync(package, cancellationToken);
+        var package = request.Adapt<ServicePackage>();
+        await _servicePackageRepository.CreateAsync(package, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 
         return new MessageResponse(Resource.CreatedSuccess);

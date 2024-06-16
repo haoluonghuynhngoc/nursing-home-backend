@@ -5,10 +5,10 @@ namespace NursingHome.Domain.Entities;
 public class Block : BaseEntity<int>
 {
     public string Name { get; set; } = default!;
-    //[Projectable]
-    //public int UsedRooms => Rooms.Count;
-    //[Projectable]
-    //public int UnUsedRooms => TotalRoom - UsedRooms;
+    [Projectable]
+    public int UsedRooms => Rooms.Count(room => room.IsUsed);
+    [Projectable]
+    public int UnUsedRooms => TotalRoom - UsedRooms;
     [Projectable]
     public int TotalRoom => Rooms.Count;
 

@@ -25,10 +25,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDate> OrderDates { get; set; }
-    public DbSet<Package> Packages { get; set; }
+    public DbSet<ServicePackage> ServicePackages { get; set; }
     public DbSet<Room> Rooms { get; set; }
-    public DbSet<PackageCategory> PackageCategories { get; set; }
-    public DbSet<PackageDate> PackageDates { get; set; }
+    public DbSet<ServicePackageCategory> ServicePackageCategories { get; set; }
+    public DbSet<ServicePackageDate> ServicePackageDates { get; set; }
     public DbSet<NurseScheduler> NurseSchedulers { get; set; }
     public DbSet<Shift> Shifts { get; set; }
     public DbSet<CareSchedule> CareSchedules { get; set; }

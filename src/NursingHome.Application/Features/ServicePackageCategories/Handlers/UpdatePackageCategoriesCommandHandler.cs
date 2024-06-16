@@ -3,7 +3,7 @@ using MediatR;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
-using NursingHome.Application.Features.PackageCategories.Commands;
+using NursingHome.Application.Features.ServicePackageCategories.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
 
@@ -12,12 +12,12 @@ internal sealed class UpdatePackageCategoriesCommandHandler(
     IUnitOfWork unitOfWork
     ) : IRequestHandler<UpdatePackageCategoriesCommand, MessageResponse>
 {
-    private readonly IGenericRepository<PackageCategory> _packageCategoryRepository = unitOfWork.Repository<PackageCategory>();
+    private readonly IGenericRepository<ServicePackageCategory> _packageCategoryRepository = unitOfWork.Repository<ServicePackageCategory>();
     public async Task<MessageResponse> Handle(UpdatePackageCategoriesCommand request, CancellationToken cancellationToken)
     {
         var packageCategory = await _packageCategoryRepository.FindByAsync(
           expression: _ => _.Id == request.Id)
-           ?? throw new NotFoundException(nameof(PackageCategory), request.Id);
+           ?? throw new NotFoundException(nameof(ServicePackageCategory), request.Id);
         request.Adapt(packageCategory);
 
         await _packageCategoryRepository.UpdateAsync(packageCategory);

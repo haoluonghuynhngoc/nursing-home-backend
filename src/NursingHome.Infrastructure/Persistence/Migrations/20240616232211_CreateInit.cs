@@ -82,22 +82,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "PackageCategories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Type = table.Column<string>(type: "nvarchar(24)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PackageCategories", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -112,6 +96,21 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ServicePackageCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServicePackageCategories", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -240,46 +239,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Packages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    RegistrationLimit = table.Column<int>(type: "int", nullable: false),
-                    TimeBetweenServices = table.Column<int>(type: "int", nullable: false),
-                    ImageUrl = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(24)", nullable: false),
-                    PackageCategoryId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ModifiedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
-                    DeletedBy = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DeletedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Packages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Packages_PackageCategories_PackageCategoryId",
-                        column: x => x.PackageCategoryId,
-                        principalTable: "PackageCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "RoleClaims",
                 columns: table => new
                 {
@@ -298,6 +257,45 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         name: "FK_RoleClaims_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ServicePackages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    RegistrationLimit = table.Column<int>(type: "int", nullable: false),
+                    TimeBetweenServices = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ServicePackageCategoryId = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ModifiedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DeletedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServicePackages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServicePackages_ServicePackageCategories_ServicePackageCateg~",
+                        column: x => x.ServicePackageCategoryId,
+                        principalTable: "ServicePackageCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -570,22 +568,22 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "PackageDates",
+                name: "ServicePackageDates",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateOnly>(type: "date", nullable: true),
                     DayOfWeek = table.Column<string>(type: "nvarchar(24)", nullable: true),
-                    PackageId = table.Column<int>(type: "int", nullable: false)
+                    ServicePackageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PackageDates", x => x.Id);
+                    table.PrimaryKey("PK_ServicePackageDates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PackageDates_Packages_PackageId",
-                        column: x => x.PackageId,
-                        principalTable: "Packages",
+                        name: "FK_ServicePackageDates_ServicePackages_ServicePackageId",
+                        column: x => x.ServicePackageId,
+                        principalTable: "ServicePackages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -763,7 +761,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     Notes = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    PackageId = table.Column<int>(type: "int", nullable: true),
+                    ServicePackageId = table.Column<int>(type: "int", nullable: true),
                     NursingPackageId = table.Column<int>(type: "int", nullable: true),
                     ElderId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "longtext", nullable: true)
@@ -791,9 +789,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         principalTable: "NursingPackages",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Orders_Packages_PackageId",
-                        column: x => x.PackageId,
-                        principalTable: "Packages",
+                        name: "FK_Orders_ServicePackages_ServicePackageId",
+                        column: x => x.ServicePackageId,
+                        principalTable: "ServicePackages",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Orders_Users_UserId",
@@ -1029,24 +1027,14 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 column: "NursingPackageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_PackageId",
+                name: "IX_Orders_ServicePackageId",
                 table: "Orders",
-                column: "PackageId");
+                column: "ServicePackageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
                 table: "Orders",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PackageDates_PackageId",
-                table: "PackageDates",
-                column: "PackageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Packages_PackageCategoryId",
-                table: "Packages",
-                column: "PackageCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -1068,6 +1056,16 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "IX_Rooms_NursingPackageId",
                 table: "Rooms",
                 column: "NursingPackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServicePackageDates_ServicePackageId",
+                table: "ServicePackageDates",
+                column: "ServicePackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServicePackages_ServicePackageCategoryId",
+                table: "ServicePackages",
+                column: "ServicePackageCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
@@ -1127,10 +1125,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "OrderDates");
 
             migrationBuilder.DropTable(
-                name: "PackageDates");
+                name: "RoleClaims");
 
             migrationBuilder.DropTable(
-                name: "RoleClaims");
+                name: "ServicePackageDates");
 
             migrationBuilder.DropTable(
                 name: "UserClaims");
@@ -1169,13 +1167,13 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 name: "HealthCategories");
 
             migrationBuilder.DropTable(
-                name: "Packages");
+                name: "ServicePackages");
 
             migrationBuilder.DropTable(
                 name: "Elders");
 
             migrationBuilder.DropTable(
-                name: "PackageCategories");
+                name: "ServicePackageCategories");
 
             migrationBuilder.DropTable(
                 name: "Rooms");

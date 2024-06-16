@@ -6,6 +6,7 @@ public record BaseRoomResponse : BaseAuditableEntityResponse<int>
 {
     public string Name { get; set; } = default!;
     public int TotalBed { get; set; }
+    public bool IsUsed { get; set; }
     public bool AvailableBed { get; set; }
     public int UnusedBed { get; set; }
     public int UserBed { get; set; }

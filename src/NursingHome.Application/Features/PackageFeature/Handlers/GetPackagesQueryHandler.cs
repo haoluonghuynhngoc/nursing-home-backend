@@ -6,13 +6,13 @@ using NursingHome.Domain.Entities;
 using NursingHome.Shared.Pages;
 
 namespace NursingHome.Application.Features.PackageFeature.Handlers;
-internal class GetPackagesQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetPackagesQuery, PaginatedResponse<PackageResponse>>
+internal class GetPackagesQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetPackagesQuery, PaginatedResponse<ServicePackageResponse>>
 {
-    private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
-    public async Task<PaginatedResponse<PackageResponse>> Handle(GetPackagesQuery request, CancellationToken cancellationToken)
+    private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
+    public async Task<PaginatedResponse<ServicePackageResponse>> Handle(GetPackagesQuery request, CancellationToken cancellationToken)
     {
-        var packages = await _packageRepository
-            .FindAsync<PackageResponse>(
+        var packages = await _servicePackageRepository
+            .FindAsync<ServicePackageResponse>(
                 request.PageIndex,
                 request.PageSize,
                 request.GetExpressions(),
