@@ -11,10 +11,10 @@ namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class PackagesController(ISender sender) : ControllerBase
+public class ServicePackageController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<PackageResponse>>> GetPackages(
+    public async Task<ActionResult<PaginatedResponse<ServicePackageResponse>>> GetPackages(
          [FromQuery] GetPackagesQuery query,
          CancellationToken cancellationToken)
     {
@@ -22,7 +22,7 @@ public class PackagesController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<PackageResponse>> GetPackageById(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<ServicePackageResponse>> GetPackageById(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new GetPackageByIdQuery(id), cancellationToken);
     }

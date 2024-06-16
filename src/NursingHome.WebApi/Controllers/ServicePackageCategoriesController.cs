@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NursingHome.Application.Features.PackageCategories.Commands;
-using NursingHome.Application.Features.PackageCategories.Models;
 using NursingHome.Application.Features.PackageCategories.Queries;
+using NursingHome.Application.Features.ServicePackageCategories.Commands;
+using NursingHome.Application.Features.ServicePackageCategories.Models;
 using NursingHome.Application.Models;
 using NursingHome.Shared.Pages;
 
@@ -11,7 +11,7 @@ namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class PackageCategoriesController(ISender sender) : ControllerBase
+public class ServicePackageCategoriesController(ISender sender) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<PaginatedResponse<PackageCategoryResponse>>> GetPackageCategoryWithPaginAsync(

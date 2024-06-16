@@ -11,18 +11,18 @@ using NursingHome.Domain.Entities;
 namespace NursingHome.Application.Features.PackageFeature.Handlers;
 internal class UpdatePackageCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdatePackageCommand, MessageResponse>
 {
-    private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
+    private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
     public async Task<MessageResponse> Handle(UpdatePackageCommand request, CancellationToken cancellationToken)
     {
-        var package = await _packageRepository
+        var package = await _servicePackageRepository
             .FindByAsync(
                 x => x.Id == request.Id,
-                _ => _.Include(_ => _.PackageDates),
+                _ => _.Include(_ => _.ServicePackageDates),
             cancellationToken: cancellationToken);
 
         if (package is null)
         {
-            throw new NotFoundException(nameof(Package), request.Id);
+            throw new NotFoundException(nameof(ServicePackage), request.Id);
         }
 
         request.Adapt(package);

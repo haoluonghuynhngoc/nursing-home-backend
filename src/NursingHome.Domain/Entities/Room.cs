@@ -20,6 +20,9 @@ public class Room : BaseEntity<int>
     public virtual Block Block { get; set; } = default!;
     public int? NursingPackageId { get; set; }
     public virtual NursingPackage NursingPackage { get; set; } = default!;
+    [Projectable]
+    [NotMapped]
+    public bool IsUsed => NursingPackageId.HasValue;
     public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();
     public virtual ICollection<CareSchedule> CareSchedules { get; set; } = new HashSet<CareSchedule>();
 }

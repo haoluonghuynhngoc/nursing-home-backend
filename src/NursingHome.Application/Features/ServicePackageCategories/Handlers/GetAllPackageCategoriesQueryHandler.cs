@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using NursingHome.Application.Contracts.Repositories;
-using NursingHome.Application.Features.PackageCategories.Models;
 using NursingHome.Application.Features.PackageCategories.Queries;
+using NursingHome.Application.Features.ServicePackageCategories.Models;
 using NursingHome.Domain.Entities;
 using NursingHome.Shared.Pages;
 
@@ -10,7 +10,7 @@ internal sealed class GetAllPackageCategoriesQueryHandler(
     IUnitOfWork unitOfWork
     ) : IRequestHandler<GetAllPackageCategoriesQuery, PaginatedResponse<PackageCategoryResponse>>
 {
-    private readonly IGenericRepository<PackageCategory> _packageCategoryRepository = unitOfWork.Repository<PackageCategory>();
+    private readonly IGenericRepository<ServicePackageCategory> _packageCategoryRepository = unitOfWork.Repository<ServicePackageCategory>();
     public async Task<PaginatedResponse<PackageCategoryResponse>> Handle(GetAllPackageCategoriesQuery request, CancellationToken cancellationToken)
     {
         var listPackageCategory = await _packageCategoryRepository.FindAsync<PackageCategoryResponse>(

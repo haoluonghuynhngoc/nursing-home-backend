@@ -1,17 +1,17 @@
 ﻿using LinqKit;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using NursingHome.Application.Features.PackageCategories.Models;
+using NursingHome.Application.Features.ServicePackageCategories.Models;
 using NursingHome.Application.Models.Pages;
 using NursingHome.Domain.Entities;
 using NursingHome.Shared.Pages;
 using System.Linq.Expressions;
 
 namespace NursingHome.Application.Features.PackageCategories.Queries;
-public sealed record GetAllPackageCategoriesQuery : PaginationRequest<PackageCategory>, IRequest<PaginatedResponse<PackageCategoryResponse>>
+public sealed record GetAllPackageCategoriesQuery : PaginationRequest<ServicePackageCategory>, IRequest<PaginatedResponse<PackageCategoryResponse>>
 {
     public string? Search { get; set; }
-    public override Expression<Func<PackageCategory, bool>> GetExpressions()
+    public override Expression<Func<ServicePackageCategory, bool>> GetExpressions()
     {
         if (!string.IsNullOrWhiteSpace(Search))
         {

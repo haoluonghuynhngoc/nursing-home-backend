@@ -9,15 +9,15 @@ using NursingHome.Domain.Entities;
 namespace NursingHome.Application.Features.PackageFeature.Handlers;
 internal class DeletePackageCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeletePackageCommand, MessageResponse>
 {
-    private readonly IGenericRepository<Package> _packageRepository = unitOfWork.Repository<Package>();
+    private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
     public async Task<MessageResponse> Handle(DeletePackageCommand request, CancellationToken cancellationToken)
     {
-        var package = await _packageRepository.FindByAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
+        var package = await _servicePackageRepository.FindByAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
         if (package is null)
         {
-            throw new NotFoundException(nameof(Package), request.Id);
+            throw new NotFoundException(nameof(ServicePackage), request.Id);
         }
-        await _packageRepository.DeleteAsync(package);
+        await _servicePackageRepository.DeleteAsync(package);
         await unitOfWork.CommitAsync(cancellationToken);
         return new MessageResponse(Resource.DeletedSuccess);
     }
