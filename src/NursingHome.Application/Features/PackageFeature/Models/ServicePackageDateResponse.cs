@@ -5,5 +5,5 @@ public record ServicePackageDateResponse : BaseEntityResponse<int>
 {
     public DateOnly? Date { get; set; }
     public DayOfWeek? DayOfWeek { get; set; }
-    public int ServicePackageId { get; set; }
+    //public int ServicePackageId { get; set; }
 }

@@ -1,9 +1,8 @@
-﻿using NursingHome.Domain.Common;
-using NursingHome.Domain.Entities.Identities;
-using NursingHome.Domain.Enums;
+﻿using NursingHome.Domain.Enums;
+using System.Text.Json.Serialization;
 
-namespace NursingHome.Domain.Entities;
-public class Contract : BaseAuditableEntity<int>
+namespace NursingHome.Application.Features.Contracts.Models;
+public record CreateContractRequest
 {
     public string Name { get; set; } = default!;
     public DateOnly SigningDate { get; set; }
@@ -13,11 +12,9 @@ public class Contract : BaseAuditableEntity<int>
     public string? Content { get; set; } = default!;
     public string? ImageUrl { get; set; }
     public string? Notes { get; set; }
-    public string? ReasonForCanceling { get; set; }
+    [JsonIgnore]
     public ContractStatus Status { get; set; } = default!;
     public string? Description { get; set; }
-    public int ElderId { get; set; }
-    public virtual Elder Elder { get; set; } = default!;
+    [JsonIgnore]
     public Guid UserId { get; set; }
-    public virtual User User { get; set; } = default!;
 }

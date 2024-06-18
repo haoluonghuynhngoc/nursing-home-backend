@@ -15,10 +15,20 @@ internal sealed class CreateRoomCommandHandler(
 
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
     private readonly IGenericRepository<Block> _blockRepository = unitOfWork.Repository<Block>();
+    private readonly IGenericRepository<NursingPackage> _nursingPackageRepository = unitOfWork.Repository<NursingPackage>();
     public async Task<MessageResponse> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
     {
-        var roomCheckName = await _roomRepository.FindByAsync(x => x.Name == request.Name);
+        if (request.NursingPackageId != null)
+        {
+            //var nursingPackageCheck = await _nursingPackageRepository.FindByAsync(x => x.Id == request.NursingPackageId)
+            //    ?? throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId.Value);
+            if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId, cancellationToken))
+            {
+                throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
+            }
+        }
 
+        var roomCheckName = await _roomRepository.FindByAsync(x => x.Name == request.Name);
         if (roomCheckName != null)
         {
             throw new ConflictException($"Room Have Name {request.Name} In DataBase");
@@ -32,6 +42,7 @@ internal sealed class CreateRoomCommandHandler(
             Name = request.Name,
             BlockId = request.BlockId,
             TotalBed = 0,
+            NursingPackageId = request.NursingPackageId,
             Type = RoomType.VacantRoom,
         };
 

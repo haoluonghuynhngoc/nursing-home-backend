@@ -7,6 +7,7 @@ using NursingHome.Application.Features.Elders.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
 using NursingHome.Domain.Entities.Identities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Elders.Handlers;
 internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateElderCommand, MessageResponse>
@@ -17,6 +18,11 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
 
     public async Task<MessageResponse> Handle(CreateElderCommand request, CancellationToken cancellationToken)
     {
+        var roomElderName = await _elderRepository.FindByAsync(x => x.CCCD == request.CCCD);
+        if (roomElderName != null)
+        {
+            throw new ConflictException($"Elder Have CCCD is {request.CCCD} In DataBase");
+        }
         if (!await _roomRepository.ExistsByAsync(_ => _.Id == request.RoomId, cancellationToken))
         {
             throw new NotFoundException(nameof(Room), request.RoomId);
@@ -28,6 +34,11 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         }
 
         var elder = request.Adapt<Elder>();
+        request.Contract.UserId = request.UserId;
+        request.Contract.Status = ContractStatus.InUse;
+        elder.Contracts = new List<Contract> {
+            request.Contract.Adapt<Contract>()
+        };
         await _elderRepository.CreateAsync(elder, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 
