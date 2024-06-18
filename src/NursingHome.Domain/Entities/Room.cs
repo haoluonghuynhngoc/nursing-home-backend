@@ -8,6 +8,7 @@ public class Room : BaseEntity<int>
 {
     public string Name { get; set; } = default!;
     public int TotalBed { get; set; }
+    public int Index { get; set; }
     public bool AvailableBed => TotalBed > Elders.Count;
     public int UnusedBed => TotalBed - Elders.Count;
     public int UserBed => Elders.Count;

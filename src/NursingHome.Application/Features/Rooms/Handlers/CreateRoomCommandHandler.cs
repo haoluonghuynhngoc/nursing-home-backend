@@ -28,10 +28,10 @@ internal sealed class CreateRoomCommandHandler(
             }
         }
 
-        var roomCheckName = await _roomRepository.FindByAsync(x => x.Name == request.Name);
+        var roomCheckName = await _roomRepository.FindByAsync(x => x.Name == request.Name && x.BlockId == request.BlockId);
         if (roomCheckName != null)
         {
-            throw new ConflictException($"Room Have Name {request.Name} In DataBase");
+            throw new ConflictException($"Room Have Name {request.Name} In Block Have Block ID Is {request.BlockId}");
         }
 
         var block = await _blockRepository.FindByAsync(expression: _ => _.Id == request.BlockId)

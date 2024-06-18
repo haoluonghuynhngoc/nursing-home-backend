@@ -23,6 +23,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new ConflictException($"Elder Have CCCD is {request.CCCD} In DataBase");
         }
+
         if (!await _roomRepository.ExistsByAsync(_ => _.Id == request.RoomId, cancellationToken))
         {
             throw new NotFoundException(nameof(Room), request.RoomId);

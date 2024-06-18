@@ -1,6 +1,6 @@
 dotnet ef migrations add UpdateDatabaseV01 --output-dir Persistence/Migrations
 
-Add-Migration CreateInit -o Persistence/Migrations
+Add-Migration UpdateDatabaseV03 -o Persistence/Migrations
 _ VNPAYMENT
 + Link Admimn : https://sandbox.vnpayment.vn/merchantv2/Home/Dashboard.htm
 + Account Login : haoluonghuynh2001@gmail.com

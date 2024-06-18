@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NursingHome.Application.Features.HealthReports.Commands;
 using NursingHome.Application.Features.HealthReports.Models;
@@ -9,6 +10,7 @@ using NursingHome.Shared.Pages;
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class HealthReportController(ISender sender) : ControllerBase
 {
     [HttpGet]

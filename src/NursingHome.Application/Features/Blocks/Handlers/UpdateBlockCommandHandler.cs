@@ -15,6 +15,13 @@ internal sealed class UpdateBlockCommandHandler(
     private readonly IGenericRepository<Block> _blockRepository = unitOfWork.Repository<Block>();
     public async Task<MessageResponse> Handle(UpdateBlockCommand request, CancellationToken cancellationToken)
     {
+        var blockCheckName = await _blockRepository.FindByAsync
+           (x => x.Name == request.Name);
+
+        if (blockCheckName != null)
+        {
+            throw new ConflictException($"Block Have Name {request.Name} In DataBase");
+        }
         var block = await _blockRepository.FindByAsync(
             expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Block Have Id {request.Id} Is Not Found");
         request.Adapt(block);

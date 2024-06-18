@@ -14,5 +14,6 @@ public class Appointment : BaseAuditableEntity<int>
     public string? Notes { get; set; }
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
-
+    public int? NursingPackageId { get; set; }
+    public virtual NursingPackage NursingPackage { get; set; } = default!;
 }
