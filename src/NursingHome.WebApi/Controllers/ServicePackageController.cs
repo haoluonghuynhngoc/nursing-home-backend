@@ -27,9 +27,6 @@ public class ServicePackageController(ISender sender) : ControllerBase
         return await sender.Send(new GetPackageByIdQuery(id), cancellationToken);
     }
 
-    /// <summary>
-    /// Type Have format like OnlyDay, DayRepeat, WeedRepeat, Unlimited 
-    /// </summary>
     [HttpPost]
     public async Task<ActionResult<MessageResponse>> CreatePackage(CreatePackageCommand command, CancellationToken cancellationToken)
     {

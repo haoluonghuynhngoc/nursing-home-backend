@@ -210,7 +210,6 @@ public static class DependencyInjection
 
                 var problemDetails = _factory.CreateProblemDetails(
                              httpContext: context,
-                             type: "null",
                              statusCode: context.Response.StatusCode,
                              detail: exception?.Message,
                              title: exception?.Message);

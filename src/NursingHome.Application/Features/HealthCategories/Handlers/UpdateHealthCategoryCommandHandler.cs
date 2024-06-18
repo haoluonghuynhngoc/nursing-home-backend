@@ -15,6 +15,11 @@ internal class UpdateHealthCategoryCommandHandler(IUnitOfWork unitOfWork)
 
     public async Task<MessageResponse> Handle(UpdateHealthCategoryCommand request, CancellationToken cancellationToken)
     {
+        if (await _healthCategoryRepository.ExistsByAsync(_ => _.Id != request.Id && _.Name == request.Name))
+        {
+            throw new ConflictException($"Health Category Have Name {request.Name} In DataBase");
+        }
+
         var healthCategory = await _healthCategoryRepository.FindByAsync(
      expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Health Category Have Id {request.Id} Is Not Found");
         request.Adapt(healthCategory);

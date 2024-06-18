@@ -20,7 +20,6 @@ internal class CreateFeedbackCommandHandler(
             ?? throw new NotFoundException($"Order Have Id {request.OrderId} Is Not Found");
 
         var feedBack = request.Adapt<FeedBack>();
-        feedBack.Order = order;
 
         await _feedbackRepository.CreateAsync(feedBack);
         await unitOfWork.CommitAsync();

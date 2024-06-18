@@ -15,6 +15,11 @@ internal sealed class UpdatePackageCategoriesCommandHandler(
     private readonly IGenericRepository<ServicePackageCategory> _packageCategoryRepository = unitOfWork.Repository<ServicePackageCategory>();
     public async Task<MessageResponse> Handle(UpdatePackageCategoriesCommand request, CancellationToken cancellationToken)
     {
+        if (await _packageCategoryRepository.ExistsByAsync(x => x.Id != request.Id && x.Name == request.Name))
+        {
+            throw new ConflictException(nameof(ServicePackageCategory), request.Id);
+        }
+
         var packageCategory = await _packageCategoryRepository.FindByAsync(
           expression: _ => _.Id == request.Id)
            ?? throw new NotFoundException(nameof(ServicePackageCategory), request.Id);

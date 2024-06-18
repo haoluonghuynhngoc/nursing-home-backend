@@ -2,7 +2,7 @@
 public enum PackageType
 {
     OnlyDay,
-    DayRepeat,
-    WeedRepeat,
-    Unlimited
+    DaysOfMonth,
+    WeedDays,
+    AnyDays
 }

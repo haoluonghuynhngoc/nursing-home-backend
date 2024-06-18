@@ -16,7 +16,7 @@ internal sealed class UpdateBlockCommandHandler(
     public async Task<MessageResponse> Handle(UpdateBlockCommand request, CancellationToken cancellationToken)
     {
         var blockCheckName = await _blockRepository.FindByAsync
-           (x => x.Name == request.Name);
+           (x => x.Id != request.Id && x.Name == request.Name);
 
         if (blockCheckName != null)
         {

@@ -18,8 +18,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
 
     public async Task<MessageResponse> Handle(CreateElderCommand request, CancellationToken cancellationToken)
     {
-        var roomElderName = await _elderRepository.FindByAsync(x => x.CCCD == request.CCCD);
-        if (roomElderName != null)
+        if (await _elderRepository.ExistsByAsync(x => x.CCCD == request.CCCD))
         {
             throw new ConflictException($"Elder Have CCCD is {request.CCCD} In DataBase");
         }

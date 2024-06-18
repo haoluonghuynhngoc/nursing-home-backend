@@ -1,12 +1,14 @@
 ﻿using NursingHome.Application.Features.HealthCategories.Models;
+using NursingHome.Application.Models;
 using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.HealthReports.Models;
-public record HealthReportDetailMeasureResponse
+public record HealthReportDetailMeasureResponse : BaseEntityResponse<int>
 {
-    public int Id { get; set; }
     public float Value { get; set; }
     public HealthReportDetailMeasureStatus Status { get; set; }
     public string? Note { get; set; }
-    public virtual MeasureUnitResponse MeasureUnit { get; set; } = default!;
+    public int MeasureUnitId { get; set; }
+    public int HealthReportDetailId { get; set; }
+    public MeasureUnitResponse MeasureUnit { get; set; } = default!;
 }
