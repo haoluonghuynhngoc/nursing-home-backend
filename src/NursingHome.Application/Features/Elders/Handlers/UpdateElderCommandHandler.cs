@@ -14,6 +14,11 @@ internal class UpdateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
 
     public async Task<MessageResponse> Handle(UpdateElderCommand request, CancellationToken cancellationToken)
     {
+        var roomElderName = await _elderRepository.FindByAsync(x => x.CCCD == request.CCCD);
+        if (roomElderName != null)
+        {
+            throw new ConflictException($"Elder Have CMND is {request.Name} In DataBase");
+        }
         var elder = await _elderRepository.FindByAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
 
         if (elder is null)

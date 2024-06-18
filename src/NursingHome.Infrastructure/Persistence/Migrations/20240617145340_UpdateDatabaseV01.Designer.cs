@@ -12,8 +12,8 @@ using NursingHome.Infrastructure.Persistence.Data;
 namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240616232211_CreateInit")]
-    partial class CreateInit
+    [Migration("20240617145340_UpdateDatabaseV01")]
+    partial class UpdateDatabaseV01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -167,6 +167,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
                     b.Property<string>("ReasonForCanceling")
                         .HasColumnType("longtext");
 
@@ -222,6 +225,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CCCD")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset?>("CreatedAt")
@@ -361,6 +368,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetime(6)");
 
@@ -423,9 +433,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int>("MeasureUnitId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("Note")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.Property<float>("Value")
                         .HasColumnType("float");
@@ -683,10 +696,17 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
                     b.Property<int>("HealthCategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UnitType")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -1060,6 +1080,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("TimeBetweenServices")
                         .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.HasKey("Id");
 

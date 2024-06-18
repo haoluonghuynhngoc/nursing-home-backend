@@ -7,13 +7,13 @@ namespace NursingHome.Domain.Entities;
 public class Elder : BaseAuditableEntity<int>
 {
     public string Name { get; set; } = default!;
+    public string CCCD { get; set; } = default!;
     public string? DateOfBirth { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public GenderStatus Gender { get; set; }
     public string? ImageUrl { get; set; }
     public string? Address { get; set; }
     public string? Nationality { get; set; }
-
     public string? Notes { get; set; }
     public int RoomId { get; set; }
     public virtual Room Room { get; set; } = default!;
