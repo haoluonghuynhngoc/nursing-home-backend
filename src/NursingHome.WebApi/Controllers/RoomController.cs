@@ -40,12 +40,10 @@ public class RoomController(ISender sender) : ControllerBase
 
     [HttpPost("multi-rooms")]
     public async Task<ActionResult<MessageResponse>> CreateRoomsAutoAsync(
-        int blockId,
-        int packageId,
         CreateAutoCommand command,
         CancellationToken cancellationToken)
     {
-        return await sender.Send(command with { BlockId = blockId, PackageId = packageId }, cancellationToken);
+        return await sender.Send(command, cancellationToken);
     }
 
     [HttpPut("{id}")]

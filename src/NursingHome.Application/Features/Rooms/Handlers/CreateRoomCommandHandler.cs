@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Mapster;
+using MediatR;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
@@ -8,9 +9,7 @@ using NursingHome.Domain.Entities;
 using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Rooms.Handlers;
-internal sealed class CreateRoomCommandHandler(
-    IUnitOfWork unitOfWork
-    ) : IRequestHandler<CreateRoomCommand, MessageResponse>
+internal sealed class CreateRoomCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateRoomCommand, MessageResponse>
 {
 
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
@@ -18,32 +17,25 @@ internal sealed class CreateRoomCommandHandler(
     private readonly IGenericRepository<NursingPackage> _nursingPackageRepository = unitOfWork.Repository<NursingPackage>();
     public async Task<MessageResponse> Handle(CreateRoomCommand request, CancellationToken cancellationToken)
     {
-        if (request.NursingPackageId != null)
+
+        if (!await _nursingPackageRepository.ExistsByAsync(_ => request.NursingPackageId == null || _.Id == request.NursingPackageId, cancellationToken))
         {
-            //var nursingPackageCheck = await _nursingPackageRepository.FindByAsync(x => x.Id == request.NursingPackageId)
-            //    ?? throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId.Value);
-            if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId, cancellationToken))
-            {
-                throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
-            }
+            throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
         }
-        if (await _blockRepository.ExistsByAsync(_ => _.Id == request.BlockId))
+
+        if (!await _blockRepository.ExistsByAsync(_ => _.Id == request.BlockId))
         {
             throw new NotFoundException(nameof(Block), request.BlockId);
         }
+
         if (await _roomRepository.ExistsByAsync(_ => _.Name == request.Name && _.BlockId == request.BlockId))
         {
             throw new ConflictException($"Room Have Name {request.Name} In Block Have Block ID Is {request.BlockId}");
         }
 
-        var room = new Room
-        {
-            Name = request.Name,
-            BlockId = request.BlockId,
-            TotalBed = 0,
-            NursingPackageId = request.NursingPackageId,
-            Type = RoomType.VacantRoom,
-        };
+        var room = request.Adapt<Room>();
+        room.TotalBed = 0;
+        room.Type = RoomType.VacantRoom;
 
         await _roomRepository.CreateAsync(room);
         await unitOfWork.CommitAsync();

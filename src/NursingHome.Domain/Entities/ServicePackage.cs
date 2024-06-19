@@ -14,6 +14,9 @@ public class ServicePackage : BaseAuditableEntity<int>
     public string? ImageUrl { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public PackageType Type { get; set; } = default!;
+
+    public DateOnly EndDate { get; set; }
+
     public int ServicePackageCategoryId { get; set; }
     public virtual ServicePackageCategory ServicePackageCategory { get; set; } = default!;
     public virtual ICollection<ServicePackageDate> ServicePackageDates { get; set; } = new HashSet<ServicePackageDate>();
