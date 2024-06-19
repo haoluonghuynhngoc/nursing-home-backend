@@ -20,13 +20,14 @@ internal sealed class CreateContractCommandHandler(
 
     public async Task<MessageResponse> Handle(CreateContractCommand request, CancellationToken cancellationToken)
     {
-        var elder = await _elderRepository.FindByAsync(
-               expression: _ => _.Id == request.ElderId)
-                ?? throw new NotFoundException(nameof(Elder), request.ElderId);
-
-        var user = await _userRepository.FindByAsync(
-               expression: _ => _.Id == request.UserId)
-               ?? throw new NotFoundException(nameof(User), request.UserId);
+        if (await _elderRepository.ExistsByAsync(_ => _.Id == request.ElderId))
+        {
+            throw new NotFoundException(nameof(Elder), request.ElderId);
+        }
+        if (await _userRepository.ExistsByAsync(_ => _.Id == request.UserId))
+        {
+            throw new NotFoundException(nameof(User), request.UserId);
+        }
 
         var contract = new Contract();
         request.Adapt(contract);

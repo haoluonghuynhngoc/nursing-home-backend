@@ -15,13 +15,11 @@ internal sealed class CreateBlockCommandHandler(
     private readonly IGenericRepository<Block> _blockRepository = unitOfWork.Repository<Block>();
     public async Task<MessageResponse> Handle(CreateBlockCommand request, CancellationToken cancellationToken)
     {
-        var blockCheckName = await _blockRepository.FindByAsync
-           (x => x.Name == request.Name);
-
-        if (blockCheckName != null)
+        if (await _blockRepository.ExistsByAsync(x => x.Name == request.Name))
         {
             throw new ConflictException($"Block Have Name {request.Name} In DataBase");
         }
+
         var block = new Block();
         request.Adapt(block);
 

@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.NursingPackages.Commands;
@@ -14,6 +15,10 @@ internal class CreateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
 
     public async Task<MessageResponse> Handle(CreateNursingPackageCommand request, CancellationToken cancellationToken)
     {
+        if (await _nursingPackageRepository.ExistsByAsync(_ => _.Name == request.Name))
+        {
+            throw new ConflictException($"Nursing Package Have Name {request.Name} In DataBase");
+        }
         var nursingPackage = request.Adapt<NursingPackage>();
         await _nursingPackageRepository.CreateAsync(nursingPackage, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);

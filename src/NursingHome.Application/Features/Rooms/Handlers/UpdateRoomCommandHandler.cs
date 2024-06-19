@@ -20,8 +20,7 @@ internal sealed class UpdateRoomCommandHandler(
             expression: _ => _.Id == request.Id)
              ?? throw new NotFoundException(nameof(Room), request.Id);
 
-        var roomCheckName = await _roomRepository.FindByAsync(x => x.Name == request.Name && x.BlockId == room.BlockId);
-        if (roomCheckName != null)
+        if (await _roomRepository.ExistsByAsync(_ => _.Name == request.Name && _.BlockId == room.BlockId))
         {
             throw new ConflictException($"Room Have Name {request.Name} In Block Have Block ID Is {room.BlockId}");
         }

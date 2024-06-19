@@ -15,9 +15,7 @@ internal sealed class CreatePackageCategoriesCommandHandler(
     private readonly IGenericRepository<ServicePackageCategory> _packageCategoryRepository = unitOfWork.Repository<ServicePackageCategory>();
     public async Task<MessageResponse> Handle(CreatePackageCategoriesCommand request, CancellationToken cancellationToken)
     {
-        var packageCategoryCheckName = await _packageCategoryRepository.FindByAsync(x => x.Name == request.Name);
-
-        if (packageCategoryCheckName != null)
+        if (await _packageCategoryRepository.ExistsByAsync(_ => _.Name == request.Name))
         {
             throw new ConflictException($"Package Category Have Name {request.Name} In DataBase");
         }
