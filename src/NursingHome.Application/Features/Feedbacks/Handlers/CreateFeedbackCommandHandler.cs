@@ -16,8 +16,10 @@ internal class CreateFeedbackCommandHandler(
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
     public async Task<MessageResponse> Handle(CreateFeedbackCommand request, CancellationToken cancellationToken)
     {
-        var order = await _orderRepository.FindByAsync(x => x.Id == request.OrderId)
-            ?? throw new NotFoundException($"Order Have Id {request.OrderId} Is Not Found");
+        if (await _orderRepository.ExistsByAsync(x => x.Id == request.OrderId))
+        {
+            throw new NotFoundException($"Order Have Id {request.OrderId} Is Not Found");
+        }
 
         var feedBack = request.Adapt<FeedBack>();
 

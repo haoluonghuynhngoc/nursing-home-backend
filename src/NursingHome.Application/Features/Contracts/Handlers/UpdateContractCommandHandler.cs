@@ -10,7 +10,7 @@ using NursingHome.Domain.Entities;
 namespace NursingHome.Application.Features.Contracts.Handlers;
 internal class UpdateContractCommandHandler(
     IUnitOfWork unitOfWork
-    ) : IRequestHandler<UpdateContractCommand, Application.Models.MessageResponse>
+    ) : IRequestHandler<UpdateContractCommand, MessageResponse>
 {
     private readonly IGenericRepository<Contract> _contractRepository = unitOfWork.Repository<Contract>();
 

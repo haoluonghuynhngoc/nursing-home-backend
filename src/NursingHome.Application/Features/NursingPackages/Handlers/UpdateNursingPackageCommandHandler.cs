@@ -15,9 +15,13 @@ internal class UpdateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
 
     public async Task<MessageResponse> Handle(UpdateNursingPackageCommand request, CancellationToken cancellationToken)
     {
+        if (await _nursingPackageRepository.ExistsByAsync(_ => _.Name == request.Name))
+        {
+            throw new ConflictException($"Nursing Package Have Name {request.Name} In DataBase");
+        }
+
         var nursingPackage = await _nursingPackageRepository
             .FindByAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
-
         if (nursingPackage is null)
         {
             throw new NotFoundException(nameof(NursingPackage), request.Id);

@@ -16,10 +16,7 @@ internal class CreateHealthCategoryCommandHandler(
 
     public async Task<MessageResponse> Handle(CreateHealthCategoryCommand request, CancellationToken cancellationToken)
     {
-        var healthCategoryCheckName = await _healthCategoryRepository.FindByAsync
-           (x => x.Name == request.Name);
-
-        if (healthCategoryCheckName != null)
+        if (await _healthCategoryRepository.ExistsByAsync(x => x.Name == request.Name))
         {
             throw new ConflictException($"Health Category Have Name {request.Name} In DataBase");
         }

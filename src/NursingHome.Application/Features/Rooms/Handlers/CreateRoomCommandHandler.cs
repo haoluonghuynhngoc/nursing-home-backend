@@ -27,15 +27,14 @@ internal sealed class CreateRoomCommandHandler(
                 throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
             }
         }
-
-        var roomCheckName = await _roomRepository.FindByAsync(x => x.Name == request.Name && x.BlockId == request.BlockId);
-        if (roomCheckName != null)
+        if (await _blockRepository.ExistsByAsync(_ => _.Id == request.BlockId))
+        {
+            throw new NotFoundException(nameof(Block), request.BlockId);
+        }
+        if (await _roomRepository.ExistsByAsync(_ => _.Name == request.Name && _.BlockId == request.BlockId))
         {
             throw new ConflictException($"Room Have Name {request.Name} In Block Have Block ID Is {request.BlockId}");
         }
-
-        var block = await _blockRepository.FindByAsync(expression: _ => _.Id == request.BlockId)
-           ?? throw new NotFoundException(nameof(Block), request.BlockId);
 
         var room = new Room
         {

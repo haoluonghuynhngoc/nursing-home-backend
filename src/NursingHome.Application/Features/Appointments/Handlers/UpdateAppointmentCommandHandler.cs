@@ -16,7 +16,7 @@ internal class UpdateAppointmentCommandHandler(IUnitOfWork unitOfWork) : IReques
     {
         var appointment = await _appointmentRepository.FindByAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
 
-        if (appointment is null)
+        if (appointment != null)
         {
             throw new NotFoundException(nameof(Appointment), request.Id);
         }
