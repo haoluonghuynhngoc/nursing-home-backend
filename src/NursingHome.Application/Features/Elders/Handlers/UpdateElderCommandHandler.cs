@@ -40,6 +40,8 @@ internal class UpdateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         }
 
         request.Adapt(elder);
+
+        await _elderRepository.UpdateAsync(elder);
         await unitOfWork.CommitAsync(cancellationToken);
 
         return new MessageResponse(Resource.UpdatedSuccess);

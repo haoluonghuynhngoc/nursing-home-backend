@@ -28,6 +28,7 @@ internal class UpdateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
         }
         // cập nhật gói thì nhớ check xem số lượng giường trong phòng phải được cập nhật theo 
         request.Adapt(nursingPackage);
+        await _nursingPackageRepository.UpdateAsync(nursingPackage);
         await unitOfWork.CommitAsync(cancellationToken);
 
         return new MessageResponse(Resource.UpdatedSuccess);

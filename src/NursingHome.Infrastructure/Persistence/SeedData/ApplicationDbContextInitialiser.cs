@@ -66,6 +66,14 @@ public class ApplicationDbContextInitialiser(
             }
             await unitOfWork.CommitAsync();
         }
+        if (!await unitOfWork.Repository<DiseaseCategory>().ExistsByAsync())
+        {
+            foreach (var item in DiseaseCategorySeed.Default)
+            {
+                await unitOfWork.Repository<DiseaseCategory>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
         if (!await unitOfWork.Repository<ServicePackageCategory>().ExistsByAsync())
         {
             foreach (var item in ServicePackageCategorySeed.Default)

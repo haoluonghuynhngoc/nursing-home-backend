@@ -15,12 +15,25 @@ internal class RegisterUserSystemCommandHandler(
     UserManager<User> userManager,
     IUnitOfWork unitOfWork) : IRequestHandler<RegisterUserSystemCommand, MessageResponse>
 {
+    private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     public async Task<MessageResponse> Handle(RegisterUserSystemCommand request, CancellationToken cancellationToken)
     {
+        if (await _userRepository.ExistsByAsync(_ => _.PhoneNumber == request.PhoneNumber && request.PhoneNumber != null))
+        {
+            throw new FieldResponseException(600, $"Phone number Is {request.PhoneNumber} already exists.");
+        }
+        if (await _userRepository.ExistsByAsync(_ => _.Email == request.Email && request.Email != null))
+        {
+            throw new FieldResponseException(601, $"Email Is {request.Email} already exists.");
+        }
+        if (await _userRepository.ExistsByAsync(_ => _.CCCD == request.CCCD && request.CCCD != null))
+        {
+            throw new FieldResponseException(602, $"CCCD Is {request.CCCD} already exists.");
+        }
         var userCheck = await userManager.FindByNameAsync(request.UserName);
         if (userCheck != null)
         {
-            throw new BadRequestException(Resource.UserAlreadyExists);
+            throw new FieldResponseException(603, Resource.UserAlreadyExists);
         }
         var roleUser = request.RoleRegister switch
         {

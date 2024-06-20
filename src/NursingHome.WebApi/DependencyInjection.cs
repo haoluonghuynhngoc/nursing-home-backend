@@ -122,9 +122,9 @@ public static class DependencyInjection
         {
             options.AddPolicy(Policies.Admin, policy => policy.RequireRole(RoleName.Admin));
             options.AddPolicy(Policies.Director, policy => policy.RequireRole(RoleName.Director));
-            options.AddPolicy(Policies.Director, policy => policy.RequireRole(RoleName.Manager));
+            options.AddPolicy(Policies.Manager, policy => policy.RequireRole(RoleName.Manager));
             options.AddPolicy(Policies.Staff, policy => policy.RequireRole(RoleName.Staff));
-            options.AddPolicy(Policies.Director, policy => policy.RequireRole(RoleName.Nurse));
+            options.AddPolicy(Policies.Nurse, policy => policy.RequireRole(RoleName.Nurse));
             options.AddPolicy(Policies.Customer, policy => policy.RequireRole(RoleName.Customer));
 
             //  options.AddPolicy(Policies.StationManager_Or_Staff, policy => policy.RequireRole(RoleName.StationManager).RequireRole(RoleName.Staff));
@@ -205,6 +205,7 @@ public static class DependencyInjection
                     ForbiddenAccessException e => StatusCodes.Status403Forbidden,
                     NotFoundException e => StatusCodes.Status404NotFound,
                     UnauthorizedAccessException e => StatusCodes.Status401Unauthorized,
+                    FieldResponseException e => e.StatusCode, // Đặt Biệt
                     _ => StatusCodes.Status500InternalServerError,
                 };
 

@@ -19,12 +19,21 @@ internal class RegisterCutomerCommandHandler(
     {
         if (await _userRepository.ExistsByAsync(_ => _.PhoneNumber == request.PhoneNumber))
         {
-            throw new ConflictException("User Have Phone Number is ", request.PhoneNumber);
+            throw new FieldResponseException(600, $"Phone number Is {request.PhoneNumber} already exists.");
         }
+        if (await _userRepository.ExistsByAsync(_ => _.Email == request.Email && request.Email != null))
+        {
+            throw new FieldResponseException(601, $"Email Is {request.Email} already exists.");
+        }
+        if (await _userRepository.ExistsByAsync(_ => _.CCCD == request.CCCD && request.CCCD != null))
+        {
+            throw new FieldResponseException(602, $"CCCD Is {request.CCCD} already exists.");
+        }
+
         var user = await userManager.FindByNameAsync(request.PhoneNumber);
         if (user != null)
         {
-            throw new BadRequestException(Resource.UserAlreadyExists);
+            throw new FieldResponseException(603, Resource.UserAlreadyExists);
         }
 
         var customer = request.Adapt<User>();

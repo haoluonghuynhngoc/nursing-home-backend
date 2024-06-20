@@ -19,6 +19,15 @@ internal sealed class UpdateUserCommandHandler(
         var user = await _userRepository.FindByAsync(
              expression: _ => _.Id == request.Id)
               ?? throw new NotFoundException(nameof(User), request.Id);
+
+        if (await _userRepository.ExistsByAsync(_ => _.Id != request.Id && _.Email == request.Email))
+        {
+            throw new FieldResponseException(601, $"Email Is {request.Email} already exists.");
+        }
+        if (await _userRepository.ExistsByAsync(_ => _.Id != request.Id && _.CCCD == request.CCCD))
+        {
+            throw new FieldResponseException(602, $"CCCD Is {request.CCCD} already exists.");
+        }
         request.Adapt(user);
         await _userRepository.UpdateAsync(user);
         await unitOfWork.CommitAsync();
