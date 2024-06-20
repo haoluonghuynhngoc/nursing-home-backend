@@ -14,12 +14,16 @@ public sealed record GetEldersQuery : PaginationRequest<Elder>, IRequest<Paginat
 
     public string? Search { get; set; }
     public GenderStatus? Gender { get; set; }
+    public Guid? UserId { get; set; }
+    public int? RoomId { get; set; }
+
     public override Expression<Func<Elder, bool>> GetExpressions()
     {
 
         Expression = Expression.And(u => string.IsNullOrWhiteSpace(Search) || EF.Functions.Like(u.Name, $"%{Search}%"));
-
         Expression = Expression.And(u => !Gender.HasValue || u.Gender == Gender);
+        Expression = Expression.And(u => !UserId.HasValue || u.UserId == UserId);
+        Expression = Expression.And(u => !RoomId.HasValue || u.RoomId == RoomId);
         return Expression;
     }
 }

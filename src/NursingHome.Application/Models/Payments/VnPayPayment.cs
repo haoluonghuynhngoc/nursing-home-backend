@@ -8,8 +8,6 @@ public class VnPayPayment
 
     public string? Info { get; set; }
 
-    //public TransactionType OrderType { get; set; }
-
     public DateTimeOffset Time { get; set; }
 
     public string returnUrl { get; set; } = default!;

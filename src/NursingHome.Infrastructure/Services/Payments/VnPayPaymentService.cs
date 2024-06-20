@@ -36,7 +36,7 @@ public class VnPayPaymentService : IVnPayPaymentService
         pay.AddRequestData("vnp_CreateDate", payment.Time.ToString("yyyyMMddHHmmss"));
         pay.AddRequestData("vnp_IpAddr", UtilitiesExtensions.GetIpAddress());
         pay.AddRequestData("vnp_OrderInfo", payment.Info ?? DefaultPaymentInfo);
-        //pay.AddRequestData("vnp_OrderType", payment.OrderType.ToString());
+        pay.AddRequestData("vnp_OrderType", "deposit");
         pay.AddRequestData("vnp_TxnRef", payment.PaymentReferenceId);
 
         var paymentUrl = pay.CreateRequestUrl(
