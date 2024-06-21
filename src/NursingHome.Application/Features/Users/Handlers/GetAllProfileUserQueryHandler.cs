@@ -18,10 +18,11 @@ internal sealed class GetAllProfileUserQueryHandler(
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     public async Task<PaginatedResponse<UserResponse>> Handle(GetAllProfileUserQuery request, CancellationToken cancellationToken)
     {
-        var role = await roleManager.FindByNameAsync(RoleName.Admin);
+        // var role = await roleManager.FindByNameAsync(RoleName.Admin);
         var expression = request.GetExpressions();
-        expression = expression.And(u => u.UserRoles.Any(ur => ur.Role != role))
-            .And(u => u.IsActive == true);
+        //expression = expression.And(u => u.UserRoles.Any(ur => ur.Role != role))
+        //    .And(u => u.IsActive == true);
+        expression = expression.And(u => u.UserRoles.Any(ur => ur.Role.Name != RoleName.Admin.ToString()));
 
         var users = await _userRepository.FindAsync<UserResponse>(
             request.PageIndex,

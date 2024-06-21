@@ -13,6 +13,7 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
 {
 
     public string? Search { get; set; }
+    public int? NursingPackageId { get; set; }
     public RoomType? Type { get; set; }
     public override Expression<Func<Room, bool>> GetExpressions()
     {
@@ -24,6 +25,8 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
         }
         Expression = Expression
             .And(r => !Type.HasValue || r.Type == Type);
+        Expression = Expression
+           .And(r => !NursingPackageId.HasValue || r.NursingPackageId == NursingPackageId);
         return Expression;
     }
 
