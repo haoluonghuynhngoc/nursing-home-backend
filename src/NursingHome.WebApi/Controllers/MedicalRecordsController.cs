@@ -29,6 +29,9 @@ public class MedicalRecordsController(ISender sender) : ControllerBase
         return await sender.Send(new GetMedicalRecordByIdQuery(id), cancellationToken);
     }
 
+    /// <summary>
+    /// Vì đây là bảng 1-1 nên khi tọa elder thì có luôn rồi nên không cần tạo riêng
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<MessageResponse>> CreateMedicalRecordAsync(
         CreateMedicalRecordCommand command,

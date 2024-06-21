@@ -1,13 +1,9 @@
-﻿using NursingHome.Application.Models;
-using NursingHome.Domain.Enums;
+﻿using NursingHome.Application.Features.NursingPackages.Models;
+using NursingHome.Application.Features.Users.Models;
 
 namespace NursingHome.Application.Features.Appointments.Models;
-public record AppointmentResponse : BaseAuditableEntityResponse<int>
+public record AppointmentResponse : BaseAppointmentResponse
 {
-    public string Name { get; set; } = default!;
-    public string? Description { get; set; }
-    public DateTime Date { get; set; }
-    public AppointmentType Type { get; set; }
-    public string? Notes { get; set; }
-    public Guid UserId { get; set; }
+    public BaseUserResponse User { get; set; } = default!;
+    public BaseNursingPackageResponse NursingPackage { get; set; } = default!;
 }

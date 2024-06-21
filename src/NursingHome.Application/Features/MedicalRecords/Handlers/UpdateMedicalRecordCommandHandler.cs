@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
@@ -16,7 +17,8 @@ internal class UpdateMedicalRecordCommandHandler(IUnitOfWork unitOfWork) : IRequ
     public async Task<MessageResponse> Handle(UpdateMedicalRecordCommand request, CancellationToken cancellationToken)
     {
 
-        var medicalRecord = await _medicalRecordRepository.FindByAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
+        var medicalRecord = await _medicalRecordRepository.FindByAsync(x => x.Id == request.Id
+          , includeFunc: _ => _.Include(x => x.DiseaseCategories), cancellationToken: cancellationToken);
 
         if (medicalRecord is null)
         {
@@ -25,22 +27,8 @@ internal class UpdateMedicalRecordCommandHandler(IUnitOfWork unitOfWork) : IRequ
 
         request.Adapt(medicalRecord);
 
-        //if (request.DiseaseCategories.Any())
-        //{
-        //    var diseaseCategories = new HashSet<DiseaseCategory>();
-        //    foreach (var diseaseCategoryId in request.DiseaseCategories)
-        //    {
-        //        if (!await _diseaseCategoryRepository.ExistsByAsync(_ => _.Id == diseaseCategoryId, cancellationToken))
-        //        {
-        //            throw new NotFoundException(nameof(DiseaseCategory), diseaseCategoryId);
-        //        }
-        //        var diseaseCategory = await _diseaseCategoryRepository.FindByAsync(_ => _.Id == diseaseCategoryId)
-        //            ?? throw new NotFoundException(nameof(DiseaseCategory), diseaseCategoryId);
-        //        diseaseCategories.Add(diseaseCategory);
-        //    }
-        //    medicalRecord.DiseaseCategories = diseaseCategories;
-
-        //}
+        var diseaseCategories = await _diseaseCategoryRepository.FindAsync(_ => request.DiseaseCategories.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
+        medicalRecord.DiseaseCategories = diseaseCategories;
 
         await _medicalRecordRepository.UpdateAsync(medicalRecord);
         await unitOfWork.CommitAsync(cancellationToken);

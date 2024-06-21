@@ -27,21 +27,8 @@ internal class CreateMedicalRecordCommandHandler(IUnitOfWork unitOfWork) : IRequ
 
         var medicalRecord = request.Adapt<MedicalRecord>();
 
-        //if (request.DiseaseCategories.Any())
-        //{
-        //    var diseaseCategories = new HashSet<DiseaseCategory>();
-        //    foreach (var diseaseCategoryId in request.DiseaseCategories)
-        //    {
-        //        if (!await _diseaseCategoryRepository.ExistsByAsync(_ => _.Id == diseaseCategoryId, cancellationToken))
-        //        {
-        //            throw new NotFoundException(nameof(DiseaseCategory), diseaseCategoryId);
-        //        }
-        //        var diseaseCategory = await _diseaseCategoryRepository.FindByAsync(_ => _.Id == diseaseCategoryId)
-        //            ?? throw new NotFoundException(nameof(DiseaseCategory), diseaseCategoryId);
-        //        diseaseCategories.Add(diseaseCategory);
-        //    }
-        //    medicalRecord.DiseaseCategories = diseaseCategories;
-        //}
+        var diseaseCategories = await _diseaseCategoryRepository.FindAsync(_ => request.DiseaseCategories.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
+        medicalRecord.DiseaseCategories = diseaseCategories;
 
         await _medicalRecordRepository.CreateAsync(medicalRecord, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);

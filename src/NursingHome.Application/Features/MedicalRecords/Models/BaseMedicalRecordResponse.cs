@@ -1,4 +1,5 @@
-﻿using NursingHome.Application.Models;
+﻿using NursingHome.Application.Features.DiseaseCategories.Models;
+using NursingHome.Application.Models;
 
 namespace NursingHome.Application.Features.MedicalRecords.Models;
 public record BaseMedicalRecordResponse : BaseAuditableEntityResponse<int>
@@ -10,5 +11,5 @@ public record BaseMedicalRecordResponse : BaseAuditableEntityResponse<int>
     public string? UnderlyingDisease { get; set; }
     public string? Note { get; set; }
     public int ElderId { get; set; }
-
+    public ICollection<BaseDiseaseCategoryResponse> DiseaseCategories { get; set; } = new HashSet<BaseDiseaseCategoryResponse>();
 }

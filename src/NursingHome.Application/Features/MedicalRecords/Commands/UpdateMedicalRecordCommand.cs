@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using NursingHome.Application.Features.DiseaseCategories.Models;
 using NursingHome.Application.Models;
 using System.Text.Json.Serialization;
 
@@ -14,5 +15,5 @@ public record UpdateMedicalRecordCommand : IRequest<MessageResponse>
     public string? Height { get; set; }
     public string? UnderlyingDisease { get; set; }
     public string? Note { get; set; }
-    // public int[] DiseaseCategories { get; set; } = Array.Empty<int>();
+    public virtual ICollection<CreateDiseaseCategoriesRequest> DiseaseCategories { get; set; } = new HashSet<CreateDiseaseCategoriesRequest>();
 }

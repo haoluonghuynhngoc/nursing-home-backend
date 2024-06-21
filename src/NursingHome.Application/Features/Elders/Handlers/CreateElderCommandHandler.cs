@@ -15,6 +15,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
+    private readonly IGenericRepository<DiseaseCategory> _diseaseCategoryRepository = unitOfWork.Repository<DiseaseCategory>();
 
     public async Task<MessageResponse> Handle(CreateElderCommand request, CancellationToken cancellationToken)
     {
@@ -33,9 +34,13 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
             throw new NotFoundException(nameof(User), request.UserId);
         }
 
+        var diseaseCategories = await _diseaseCategoryRepository.FindAsync(_ =>
+        request.MedicalRecord.DiseaseCategories.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
+
         var elder = request.Adapt<Elder>();
         request.Contract.UserId = request.UserId;
         request.Contract.Status = ContractStatus.InUse;
+        elder.MedicalRecord.DiseaseCategories = diseaseCategories; // add DiseaseCategories
         elder.Contracts = new List<Contract> {
             request.Contract.Adapt<Contract>()
         };

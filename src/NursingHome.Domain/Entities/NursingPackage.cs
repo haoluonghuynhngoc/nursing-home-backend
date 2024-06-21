@@ -13,7 +13,7 @@ public class NursingPackage : BaseAuditableEntity<int>
     public int RegistrationLimit { get; set; }
     public string? ImageUrl { get; set; }
     public int Capacity { get; set; }
-    public virtual Appointment Appointment { get; set; } = default!;
+    public virtual ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
     public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     public virtual ICollection<Room> Rooms { get; set; } = new HashSet<Room>();
 }
