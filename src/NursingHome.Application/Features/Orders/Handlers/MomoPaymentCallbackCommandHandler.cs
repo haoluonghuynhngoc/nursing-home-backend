@@ -24,7 +24,7 @@ internal class MomoPaymentCallbackCommandHandler(IUnitOfWork unitOfWork) : IRequ
 
         if (request.IsSuccess)
         {
-            order.Status = OrderStatus.Completed;
+            order.Status = OrderStatus.Paid;
         }
         else
         {

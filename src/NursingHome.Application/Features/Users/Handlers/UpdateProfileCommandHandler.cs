@@ -33,7 +33,21 @@ internal sealed class UpdateProfileCommandHandler(
             throw new FieldResponseException(602, $"CCCD Is {request.CCCD} already exists.");
         }
         request.Adapt(user);
-        await userManager.UpdateNormalizedEmailAsync(user);
+
+        // nếu user là khách hàng thì cập nhật username = phoneNumber
+        //if (user.UserRoles.Any(_ => _.Role.Name == RoleName.Customer))
+        //{
+        //    // user.UserName = request.PhoneNumber;
+        //    // await userManager.UpdateAsync(user);
+        //    await userManager.SetUserNameAsync(user, request.PhoneNumber);
+        //    var setUserNameResult = await userManager.SetUserNameAsync(user, request.PhoneNumber);
+        //    if (!setUserNameResult.Succeeded)
+        //    {
+        //        Console.WriteLine("Error setting username");
+        //    }
+        //}
+        //  await userManager.UpdateNormalizedEmailAsync(user);
+        await userManager.UpdateAsync(user);
         await unitOfWork.CommitAsync(cancellationToken);
         return new MessageResponse(Resource.UserUpdatedProfileSuccess);
     }

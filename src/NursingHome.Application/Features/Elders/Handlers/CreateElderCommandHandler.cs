@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
@@ -14,6 +15,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
 {
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
+    private readonly IGenericRepository<NursingPackage> _nursingPackageRepository = unitOfWork.Repository<NursingPackage>();
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     private readonly IGenericRepository<DiseaseCategory> _diseaseCategoryRepository = unitOfWork.Repository<DiseaseCategory>();
 
@@ -28,18 +30,28 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new NotFoundException(nameof(Room), request.RoomId);
         }
-
         if (!await _userRepository.ExistsByAsync(_ => _.Id == request.UserId, cancellationToken))
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
-
+        if (!await _roomRepository.ExistsByAsync(_ => _.AvailableBed))
+        {
+            throw new FieldResponseException(604, "Room is full");
+        }
         var diseaseCategories = await _diseaseCategoryRepository.FindAsync(_ =>
         request.MedicalRecord.DiseaseCategories.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
 
+        var room = await _roomRepository.FindByAsync(x => x.Id == request.RoomId
+           , includeFunc: _ => _.Include(x => x.NursingPackage), cancellationToken: cancellationToken);
+        if (room?.NursingPackageId == null)
+        {
+            throw new FieldResponseException(605, "Room Not Have Package");
+        }
         var elder = request.Adapt<Elder>();
         request.Contract.UserId = request.UserId;
-        request.Contract.Status = ContractStatus.InUse;
+        request.Contract.NursingPackageId = room?.NursingPackageId; // Nếu đã sửa database rồi thì nhớ sửa lại int? sang int
+        request.Contract.Price = room?.NursingPackage.Price ?? 0m;  // Cast Dữ liệu nếu phòng không có gói dịch vụ
+        request.Contract.Status = ContractStatus.Pending;
         elder.MedicalRecord.DiseaseCategories = diseaseCategories; // add DiseaseCategories
         elder.Contracts = new List<Contract> {
             request.Contract.Adapt<Contract>()

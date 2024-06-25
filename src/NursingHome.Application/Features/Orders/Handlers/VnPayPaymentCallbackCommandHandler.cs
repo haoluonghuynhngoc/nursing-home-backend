@@ -24,7 +24,7 @@ internal class VnPayPaymentCallbackCommandHandler(IUnitOfWork unitOfWork) : IReq
 
         if (request.IsSuccess)
         {
-            order.Status = OrderStatus.Completed;
+            order.Status = OrderStatus.Paid;
         }
         else
         {

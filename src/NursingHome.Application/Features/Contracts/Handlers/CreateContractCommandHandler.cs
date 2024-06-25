@@ -32,7 +32,7 @@ internal sealed class CreateContractCommandHandler(
         var contract = new Contract();
         request.Adapt(contract);
 
-        contract.Status = ContractStatus.InUse;
+        contract.Status = ContractStatus.Pending;
 
         await _contractRepository.CreateAsync(contract);
         await unitOfWork.CommitAsync();

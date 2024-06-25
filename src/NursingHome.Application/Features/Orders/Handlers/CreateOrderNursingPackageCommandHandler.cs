@@ -29,7 +29,7 @@ internal class CreateOrderNursingPackageCommandHandler(IUnitOfWork unitOfWork) :
         }
 
         var order = request.Adapt<Order>();
-        order.Status = OrderStatus.Completed;
+        order.Status = OrderStatus.Paid;
         order.Method = TransactionMethod.Cash;
 
         await _orderRepository.CreateAsync(order, cancellationToken);

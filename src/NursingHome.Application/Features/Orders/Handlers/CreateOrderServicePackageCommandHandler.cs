@@ -38,7 +38,7 @@ internal class CreateOrderServicePackageCommandHandler(
         }
 
         var order = request.Adapt<Order>();
-        order.Status = OrderStatus.Completed;
+        order.Status = OrderStatus.Paid;
         order.PaymentReferenceId = Guid.NewGuid();
 
         await _orderRepository.CreateAsync(order, cancellationToken);

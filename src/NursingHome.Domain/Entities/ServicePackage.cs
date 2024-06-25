@@ -1,4 +1,5 @@
-﻿using NursingHome.Domain.Common;
+﻿using EntityFrameworkCore.Projectables;
+using NursingHome.Domain.Common;
 using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,6 +12,8 @@ public class ServicePackage : BaseAuditableEntity<int>
     public int Duration { get; set; }
     public int RegistrationLimit { get; set; }
     public int TimeBetweenServices { get; set; }
+    [Projectable]
+    public int TotalOrder => Orders.Count;
     public string? ImageUrl { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public PackageType Type { get; set; } = default!;

@@ -11,5 +11,5 @@ public record ElderResponse : BaseElderResponse
     public BaseMedicalRecordResponse MedicalRecord { get; set; } = default!;
     public BaseUserResponse User { get; set; } = default!;
     public ICollection<BaseContractResponse> Contracts { get; set; } = new HashSet<BaseContractResponse>();
-    public BaseContractResponse? ContractsInUse => Contracts.FirstOrDefault(x => x.Status == ContractStatus.InUse);
+    public BaseContractResponse? ContractsInUse => Contracts.FirstOrDefault(x => x.Status == ContractStatus.Pending);
 }

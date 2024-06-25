@@ -2,5 +2,8 @@
 public enum OrderStatus
 {
     Failed,
-    Completed,
+    //Completed,
+    Paid,
+    UnPaid,
+    OverDue,
 }
