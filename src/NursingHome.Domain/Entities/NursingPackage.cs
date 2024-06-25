@@ -13,7 +13,11 @@ public class NursingPackage : BaseAuditableEntity<int>
     public int RegistrationLimit { get; set; }
     public string? ImageUrl { get; set; }
     public int Capacity { get; set; }
+    //[Projectable]
+    //public int TotalOrder => Orders.Count;
     public virtual ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
-    public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+    //public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+    public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<Room> Rooms { get; set; } = new HashSet<Room>();
+
 }

@@ -22,8 +22,8 @@ public class Order : BaseAuditableEntity<int>
     public virtual User User { get; set; } = default!;
     public int? ServicePackageId { get; set; }
     public virtual ServicePackage ServicePackage { get; set; } = default!;
-    public int? NursingPackageId { get; set; }
-    public virtual NursingPackage NursingPackage { get; set; } = default!;
+    public int? ContractId { get; set; }
+    public virtual Contract Contract { get; set; } = default!;
     public int? ElderId { get; set; }
     public virtual Elder Elder { get; set; } = default!;
     public virtual ICollection<OrderDate> OrderDates { get; set; } = new List<OrderDate>();
