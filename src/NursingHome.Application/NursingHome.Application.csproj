@@ -21,6 +21,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Features\CareSchedules\Handlers\" />
+	  <Folder Include="Features\CareSchedules\Models\" />
 	  <Folder Include="Features\Rooms\Handlers\" />
 	</ItemGroup>
 

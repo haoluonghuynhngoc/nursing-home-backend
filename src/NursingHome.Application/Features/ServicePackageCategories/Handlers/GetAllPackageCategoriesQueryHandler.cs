@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using NursingHome.Application.Contracts.Repositories;
-using NursingHome.Application.Features.PackageCategories.Queries;
 using NursingHome.Application.Features.ServicePackageCategories.Models;
+using NursingHome.Application.Features.ServicePackageCategories.Queries;
 using NursingHome.Domain.Entities;
 using NursingHome.Shared.Pages;
 
-namespace NursingHome.Application.Features.PackageCategories.Handlers;
+namespace NursingHome.Application.Features.ServicePackageCategories.Handlers;
 internal sealed class GetAllPackageCategoriesQueryHandler(
     IUnitOfWork unitOfWork
     ) : IRequestHandler<GetAllPackageCategoriesQuery, PaginatedResponse<PackageCategoryResponse>>

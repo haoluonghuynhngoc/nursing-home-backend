@@ -7,7 +7,7 @@ using NursingHome.Domain.Entities;
 using NursingHome.Shared.Pages;
 using System.Linq.Expressions;
 
-namespace NursingHome.Application.Features.PackageCategories.Queries;
+namespace NursingHome.Application.Features.ServicePackageCategories.Queries;
 public sealed record GetAllPackageCategoriesQuery : PaginationRequest<ServicePackageCategory>, IRequest<PaginatedResponse<PackageCategoryResponse>>
 {
     public string? Search { get; set; }

@@ -1,4 +1,4 @@
-﻿using NursingHome.Application.Features.PackageFeature.Models;
+﻿using NursingHome.Application.Features.ServicePackages.Models;
 
 namespace NursingHome.Application.Features.ServicePackageCategories.Models;
 public record PackageCategoryResponse : BasePackageCategoryResponse

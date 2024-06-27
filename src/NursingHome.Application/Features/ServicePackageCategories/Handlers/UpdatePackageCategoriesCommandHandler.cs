@@ -7,7 +7,7 @@ using NursingHome.Application.Features.ServicePackageCategories.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
 
-namespace NursingHome.Application.Features.PackageCategories.Handlers;
+namespace NursingHome.Application.Features.ServicePackageCategories.Handlers;
 internal sealed class UpdatePackageCategoriesCommandHandler(
     IUnitOfWork unitOfWork
     ) : IRequestHandler<UpdatePackageCategoriesCommand, MessageResponse>
