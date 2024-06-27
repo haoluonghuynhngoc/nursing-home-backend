@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Contracts.Services.Notifications;
@@ -9,6 +10,7 @@ using System.Text.Json;
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class TestsController(
     INotifier notifier,
     ICurrentUserService currentUserService,

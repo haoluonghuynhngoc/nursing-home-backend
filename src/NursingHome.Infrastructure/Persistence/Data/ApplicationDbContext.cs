@@ -29,10 +29,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Room> Rooms { get; set; }
     public DbSet<ServicePackageCategory> ServicePackageCategories { get; set; }
     public DbSet<ServicePackageDate> ServicePackageDates { get; set; }
-    public DbSet<NurseScheduler> NurseSchedulers { get; set; }
+    public DbSet<NurseSchedule> NurseSchedules { get; set; }
     public DbSet<Shift> Shifts { get; set; }
     public DbSet<CareSchedule> CareSchedules { get; set; }
     public DbSet<NursingPackage> NursingPackages { get; set; }
+    public DbSet<OrderDetail> OrderDetails { get; set; }
     //public ApplicationDbContext()
     //{
     //}

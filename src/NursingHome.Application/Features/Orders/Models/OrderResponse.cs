@@ -1,7 +1,7 @@
 ﻿using NursingHome.Application.Features.Elders.Models;
 using NursingHome.Application.Features.Feedbacks.Models;
 using NursingHome.Application.Features.NursingPackages.Models;
-using NursingHome.Application.Features.PackageFeature.Models;
+using NursingHome.Application.Features.ServicePackages.Models;
 using NursingHome.Application.Features.Users.Models;
 
 namespace NursingHome.Application.Features.Orders.Models;

@@ -292,6 +292,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("longtext");
 
+                    b.Property<DateOnly>("InDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("datetime(6)");
 
@@ -307,6 +313,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
+
+                    b.Property<DateOnly>("OutDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
@@ -352,7 +361,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int>("OrderDetailId")
                         .HasColumnType("int");
 
                     b.Property<int?>("Rating")
@@ -364,8 +373,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId")
-                        .IsUnique();
+                    b.HasIndex("OrderDetailId");
 
                     b.ToTable("Feedbacks");
                 });
@@ -738,6 +746,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int>("HealthCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<float>("MaxValue")
+                        .HasColumnType("float");
+
+                    b.Property<float>("MinValue")
+                        .HasColumnType("float");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -864,7 +878,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("NursingHome.Domain.Entities.NurseScheduler", b =>
+            modelBuilder.Entity("NursingHome.Domain.Entities.NurseSchedule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -889,7 +903,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("NurseSchedulers");
+                    b.ToTable("NurseSchedules");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.NursingPackage", b =>
@@ -961,9 +975,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ContractId")
-                        .HasColumnType("int");
-
                     b.Property<DateTimeOffset?>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -978,9 +989,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
-
-                    b.Property<int?>("ElderId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Method")
                         .IsRequired()
@@ -998,9 +1006,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("PaymentReferenceId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int?>("ServicePackageId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(24)");
@@ -1009,12 +1014,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ContractId");
-
-                    b.HasIndex("ElderId");
-
-                    b.HasIndex("ServicePackageId");
 
                     b.HasIndex("UserId");
 
@@ -1032,14 +1031,62 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int>("OrderDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderDetailId");
 
                     b.ToTable("OrderDates");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.OrderDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ElderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ServicePackageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractId");
+
+                    b.HasIndex("ElderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ServicePackageId");
+
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Room", b =>
@@ -1102,8 +1149,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
+                    b.Property<string>("Duration")
+                        .HasColumnType("longtext");
 
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
@@ -1169,11 +1216,14 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateOnly?>("Date")
-                        .HasColumnType("date");
-
                     b.Property<string>("DayOfWeek")
                         .HasColumnType("nvarchar(24)");
+
+                    b.Property<DateOnly?>("OccurrenceDay")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("RepetitionDay")
+                        .HasColumnType("int");
 
                     b.Property<int>("ServicePackageId")
                         .HasColumnType("int");
@@ -1308,13 +1358,13 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("NursingHome.Domain.Entities.FeedBack", b =>
                 {
-                    b.HasOne("NursingHome.Domain.Entities.Order", "Order")
-                        .WithOne("FeedBack")
-                        .HasForeignKey("NursingHome.Domain.Entities.FeedBack", "OrderId")
+                    b.HasOne("NursingHome.Domain.Entities.OrderDetail", "OrderDetail")
+                        .WithMany("FeedBacks")
+                        .HasForeignKey("OrderDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.Navigation("OrderDetail");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.HealthReport", b =>
@@ -1454,10 +1504,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NursingHome.Domain.Entities.NurseScheduler", b =>
+            modelBuilder.Entity("NursingHome.Domain.Entities.NurseSchedule", b =>
                 {
                     b.HasOne("NursingHome.Domain.Entities.CareSchedule", "CareSchedule")
-                        .WithMany("NurseSchedulers")
+                        .WithMany("NurseSchedules")
                         .HasForeignKey("CareScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1469,7 +1519,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("NursingHome.Domain.Entities.Identities.User", "User")
-                        .WithMany("NurseSchedulers")
+                        .WithMany("NurseSchedules")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1483,42 +1533,53 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("NursingHome.Domain.Entities.Contract", "Contract")
-                        .WithMany("Orders")
-                        .HasForeignKey("ContractId");
-
-                    b.HasOne("NursingHome.Domain.Entities.Elder", "Elder")
-                        .WithMany("Orders")
-                        .HasForeignKey("ElderId");
-
-                    b.HasOne("NursingHome.Domain.Entities.ServicePackage", "ServicePackage")
-                        .WithMany("Orders")
-                        .HasForeignKey("ServicePackageId");
-
                     b.HasOne("NursingHome.Domain.Entities.Identities.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contract");
-
-                    b.Navigation("Elder");
-
-                    b.Navigation("ServicePackage");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.OrderDate", b =>
                 {
-                    b.HasOne("NursingHome.Domain.Entities.Order", "Order")
+                    b.HasOne("NursingHome.Domain.Entities.OrderDetail", "OrderDetail")
                         .WithMany("OrderDates")
+                        .HasForeignKey("OrderDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderDetail");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.OrderDetail", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Contract", "Contract")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ContractId");
+
+                    b.HasOne("NursingHome.Domain.Entities.Elder", "Elder")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ElderId");
+
+                    b.HasOne("NursingHome.Domain.Entities.Order", "Order")
+                        .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NursingHome.Domain.Entities.ServicePackage", "ServicePackage")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("ServicePackageId");
+
+                    b.Navigation("Contract");
+
+                    b.Navigation("Elder");
+
                     b.Navigation("Order");
+
+                    b.Navigation("ServicePackage");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Room", b =>
@@ -1567,12 +1628,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("NursingHome.Domain.Entities.CareSchedule", b =>
                 {
-                    b.Navigation("NurseSchedulers");
+                    b.Navigation("NurseSchedules");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Contract", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Elder", b =>
@@ -1584,7 +1645,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("MedicalRecord")
                         .IsRequired();
 
-                    b.Navigation("Orders");
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.HealthCategory", b =>
@@ -1621,7 +1682,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Notifications");
 
-                    b.Navigation("NurseSchedulers");
+                    b.Navigation("NurseSchedules");
 
                     b.Navigation("Orders");
 
@@ -1644,8 +1705,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Order", b =>
                 {
-                    b.Navigation("FeedBack")
-                        .IsRequired();
+                    b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.OrderDetail", b =>
+                {
+                    b.Navigation("FeedBacks");
 
                     b.Navigation("OrderDates");
                 });
@@ -1659,7 +1724,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("NursingHome.Domain.Entities.ServicePackage", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderDetails");
 
                     b.Navigation("ServicePackageDates");
                 });

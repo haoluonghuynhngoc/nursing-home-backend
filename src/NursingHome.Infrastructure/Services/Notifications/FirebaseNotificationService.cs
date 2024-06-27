@@ -35,9 +35,19 @@ public class FirebaseNotificationService : IFirebaseNotificationService
                 cancellationToken: cancellationToken))
             .Select(_ => _.Token).ToList();
 
-        var messages = new MulticastMessage()
+        //var messages = new MulticastMessage()
+        //{
+        //    Tokens = deviceIds,
+        //    Data = notification.ObjectToDictionary(),
+        //    Notification = new FirebaseAdmin.Messaging.Notification()
+        //    {
+        //        Title = notification.Title,
+        //        Body = notification.Content
+        //    }
+        //};
+        var messages = new Message
         {
-            Tokens = deviceIds,
+            Token = "1212",
             Data = notification.ObjectToDictionary(),
             Notification = new FirebaseAdmin.Messaging.Notification()
             {
@@ -48,7 +58,9 @@ public class FirebaseNotificationService : IFirebaseNotificationService
         _logger.LogInformation($"[MOBILE NOTIFICATION] Data: {JsonSerializer.Serialize(messages.Data)}");
         try
         {
-            var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(messages, cancellationToken);
+            //var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(messages, cancellationToken);
+            //_logger.LogInformation($"[MOBILE NOTIFICATION] Success push notification: {JsonSerializer.Serialize(response)}");
+            var response = await FirebaseMessaging.DefaultInstance.SendAsync(messages, cancellationToken);
             _logger.LogInformation($"[MOBILE NOTIFICATION] Success push notification: {JsonSerializer.Serialize(response)}");
         }
         catch (Exception ex)

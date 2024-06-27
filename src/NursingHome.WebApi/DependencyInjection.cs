@@ -142,7 +142,7 @@ public static class DependencyInjection
         services.AddHangfire(c => c.UseMemoryStorage());
         services.AddHangfireServer();
     }
-
+    // cái này là thêm firebase
     private static void AddFirebaseServices(this IServiceCollection services)
     {
         FirebaseApp.Create(new AppOptions()

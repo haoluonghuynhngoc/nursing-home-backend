@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NursingHome.Application.Features.PackageCategories.Queries;
 using NursingHome.Application.Features.ServicePackageCategories.Commands;
 using NursingHome.Application.Features.ServicePackageCategories.Models;
+using NursingHome.Application.Features.ServicePackageCategories.Queries;
 using NursingHome.Application.Models;
 using NursingHome.Shared.Pages;
 
