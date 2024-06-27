@@ -7,5 +7,5 @@ public class CareSchedule : BaseEntity<int>
     public string? Notes { get; set; }
     public int RoomId { get; set; }
     public virtual Room Room { get; set; } = default!;
-    public virtual ICollection<NurseScheduler> NurseSchedulers { get; set; } = new HashSet<NurseScheduler>();
+    public virtual ICollection<NurseSchedule> NurseSchedules { get; set; } = new HashSet<NurseSchedule>();
 }

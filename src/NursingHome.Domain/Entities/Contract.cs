@@ -22,5 +22,6 @@ public class Contract : BaseAuditableEntity<int>
     public virtual NursingPackage NursingPackage { get; set; } = default!;
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
-    public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+    //public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
 }

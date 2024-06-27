@@ -14,6 +14,9 @@ public class Elder : BaseAuditableEntity<int>
     public string? ImageUrl { get; set; }
     public string? Address { get; set; }
     public string? Nationality { get; set; }
+    public DateOnly InDate { get; set; }
+    public DateOnly OutDate { get; set; }
+    public bool IsActive { get; set; }
     public string? Notes { get; set; }
     public int RoomId { get; set; }
     public virtual Room Room { get; set; } = default!;
@@ -22,5 +25,6 @@ public class Elder : BaseAuditableEntity<int>
     public virtual MedicalRecord MedicalRecord { get; set; } = default!;
     public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new HashSet<HealthReport>();
-    public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+    //public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
 }

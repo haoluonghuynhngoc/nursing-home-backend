@@ -30,7 +30,7 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public virtual ICollection<Device> Devices { get; set; } = new HashSet<Device>();
     public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-    public virtual ICollection<NurseScheduler> NurseSchedulers { get; set; } = new HashSet<NurseScheduler>();
+    public virtual ICollection<NurseSchedule> NurseSchedules { get; set; } = new HashSet<NurseSchedule>();
     public virtual ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();
     [Projectable]
     [NotMapped]
