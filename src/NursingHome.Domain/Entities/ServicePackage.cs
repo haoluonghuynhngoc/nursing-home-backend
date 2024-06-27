@@ -19,7 +19,7 @@ public class ServicePackage : BaseAuditableEntity<int>
     public PackageType Type { get; set; } = default!;
 
     public DateOnly EndDate { get; set; }
-
+    //public int TotalDate => ServicePackageDates.Count;
     public int ServicePackageCategoryId { get; set; }
     public virtual ServicePackageCategory ServicePackageCategory { get; set; } = default!;
     public virtual ICollection<ServicePackageDate> ServicePackageDates { get; set; } = new HashSet<ServicePackageDate>();

@@ -26,20 +26,34 @@ internal class CreateOrderServicePackageCommandHandler(
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
-
-        if (!await _elderRepository.ExistsByAsync(_ => _.Id == request.ElderId, cancellationToken))
+        foreach (var item in request.OrderDetails)
         {
-            throw new NotFoundException(nameof(Elder), request.ElderId);
-        }
+            if (!await _elderRepository.ExistsByAsync(_ => _.Id == item.ElderId, cancellationToken))
+            {
+                throw new NotFoundException(nameof(Elder), item.ElderId);
+            }
+            //if (!await _servicePackageRepository.ExistsByAsync(_ => _.Id == item.ServicePackageId, cancellationToken))
+            //{
+            //    throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
+            //}
+            var servicePackage = await _servicePackageRepository.FindByIdAsync(item.ServicePackageId, cancellationToken)
+                ?? throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
 
-        if (!await _servicePackageRepository.ExistsByAsync(_ => _.Id == request.ServicePackageId, cancellationToken))
-        {
-            throw new NotFoundException(nameof(ServicePackage), request.ServicePackageId);
+            item.Type = servicePackage.Type switch
+            {
+                PackageType.OneDay => OrderDetailType.One_Time,
+                PackageType.MultipleDays => OrderDetailType.Recurring,
+                PackageType.WeeklyDays => OrderDetailType.Recurring,
+                _ => OrderDetailType.Recurring
+            };
+
+            item.Price = servicePackage.Price * item.TotalDate;
         }
 
         var order = request.Adapt<Order>();
-        order.Status = OrderStatus.Paid;
+        order.Status = OrderStatus.UnPaid;
         order.PaymentReferenceId = Guid.NewGuid();
+        order.Amount = (double)(request.OrderDetails?.Sum(detail => detail.Price) ?? 0);
 
         await _orderRepository.CreateAsync(order, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);

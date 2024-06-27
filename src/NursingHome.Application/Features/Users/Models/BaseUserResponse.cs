@@ -2,8 +2,9 @@
 using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Users.Models;
-public record BaseUserResponse : BaseAuditableEntityResponse<Guid>
+public record BaseUserResponse : BaseEntityResponse<Guid>
 {
+    //: BaseAuditableEntityResponse<Guid>
     public string? FullName { get; set; }
     public string? AvatarUrl { get; set; }
     public string? Address { get; set; }

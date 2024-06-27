@@ -2,8 +2,9 @@
 using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Elders.Models;
-public record BaseElderResponse : BaseAuditableEntityResponse<int>
+public record BaseElderResponse : BaseEntityResponse<int>
 {
+    // : BaseAuditableEntityResponse<int>
     public string Name { get; set; } = default!;
     public string? DateOfBirth { get; set; }
     public GenderStatus Gender { get; set; }

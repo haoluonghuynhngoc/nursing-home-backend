@@ -10,6 +10,6 @@ public record ElderResponse : BaseElderResponse
     public BaseRoomResponse Room { get; set; } = default!;
     public BaseMedicalRecordResponse MedicalRecord { get; set; } = default!;
     public BaseUserResponse User { get; set; } = default!;
-    public ICollection<BaseContractResponse> Contracts { get; set; } = new HashSet<BaseContractResponse>();
-    public BaseContractResponse? ContractsInUse => Contracts.FirstOrDefault(x => x.Status == ContractStatus.Pending);
+    public ICollection<BaseContractNursingPackageResponse> Contracts { get; set; } = new HashSet<BaseContractNursingPackageResponse>();
+    public BaseContractNursingPackageResponse? ContractsInUse => Contracts.FirstOrDefault(x => x.Status == ContractStatus.Pending);
 }

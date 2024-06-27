@@ -8,7 +8,7 @@ namespace NursingHome.WebApi.Controllers;
 public class PaymentsController(ISender sender) : ControllerBase
 {
 
-    [HttpGet("callback/momo")]
+    [HttpGet("momo-callback")]
     public async Task<IActionResult> MomoPaymentCallback(
     [FromQuery] MomoPaymentCallbackCommand callback,
     CancellationToken cancellationToken)
@@ -17,7 +17,7 @@ public class PaymentsController(ISender sender) : ControllerBase
         return Redirect($"{callback.returnUrl}?isSuccess={callback.IsSuccess}");
     }
 
-    [HttpGet("callback/vnpay")]
+    [HttpGet("vnpay-callback")]
     public async Task<IActionResult> VnPayPaymentCallback(
         [FromQuery] VnPayPaymentCallbackCommand callback,
         CancellationToken cancellationToken)
