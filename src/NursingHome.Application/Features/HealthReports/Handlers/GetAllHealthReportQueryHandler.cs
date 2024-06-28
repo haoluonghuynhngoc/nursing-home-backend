@@ -23,18 +23,21 @@ internal class GetAllHealthReportQueryHandler(IUnitOfWork unitOfWork) : IRequest
                  request.GetOrder(),
                  cancellationToken);
 
-        healthReport.ForEach(async _ =>
+        foreach (var report in healthReport)
         {
-            if (Guid.TryParse(_.CreatedBy, out Guid createdByUserId))
+            if (Guid.TryParse(report.CreatedBy, out Guid createdByUserId))
             {
-                if (await _userRepository
-                .FindByAsync<UserResponse>(_ => _.Id == createdByUserId, cancellationToken) is not { } userResponse)
+                var userResponse = await _userRepository
+                    .FindByAsync<UserResponse>(u => u.Id == createdByUserId, cancellationToken);
+
+                if (userResponse == null)
                 {
                     throw new NotFoundException(nameof(User), createdByUserId);
                 }
-                _.CreatorInfo = userResponse;
+
+                report.CreatorInfo = userResponse;
             }
-        });
+        }
 
         return await healthReport.ToPaginatedResponseAsync();
     }
