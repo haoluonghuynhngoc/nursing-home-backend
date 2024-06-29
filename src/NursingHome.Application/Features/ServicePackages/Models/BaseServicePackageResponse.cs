@@ -13,6 +13,8 @@ public record BaseServicePackageResponse : BaseEntityResponse<int>
     public int TotalOrder { get; set; }
     public string? ImageUrl { get; set; }
     public PackageType Type { get; set; } = default!;
+    public DateOnly StartRegistrationDate { get; set; }
+    public DateOnly EndRegistrationStartDate { get; set; }
     public DateOnly EndDate { get; set; }
     public int ServicePackageCategoryId { get; set; }
 }

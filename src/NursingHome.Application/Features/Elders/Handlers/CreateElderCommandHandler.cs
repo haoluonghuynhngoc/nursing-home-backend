@@ -47,6 +47,10 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new FieldResponseException(605, "Room Not Have Package");
         }
+        if (room?.NursingPackageId != request.NursingPackageId)
+        {
+            throw new FieldResponseException(606, $"This Room Does Not Contain A Nursing Package With Id {request.NursingPackageId}");
+        }
         var elder = request.Adapt<Elder>();
         request.Contract.UserId = request.UserId;
         request.Contract.NursingPackageId = room?.NursingPackageId; // Nếu đã sửa database rồi thì nhớ sửa lại int? sang int

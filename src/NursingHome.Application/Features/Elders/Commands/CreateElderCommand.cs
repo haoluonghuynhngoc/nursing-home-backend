@@ -17,6 +17,7 @@ public sealed record CreateElderCommand : IRequest<MessageResponse>
     public string? Notes { get; set; }
     public int RoomId { get; set; }
     public Guid UserId { get; set; }
+    public int NursingPackageId { get; set; }
     public CreateMedicalRecordRequest MedicalRecord { get; set; } = default!;
     public CreateContractRequest Contract { get; set; } = default!;
 }

@@ -98,6 +98,14 @@ public class ApplicationDbContextInitialiser(
             }
             await unitOfWork.CommitAsync();
         }
+        if (!await unitOfWork.Repository<Shift>().ExistsByAsync())
+        {
+            foreach (var item in ShiftSeed.Default)
+            {
+                await unitOfWork.Repository<Shift>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
         if (!await unitOfWork.Repository<Role>().ExistsByAsync())
         {
             foreach (var item in RoleSeed.Default)

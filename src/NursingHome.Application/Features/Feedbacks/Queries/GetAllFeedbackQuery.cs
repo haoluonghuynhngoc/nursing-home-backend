@@ -11,6 +11,7 @@ namespace NursingHome.Application.Features.Feedbacks.Queries;
 public sealed record GetAllFeedbackQuery : PaginationRequest<FeedBack>, IRequest<PaginatedResponse<FeedbackResponse>>
 {
     public string? Search { get; set; }
+    public Guid? UserId { get; set; }
     public override Expression<Func<FeedBack, bool>> GetExpressions()
     {
         if (!string.IsNullOrWhiteSpace(Search))
@@ -19,6 +20,7 @@ public sealed record GetAllFeedbackQuery : PaginationRequest<FeedBack>, IRequest
             Expression = Expression
                 .And(u => EF.Functions.Like(u.Title, $"%{Search}%"));
         }
+        Expression = Expression.And(_ => !UserId.HasValue || _.UserId == UserId);
         return Expression;
     }
 }

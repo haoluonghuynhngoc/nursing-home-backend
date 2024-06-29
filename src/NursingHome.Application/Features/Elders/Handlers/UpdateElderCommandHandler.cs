@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
@@ -31,7 +32,16 @@ internal class UpdateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
-
+        var room = await _roomRepository.FindByAsync(x => x.Id == request.RoomId
+              , includeFunc: _ => _.Include(x => x.NursingPackage), cancellationToken: cancellationToken);
+        if (room?.NursingPackageId == null)
+        {
+            throw new FieldResponseException(605, "Room Not Have Package");
+        }
+        if (room?.NursingPackageId != request.NursingPackageId)
+        {
+            throw new FieldResponseException(606, $"This Room Does Not Contain A Nursing Package With Id {request.NursingPackageId}");
+        }
         var elder = await _elderRepository.FindByAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
 
         if (elder is null)

@@ -18,7 +18,7 @@ public record UpdateElderCommand : IRequest<MessageResponse>
     public string? Address { get; set; }
     public string? Nationality { get; set; }
     public string? Notes { get; set; }
-
+    public int NursingPackageId { get; set; }
     public int RoomId { get; set; }
     public Guid UserId { get; set; }
     public UpdateMedicalRecordRequest MedicalRecord { get; set; } = default!;

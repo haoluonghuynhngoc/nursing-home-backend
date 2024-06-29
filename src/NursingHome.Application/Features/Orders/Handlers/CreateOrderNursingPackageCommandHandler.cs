@@ -39,6 +39,7 @@ internal class CreateOrderNursingPackageCommandHandler(IUnitOfWork unitOfWork) :
         order.Status = OrderStatus.Paid;
         order.Method = TransactionMethod.Cash;
         order.Amount = (double)(request.OrderDetails?.Sum(detail => detail.Price) ?? 0);
+        order.DueDate = DateOnly.FromDateTime(DateTime.Today).AddMonths(1);
 
         await _orderRepository.CreateAsync(order, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);

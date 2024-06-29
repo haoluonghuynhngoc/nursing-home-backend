@@ -1,9 +1,9 @@
-﻿namespace NursingHome.Application.Features.Feedbacks.Models;
-public sealed record FeedbackResponse
+﻿using NursingHome.Application.Features.OrderDetails.Models;
+using NursingHome.Application.Features.Users.Models;
+
+namespace NursingHome.Application.Features.Feedbacks.Models;
+public sealed record FeedbackResponse : BaseFeedbackResponse
 {
-    public int Id { get; set; }
-    public string Title { get; set; } = default!;
-    public int? Rating { get; set; }
-    public string? Content { get; set; }
-    public int OrderId { get; set; }
+    public OrderDetailResponse OrderDetail { get; set; } = default!;
+    public BaseUserResponse User { get; set; } = default!;
 }

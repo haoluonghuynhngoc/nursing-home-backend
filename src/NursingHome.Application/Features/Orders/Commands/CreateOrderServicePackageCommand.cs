@@ -10,6 +10,7 @@ public record CreateOrderServicePackageCommand : IRequest<MessageResponse>
     //[JsonIgnore]
     //public double Amount { get; set; }
     public TransactionMethod Method { get; set; }
+    public DateOnly DueDate { get; set; }
     public string? Description { get; set; }
     public string? Content { get; set; }
     public string? Notes { get; set; }
