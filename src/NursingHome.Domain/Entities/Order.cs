@@ -14,7 +14,8 @@ public class Order : BaseAuditableEntity<int>
 
     [Column(TypeName = "nvarchar(24)")]
     public TransactionMethod Method { get; set; }
-
+    public DateTime PaymentDate { get; set; }
+    public DateOnly DueDate { get; set; }
     public string? Description { get; set; }
     public string? Content { get; set; }
     public string? Notes { get; set; }

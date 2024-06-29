@@ -11,7 +11,7 @@ public class Contract : BaseAuditableEntity<int>
     public DateOnly EndDate { get; set; }
     public decimal Price { get; set; }
     public string? Content { get; set; } = default!;
-    public string? ImageUrl { get; set; }
+    //public string? ImageUrl { get; set; }
     public string? Notes { get; set; }
     public string? ReasonForCanceling { get; set; }
     public ContractStatus Status { get; set; } = default!;
@@ -24,4 +24,5 @@ public class Contract : BaseAuditableEntity<int>
     public virtual User User { get; set; } = default!;
     //public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
+    public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
 }
