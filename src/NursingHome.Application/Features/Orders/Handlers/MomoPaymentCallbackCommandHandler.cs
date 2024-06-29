@@ -25,6 +25,7 @@ internal class MomoPaymentCallbackCommandHandler(IUnitOfWork unitOfWork) : IRequ
         if (request.IsSuccess)
         {
             order.Status = OrderStatus.Paid;
+            order.PaymentDate = DateTime.UtcNow;
         }
         else
         {

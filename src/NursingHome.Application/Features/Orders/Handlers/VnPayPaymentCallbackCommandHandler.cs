@@ -25,6 +25,7 @@ internal class VnPayPaymentCallbackCommandHandler(IUnitOfWork unitOfWork) : IReq
         if (request.IsSuccess)
         {
             order.Status = OrderStatus.Paid;
+            order.PaymentDate = DateTime.UtcNow;
         }
         else
         {
