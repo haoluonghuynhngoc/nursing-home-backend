@@ -2,7 +2,7 @@
 using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Feedbacks.Models;
-public record BaseFeedbackResponse : BaseEntityResponse<int>
+public record BaseFeedbackResponse : BaseAuditableEntityResponse<int>
 {
     public string Title { get; set; } = default!;
     public RatingStatus Ratings { get; set; }
