@@ -33,7 +33,7 @@ internal static class BlockSeed
     {
         return new Faker<Room>()
             .RuleFor(a => a.Name, r => $"Room VacantRoom")
-            .RuleFor(a => a.TotalBed, r => 0)
+            //.RuleFor(a => a.TotalBed, r => 0)
             .RuleFor(r => r.Type, f => RoomType.VacantRoom)
             .Generate(roomCount);
     }

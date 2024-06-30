@@ -32,7 +32,7 @@ internal class AddNursingPackageToRoomCommandHandler(
                     throw new BadRequestException($"Room Have Id Is {room.Id} Already Has Nursing Package");
                 }
                 room.Type = RoomType.UsableRoom;
-                room.TotalBed = nursingPackage.Capacity; // Set Total Bed Of Room
+                //room.TotalBed = nursingPackage.Capacity; // Set Total Bed Of Room
                 nursingPackage.Rooms?.Add(room);
             }
         }

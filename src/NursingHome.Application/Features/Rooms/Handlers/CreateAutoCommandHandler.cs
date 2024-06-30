@@ -33,7 +33,7 @@ internal sealed class CreateAutoCommandHandler(IUnitOfWork unitOfWork) : IReques
             {
                 Index = ++lastIndex,
                 Name = $"{request.Name}{lastIndex}",
-                TotalBed = 0,
+                //TotalBed = 0,
                 BlockId = request.BlockId,
                 Type = RoomType.VacantRoom,
                 NursingPackageId = request.NursingPackageId,

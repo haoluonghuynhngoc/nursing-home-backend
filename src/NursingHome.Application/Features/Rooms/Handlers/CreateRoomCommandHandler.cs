@@ -34,7 +34,7 @@ internal sealed class CreateRoomCommandHandler(IUnitOfWork unitOfWork) : IReques
         }
 
         var room = request.Adapt<Room>();
-        room.TotalBed = 0;
+        // room.TotalBed = 0;
         room.Type = RoomType.VacantRoom;
 
         await _roomRepository.CreateAsync(room);

@@ -7,7 +7,6 @@ namespace NursingHome.Domain.Entities;
 public class Room : BaseEntity<int>
 {
     public string Name { get; set; } = default!;
-    public int TotalBed { get; set; }
     public int Index { get; set; }
 
     [Column(TypeName = "nvarchar(24)")]
@@ -17,18 +16,20 @@ public class Room : BaseEntity<int>
     public virtual Block Block { get; set; } = default!;
     public int? NursingPackageId { get; set; }
     public virtual NursingPackage NursingPackage { get; set; } = default!;
-
     [Projectable]
     public int TotalElder => Elders.Count;
     [Projectable]
     public bool IsUsed => NursingPackageId.HasValue;
+    [Projectable]
+    public int TotalNurseOnDuty => NursingPackage.NumberOfNurses;
+    [Projectable]
+    public int TotalBed => NursingPackage.Capacity;
     [Projectable]
     public bool AvailableBed => TotalBed > Elders.Count;
     [Projectable]
     public int UnusedBed => TotalBed - Elders.Count;
     [Projectable]
     public int UserBed => Elders.Count;
-
     public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();
     public virtual ICollection<CareSchedule> CareSchedules { get; set; } = new HashSet<CareSchedule>();
 }
