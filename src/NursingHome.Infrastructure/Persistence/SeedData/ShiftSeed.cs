@@ -13,7 +13,7 @@ internal static class ShiftSeed
                EndTime = new TimeOnly(11, 30)
             },
             new Shift {
-               Name = ShiftName.Noon,
+              Name = ShiftName.Noon,
                StartTime = new TimeOnly(12, 0),
                EndTime = new TimeOnly(16, 0)
             },

@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NursingHome.Application.Contracts.Jobs;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Contracts.Services.Notifications;
 using NursingHome.Application.Contracts.Services.Payments;
 using NursingHome.Domain.Entities.Identities;
+using NursingHome.Infrastructure.Jobs;
 using NursingHome.Infrastructure.Persistence.Data;
 using NursingHome.Infrastructure.Persistence.Interceptors;
 using NursingHome.Infrastructure.Persistence.SeedData;
@@ -49,7 +51,9 @@ public static class DependencyInjection
             .AddScoped<IFirebaseNotificationService, FirebaseNotificationService>()
             .AddScoped<ISmsNotificationService, SmsNotificationService>()
             .AddTransient<IEmailSender, EmailSender>()
-            .AddTransient<ISmsSender, SmsSender>();
+            .AddTransient<ISmsSender, SmsSender>()
+            .AddSingleton<ITimeService, TimeService>()
+            .AddTransient<ITaskSchedulerOrder, TaskSchedulerOrder>();
     }
 
     private static void AddRepositories(this IServiceCollection services)

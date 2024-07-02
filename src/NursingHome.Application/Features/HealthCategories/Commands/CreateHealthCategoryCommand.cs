@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using NursingHome.Application.Features.HealthCategories.Models;
+using NursingHome.Application.Features.MeasureUnits.Models;
 using NursingHome.Application.Models;
 
 namespace NursingHome.Application.Features.HealthCategories.Commands;

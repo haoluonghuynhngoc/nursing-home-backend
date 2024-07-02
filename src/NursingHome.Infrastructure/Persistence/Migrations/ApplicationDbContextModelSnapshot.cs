@@ -196,8 +196,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -361,8 +362,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int>("OrderDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Ratings")
-                        .HasColumnType("int");
+                    b.Property<string>("Ratings")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -780,6 +782,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
+
                     b.Property<string>("UnitType")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -1033,7 +1039,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("PaymentDate")
+                    b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid?>("PaymentReferenceId")
@@ -1067,8 +1073,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int>("OrderDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.HasKey("Id");
 
@@ -1106,8 +1113,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int?>("ServicePackageId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.HasKey("Id");
 
@@ -1279,8 +1287,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time(6)");
 
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time(6)");
