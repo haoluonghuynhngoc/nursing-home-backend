@@ -21,9 +21,9 @@ public class Room : BaseEntity<int>
     [Projectable]
     public bool IsUsed => NursingPackageId.HasValue;
     [Projectable]
-    public int TotalNurseOnDuty => NursingPackage.NumberOfNurses;
+    public int TotalNurseOnDuty => NursingPackage != null ? NursingPackage.NumberOfNurses : 0;
     [Projectable]
-    public int TotalBed => NursingPackage.Capacity;
+    public int TotalBed => NursingPackage != null ? NursingPackage.Capacity : 0;
     [Projectable]
     public bool AvailableBed => TotalBed > Elders.Count;
     [Projectable]

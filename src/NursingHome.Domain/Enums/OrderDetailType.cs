@@ -2,6 +2,6 @@
 public enum OrderDetailType
 {
     One_Time,
-    Recurring,
-    Not_Recurring
+    RecurringDay,
+    RecurringWeeks
 }

@@ -14,6 +14,7 @@ public record CreateOrderServicePackageCommand : IRequest<MessageResponse>
     public string? Description { get; set; }
     public string? Content { get; set; }
     public string? Notes { get; set; }
+    [JsonIgnore]
     public Guid UserId { get; set; }
     //public int ServicePackageId { get; set; }
     //public int ElderId { get; set; }

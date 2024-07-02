@@ -25,7 +25,6 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new ConflictException($"Elder Have CCCD is {request.CCCD} In DataBase");
         }
-
         if (!await _roomRepository.ExistsByAsync(_ => _.Id == request.RoomId, cancellationToken))
         {
             throw new NotFoundException(nameof(Room), request.RoomId);
@@ -38,9 +37,6 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new FieldResponseException(604, "Room is full");
         }
-        var diseaseCategories = await _diseaseCategoryRepository.FindAsync(_ =>
-        request.MedicalRecord.DiseaseCategories.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
-
         var room = await _roomRepository.FindByAsync(x => x.Id == request.RoomId
            , includeFunc: _ => _.Include(x => x.NursingPackage), cancellationToken: cancellationToken);
         if (room?.NursingPackageId == null)
@@ -51,12 +47,18 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new FieldResponseException(606, $"This Room Does Not Contain A Nursing Package With Id {request.NursingPackageId}");
         }
+
+        var diseaseCategories = await _diseaseCategoryRepository.FindAsync(_ =>
+        request.MedicalRecord.DiseaseCategories.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
         var elder = request.Adapt<Elder>();
+        elder.MedicalRecord.DiseaseCategories = diseaseCategories;
         request.Contract.UserId = request.UserId;
         request.Contract.NursingPackageId = room?.NursingPackageId; // Nếu đã sửa database rồi thì nhớ sửa lại int? sang int
-        request.Contract.Price = room?.NursingPackage.Price ?? 0m;  // Cast Dữ liệu nếu phòng không có gói dịch vụ
-        request.Contract.Status = ContractStatus.Pending;
-        elder.MedicalRecord.DiseaseCategories = diseaseCategories; // add DiseaseCategories
+        request.Contract.Price = room?.NursingPackage.Price ?? 0m;
+        request.Contract.Status = request.Contract.StartDate < DateOnly.FromDateTime(DateTime.Now)
+            ? ContractStatus.Pending
+            : ContractStatus.Valid;
+
         elder.Contracts = new List<Contract> {
             request.Contract.Adapt<Contract>()
         };

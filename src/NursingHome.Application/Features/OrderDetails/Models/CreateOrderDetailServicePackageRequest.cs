@@ -8,7 +8,7 @@ public record CreateOrderDetailServicePackageRequest
     public string? Notes { get; set; }
     public int ServicePackageId { get; set; }
     public int ElderId { get; set; }
-    [JsonIgnore]
+    //[JsonIgnore]
     public OrderDetailType Type { get; set; }
     [JsonIgnore]
     public decimal Price { get; set; }

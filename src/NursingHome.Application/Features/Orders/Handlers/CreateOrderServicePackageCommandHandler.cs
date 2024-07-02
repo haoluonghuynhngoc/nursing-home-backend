@@ -2,6 +2,7 @@
 using MediatR;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Contracts.Repositories;
+using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Contracts.Services.Payments;
 using NursingHome.Application.Features.Orders.Commands;
 using NursingHome.Application.Models;
@@ -13,6 +14,7 @@ using NursingHome.Domain.Enums;
 namespace NursingHome.Application.Features.Orders.Handlers;
 internal class CreateOrderServicePackageCommandHandler(
     IUnitOfWork unitOfWork,
+    ICurrentUserService currentUserService,
     IMomoPaymentService momoPaymentService,
     IVnPayPaymentService vnPayPaymentService) : IRequestHandler<CreateOrderServicePackageCommand, MessageResponse>
 {
@@ -22,6 +24,8 @@ internal class CreateOrderServicePackageCommandHandler(
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     public async Task<MessageResponse> Handle(CreateOrderServicePackageCommand request, CancellationToken cancellationToken)
     {
+        var userId = await currentUserService.FindCurrentUserIdAsync();
+        request.UserId = userId; //hơi thừa nhưng có thể sửa lại sau này
         if (!await _userRepository.ExistsByAsync(_ => _.Id == request.UserId, cancellationToken))
         {
             throw new NotFoundException(nameof(User), request.UserId);
@@ -39,13 +43,14 @@ internal class CreateOrderServicePackageCommandHandler(
             var servicePackage = await _servicePackageRepository.FindByIdAsync(item.ServicePackageId, cancellationToken)
                 ?? throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
 
-            item.Type = servicePackage.Type switch
-            {
-                PackageType.OneDay => OrderDetailType.One_Time,
-                PackageType.MultipleDays => OrderDetailType.Recurring,
-                PackageType.WeeklyDays => OrderDetailType.Recurring,
-                _ => OrderDetailType.Recurring
-            };
+            //item.Type = servicePackage.Type switch
+            //{
+            //    PackageType.OneDay => OrderDetailType.One_Time,
+            //    PackageType.MultipleDays => OrderDetailType.RecurringDay,
+            //    PackageType.WeeklyDays => OrderDetailType.RecurringWeeks,
+            //    PackageType.AnyDay => OrderDetailType.RecurringWeeks,// any day có thể là tuần, ngày , tháng
+            //    _ => OrderDetailType.RecurringWeeks
+            //};
 
             item.Price = servicePackage.Price * item.TotalDate;
         }
