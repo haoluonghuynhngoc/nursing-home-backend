@@ -52,7 +52,6 @@ jobs:
           user: site6175
           password: x-6GY8p#h=3B
           remoteFiles: "*.*"
-          remoteDirectories: "/wwwroot/"
           workingDir: /wwwroot
           ignoreSSL: "1"
 
