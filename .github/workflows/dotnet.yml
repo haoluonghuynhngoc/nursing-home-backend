@@ -7,43 +7,43 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+  # build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.x
+  #     - name: Setup .NET
+  #       uses: actions/setup-dotnet@v3
+  #       with:
+  #         dotnet-version: 8.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore
+  #     - name: Restore dependencies
+  #       run: dotnet restore
 
-      - name: Build
-        run: dotnet build --no-restore
+  #     - name: Build
+  #       run: dotnet build --no-restore
 
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+  #     - name: Test
+  #       run: dotnet test --no-build --verbosity normal
 
-      - name: Publish
-        run: dotnet publish -c Release -o ./publish
+  #     - name: Publish
+  #       run: dotnet publish -c Release -o ./publish
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: publish
-          path: ./publish
+  #     - name: Upload artifact for deployment job
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: publish
+  #         path: ./publish
 
   web-deploy:
     needs: build
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: publish
+      # - name: Download artifact from build job
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: publish
 
       - name: Delete all file on ftp server
         uses: StephanThierry/ftp-delete-action@v2.1
@@ -52,40 +52,52 @@ jobs:
           user: site6175
           password: x-6GY8p#h=3B
           remoteFiles: "*.*"
+          # remoteDirectories: "/wwwroot/"
           workingDir: /wwwroot
           ignoreSSL: "1"
 
-      - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Delete all file on ftp server
+        uses: StephanThierry/ftp-delete-action@v2.1
         with:
-          server: site6175.siteasp.net
-          username: site6175
+          host: site6175.siteasp.net
+          user: site6175
           password: x-6GY8p#h=3B
-          local-dir: ./
-          server-dir: ./wwwroot/
-          dangerous-clean-slate: true
-          log-level: verbose
+          remoteFiles: "*.*"
+          # remoteDirectories: "/wwwroot/"
+          workingDir: /wwwroot
+          ignoreSSL: "1"
 
-  push_backend_to_docker:
-    name: Push Backend
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
+      # - name: 📂 Sync files
+      #   uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      #   with:
+      #     server: site6175.siteasp.net
+      #     username: site6175
+      #     password: x-6GY8p#h=3B
+      #     local-dir: ./
+      #     server-dir: ./wwwroot/
+      #     dangerous-clean-slate: true
+      #     log-level: verbose
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+  # push_backend_to_docker:
+  #   name: Push Backend
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out the repo
+  #       uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+  #     - name: Log in to Docker Hub
+  #       uses: docker/login-action@v3
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: dockerracdockerrac/nursing-home:latest
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
+
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: .
+  #         file: ./Dockerfile
+  #         push: true
+  #         tags: dockerracdockerrac/nursing-home:latest
