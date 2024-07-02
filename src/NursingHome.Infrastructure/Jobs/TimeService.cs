@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using NursingHome.Application.Contracts.Jobs;
 
-namespace NursingHome.Application.TaskSchedulers.Impl;
+namespace NursingHome.Infrastructure.Jobs;
 public class TimeService : ITimeService
 {
     private readonly ILogger<TimeService> logger;

@@ -5,8 +5,6 @@ using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NursingHome.Application.Behaviours;
-using NursingHome.Application.TaskSchedulers;
-using NursingHome.Application.TaskSchedulers.Impl;
 using NursingHome.Shared.Helpers;
 using System.Reflection;
 
@@ -18,14 +16,6 @@ public static class DependencyInjection
         services.AddValidators();
         services.AddMediator();
         services.AddCachingRedis(configuration);
-        services.AddHangFireServices();
-    }
-
-    private static void AddHangFireServices(this IServiceCollection services)
-    {
-        services
-            .AddSingleton<ITimeService, TimeService>()
-            .AddTransient<ITaskSchedulerOrder, TaskSchedulerOrder>();
     }
 
     private static void AddMediator(this IServiceCollection services)

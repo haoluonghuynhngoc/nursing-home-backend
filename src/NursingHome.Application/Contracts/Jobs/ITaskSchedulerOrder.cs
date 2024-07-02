@@ -1,4 +1,4 @@
-﻿namespace NursingHome.Application.TaskSchedulers;
+﻿namespace NursingHome.Application.Contracts.Jobs;
 public interface ITaskSchedulerOrder
 {
     public void PrintNow();

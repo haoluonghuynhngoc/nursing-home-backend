@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NursingHome.Application.Common.Constants;
 using NursingHome.Application.Common.Exceptions;
-using NursingHome.Application.TaskSchedulers;
+using NursingHome.Application.Contracts.Jobs;
 using NursingHome.Domain.Constants;
 using NursingHome.Infrastructure;
 using NursingHome.Infrastructure.Hubs;
