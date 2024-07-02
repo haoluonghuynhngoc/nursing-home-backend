@@ -1,11 +1,13 @@
 ﻿using NursingHome.Domain.Common;
 using NursingHome.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingHome.Domain.Entities;
 public class OrderDetail : BaseEntity<int>
 {
     public decimal Price { get; set; }
     public int Quantity { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
     public OrderDetailType Type { get; set; }
     public string? Notes { get; set; }
     public int? ServicePackageId { get; set; }

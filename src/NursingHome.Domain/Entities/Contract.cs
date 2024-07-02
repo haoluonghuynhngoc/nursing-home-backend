@@ -1,6 +1,7 @@
 ﻿using NursingHome.Domain.Common;
 using NursingHome.Domain.Entities.Identities;
 using NursingHome.Domain.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NursingHome.Domain.Entities;
 public class Contract : BaseAuditableEntity<int>
@@ -14,6 +15,7 @@ public class Contract : BaseAuditableEntity<int>
     //public string? ImageUrl { get; set; }
     public string? Notes { get; set; }
     public string? ReasonForCanceling { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
     public ContractStatus Status { get; set; } = default!;
     public string? Description { get; set; }
     public int ElderId { get; set; }
