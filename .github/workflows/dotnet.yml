@@ -35,37 +35,36 @@ jobs:
           name: publish
           path: ./publish
 
-  # web-deploy:
-  #   needs: build
-  #   name: 🎉 Deploy
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Download artifact from build job
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: publish
+  web-deploy:
+    needs: build
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: publish
 
-  #     - name: Delete all file on ftp server
-  #       uses: StephanThierry/ftp-delete-action@v2.1
-  #       with:
-  #         host: ${{ secrets.FTP_SERVER }}
-  #         user: ${{ secrets.FTP_USERNAME }}
-  #         password: ${{ secrets.FTP_PASSWORD }}
-  #         remoteFiles: "*.*"
-  #         remoteDirectories: "/${{ secrets.SERVER_DIR }}/"
-  #         workingDir: /${{ secrets.SERVER_DIR }}
-  #         ignoreSSL: "1"
+      - name: Delete all file on ftp server
+        uses: StephanThierry/ftp-delete-action@v2.1
+        with:
+          host: site6175.siteasp.net
+          user: site6175
+          password: x-6GY8p#h=3B
+          remoteFiles: "*.*"
+          workingDir: /wwwroot
+          ignoreSSL: "1"
 
-  #     - name: 📂 Sync files
-  #       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-  #       with:
-  #         server: ${{ secrets.FTP_SERVER }}
-  #         username: ${{ secrets.FTP_USERNAME }}
-  #         password: ${{ secrets.FTP_PASSWORD }}
-  #         local-dir: ./
-  #         server-dir: ./${{ secrets.SERVER_DIR }}/
-  #         dangerous-clean-slate: true
-  #         log-level: verbose
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: site6175.siteasp.net
+          username: site6175
+          password: x-6GY8p#h=3B
+          local-dir: ./
+          server-dir: ./wwwroot/
+          dangerous-clean-slate: true
+          log-level: verbose
 
   push_backend_to_docker:
     name: Push Backend
