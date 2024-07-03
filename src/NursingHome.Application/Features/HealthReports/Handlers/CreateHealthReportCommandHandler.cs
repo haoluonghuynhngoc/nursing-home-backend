@@ -36,6 +36,11 @@ internal class CreateHealthReportCommandHandler(IUnitOfWork unitOfWork) : IReque
                 healthReportDetailMeasure.Status = measureUnit.MinValue <= healthReportDetailMeasure.Value
                     && measureUnit.MaxValue >= healthReportDetailMeasure.Value
                     ? HealthReportDetailMeasureStatus.Normal : HealthReportDetailMeasureStatus.Warning;
+
+                if (measureUnit.HealthCategoryId != healthReportDetail.HealthCategoryId)
+                {
+                    throw new FieldResponseException(608, $"Measure Unit Have Id {healthReportDetailMeasure.MeasureUnitId} Not In The Health Category");
+                }
             }
         }
         var healthReport = request.Adapt<HealthReport>();
