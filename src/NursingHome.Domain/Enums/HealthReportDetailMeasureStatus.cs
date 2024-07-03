@@ -3,5 +3,5 @@ public enum HealthReportDetailMeasureStatus
 {
     Normal,
     Warning,
-    Critical
+    //Critical
 }

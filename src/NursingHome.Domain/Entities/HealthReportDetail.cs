@@ -10,8 +10,6 @@ public class HealthReportDetail : BaseEntity<int>
     public int HealthReportId { get; set; }
     public virtual HealthReport HealthReport { get; set; } = default!;
     [Projectable]
-    public bool IsCritical => HealthReportDetailMeasures != null && HealthReportDetailMeasures.Any(_ => _.Status == HealthReportDetailMeasureStatus.Critical);
-    [Projectable]
     public bool IsWarning => HealthReportDetailMeasures != null && HealthReportDetailMeasures.Any(_ => _.Status == HealthReportDetailMeasureStatus.Warning);
     public virtual ICollection<HealthReportDetailMeasure> HealthReportDetailMeasures { get; set; } = new HashSet<HealthReportDetailMeasure>();
 }
