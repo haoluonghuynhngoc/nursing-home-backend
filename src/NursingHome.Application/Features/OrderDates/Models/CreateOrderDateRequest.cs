@@ -5,6 +5,9 @@ namespace NursingHome.Application.Features.OrderDates.Models;
 public record CreateOrderDateRequest
 {
     public DateOnly Date { get; set; }
+
     [JsonIgnore]
-    public OrderDateStatus Status = OrderDateStatus.InComplete;
+    public OrderDateStatus Status => Date <= DateOnly.FromDateTime(DateTime.Now)
+        ? OrderDateStatus.NotPerformed
+        : OrderDateStatus.InComplete;
 }

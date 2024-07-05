@@ -9,6 +9,8 @@ public class OrderDetail : BaseEntity<int>
     public int Quantity { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public OrderDetailType Type { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
+    public OrderDetailStatus Status { get; set; }
     public string? Notes { get; set; }
     public int? ServicePackageId { get; set; }
     public virtual ServicePackage ServicePackage { get; set; } = default!;

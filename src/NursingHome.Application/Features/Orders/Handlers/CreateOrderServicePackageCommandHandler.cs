@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Contracts.Services;
@@ -21,6 +22,7 @@ internal class CreateOrderServicePackageCommandHandler(
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
+    private readonly IGenericRepository<OrderDetail> _orderDetailRepository = unitOfWork.Repository<OrderDetail>();
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     public async Task<MessageResponse> Handle(CreateOrderServicePackageCommand request, CancellationToken cancellationToken)
     {
@@ -36,23 +38,57 @@ internal class CreateOrderServicePackageCommandHandler(
             {
                 throw new NotFoundException(nameof(Elder), item.ElderId);
             }
-            //if (!await _servicePackageRepository.ExistsByAsync(_ => _.Id == item.ServicePackageId, cancellationToken))
-            //{
-            //    throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
-            //}
+
+            var listOrderDetail = await _orderDetailRepository.FindAsync(_ => _.ElderId == item.ElderId
+            && _.ServicePackageId == item.ServicePackageId
+            && _.Status != OrderDetailStatus.Finalized, includeFunc: _ => _.Include(x => x.OrderDates));
+            foreach (var orderDetail in listOrderDetail)
+            {
+                if (orderDetail.Type == OrderDetailType.RecurringDay)
+                {
+                    item.OrderDates.Select(_ => _.Date).ToList().ForEach(date =>
+                    {
+                        if (orderDetail.OrderDates.Any(_ => _.Date.Day == date.Day))
+                        {
+                            throw new FieldResponseException(609, $"Elder already has this service package in Date Of Month {date.Day}");
+                        }
+                    });
+                }
+                if (orderDetail.Type == OrderDetailType.RecurringWeeks)
+                {
+                    item.OrderDates.Select(_ => _.Date).ToList().ForEach(date =>
+                    {
+                        if (orderDetail.OrderDates.Any(_ => _.Date.DayOfWeek == date.DayOfWeek))
+                        {
+                            throw new FieldResponseException(610, $"Elder already has this service package in day of the week {date.DayOfWeek}");
+                        }
+                    });
+                }
+                if (orderDetail.Type == OrderDetailType.One_Time)
+                {
+                    item.OrderDates.Select(_ => _.Date).ToList().ForEach(date =>
+                    {
+                        if (orderDetail.OrderDates.Any(_ => _.Date == date))
+                        {
+                            throw new FieldResponseException(611, $"Elder already has this service package in Date {date}");
+                        }
+                    });
+                }
+            }
+            // end check
+
+            if (item.Type == OrderDetailType.One_Time)
+            {
+                item.Status = OrderDetailStatus.NonRepeatable;
+            }
+            else
+            {
+                item.Status = OrderDetailStatus.Repeatable;
+            }
             var servicePackage = await _servicePackageRepository.FindByIdAsync(item.ServicePackageId, cancellationToken)
                 ?? throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
 
-            //item.Type = servicePackage.Type switch
-            //{
-            //    PackageType.OneDay => OrderDetailType.One_Time,
-            //    PackageType.MultipleDays => OrderDetailType.RecurringDay,
-            //    PackageType.WeeklyDays => OrderDetailType.RecurringWeeks,
-            //    PackageType.AnyDay => OrderDetailType.RecurringWeeks,// any day có thể là tuần, ngày , tháng
-            //    _ => OrderDetailType.RecurringWeeks
-            //};
-
-            item.Price = servicePackage.Price * item.TotalDate;
+            item.Price = servicePackage.Price * item.TotalFutureDates;
         }
 
         var order = request.Adapt<Order>();

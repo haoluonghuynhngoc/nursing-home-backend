@@ -11,10 +11,12 @@ public record CreateOrderDetailServicePackageRequest
     //[JsonIgnore]
     public OrderDetailType Type { get; set; }
     [JsonIgnore]
+    public OrderDetailStatus Status { get; set; }
+    [JsonIgnore]
     public decimal Price { get; set; }
     [JsonIgnore]
     public int Quantity = 1;
     [JsonIgnore]
-    public int TotalDate => OrderDates.Count;
+    public int TotalFutureDates => OrderDates.Count(date => date.Date > DateOnly.FromDateTime(DateTime.Now));
     public virtual ICollection<CreateOrderDateRequest> OrderDates { get; set; } = new List<CreateOrderDateRequest>();
 }
