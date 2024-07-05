@@ -20,7 +20,7 @@ public class Contract : BaseAuditableEntity<int>
     public string? Description { get; set; }
     public int ElderId { get; set; }
     public virtual Elder Elder { get; set; } = default!;
-    public int? NursingPackageId { get; set; } // nhớ ràng buộc cái này 
+    public int? NursingPackageId { get; set; }
     public virtual NursingPackage NursingPackage { get; set; } = default!;
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;

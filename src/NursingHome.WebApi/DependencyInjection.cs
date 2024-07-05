@@ -191,6 +191,7 @@ public static class DependencyInjection
     }
     private static void UpdateRecurringJobSchedule()
     {
+        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-contract-expiration-everyday", _ => _.CheckContractExpirationAsync(), "0 0 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("print-time-task-scheduler-order", _ => _.PrintNow(), "0 0 27 * *");
         RecurringJob.AddOrUpdate<ITimeService>("print-time-time-service", _ => _.PrintTimeNow(), "0 0 27 * *");
     }

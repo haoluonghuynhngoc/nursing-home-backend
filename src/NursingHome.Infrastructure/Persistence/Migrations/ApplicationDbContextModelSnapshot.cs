@@ -1116,6 +1116,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int?>("ServicePackageId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(24)");
