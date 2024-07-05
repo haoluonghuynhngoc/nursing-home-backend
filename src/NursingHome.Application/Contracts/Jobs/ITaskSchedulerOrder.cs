@@ -3,4 +3,5 @@ public interface ITaskSchedulerOrder
 {
     public void PrintNow();
     void PrintTimeNow();
+    public void CheckContractExpirationAsync();
 }
