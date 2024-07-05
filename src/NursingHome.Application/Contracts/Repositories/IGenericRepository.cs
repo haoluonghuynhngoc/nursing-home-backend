@@ -28,6 +28,7 @@ namespace NursingHome.Application.Contracts.Repositories
         Task<IList<T>> FindAsync(
             Expression<Func<T, bool>>? expression = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            Func<IQueryable<T>, IQueryable<T>>? includeFunc = null,
             bool isAsNoTracking = true,
             CancellationToken cancellationToken = default);
 

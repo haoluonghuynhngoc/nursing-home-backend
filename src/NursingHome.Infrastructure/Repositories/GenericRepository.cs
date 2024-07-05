@@ -98,11 +98,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<IList<T>> FindAsync(
         Expression<Func<T, bool>>? expression = null,
         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+        Func<IQueryable<T>, IQueryable<T>>? includeFunc = null,
         bool isAsNoTracking = true,
         CancellationToken cancellationToken = default)
     {
         IQueryable<T> query = dbSet;
-
+        if (includeFunc != null)
+        {
+            query = includeFunc(query);
+        }
         if (isAsNoTracking)
         {
             query = query.AsNoTracking();
