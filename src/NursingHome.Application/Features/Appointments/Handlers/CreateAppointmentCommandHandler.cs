@@ -13,6 +13,7 @@ internal class CreateAppointmentCommandHandler(IUnitOfWork unitOfWork) : IReques
 {
     private readonly IGenericRepository<Appointment> _appointmentRepository = unitOfWork.Repository<Appointment>();
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
+    private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
 
     public async Task<MessageResponse> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
@@ -21,7 +22,19 @@ internal class CreateAppointmentCommandHandler(IUnitOfWork unitOfWork) : IReques
             throw new NotFoundException(nameof(User), request.UserId);
         }
 
+        foreach (var elder in request.Elders)
+        {
+            if (!await _elderRepository.ExistsByAsync(_ => _.Id == elder.Id, cancellationToken))
+            {
+                throw new NotFoundException(nameof(Elder), elder.Id);
+            }
+        }
+
+        var appointmentElder = await _elderRepository.FindAsync(_ =>
+        request.Elders.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
+
         var appointment = request.Adapt<Appointment>();
+        appointment.Elders = appointmentElder;
         await _appointmentRepository.CreateAsync(appointment, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 

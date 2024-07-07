@@ -24,7 +24,7 @@ internal class RegisterAppointmentCommandHandler(
         {
             Name = "Make an appointment to order a nursing package",
             NursingPackageId = request.NursingPackageId,
-            Date = request.Date,
+            Date = request.Date.ToDateTime(new TimeOnly(0, 0)),
             Type = AppointmentType.None,
             UserId = user.Id,
             User = user,
@@ -36,8 +36,8 @@ internal class RegisterAppointmentCommandHandler(
         {
             Name = user.FullName,
             PhoneNumber = user.PhoneNumber,
-            Date = DateOnly.FromDateTime(request.Date),
-            Time = TimeOnly.FromDateTime(request.Date),
+            //  Date = DateOnly.FromDateTime(request.Date),
+            Date = request.Date,
         };
     }
 }

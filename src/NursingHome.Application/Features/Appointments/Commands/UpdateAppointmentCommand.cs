@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using NursingHome.Application.Features.Elders.Models;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Enums;
 using System.Text.Json.Serialization;
@@ -14,4 +15,5 @@ public record UpdateAppointmentCommand : IRequest<MessageResponse>
     public DateTime Date { get; set; }
     public AppointmentType Type { get; set; }
     public string? Notes { get; set; }
+    public ICollection<CreateElderAppointmentRequest> Elders { get; set; } = new HashSet<CreateElderAppointmentRequest>();
 }
