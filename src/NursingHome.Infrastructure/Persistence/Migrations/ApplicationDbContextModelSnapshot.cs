@@ -22,6 +22,21 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("AppointmentElder", b =>
+                {
+                    b.Property<int>("AppointmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EldersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppointmentsId", "EldersId");
+
+                    b.HasIndex("EldersId");
+
+                    b.ToTable("AppointmentElder");
+                });
+
             modelBuilder.Entity("DiseaseCategoryMedicalRecord", b =>
                 {
                     b.Property<int>("DiseaseCategoriesId")
@@ -1304,6 +1319,21 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Shifts");
+                });
+
+            modelBuilder.Entity("AppointmentElder", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Appointment", null)
+                        .WithMany()
+                        .HasForeignKey("AppointmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NursingHome.Domain.Entities.Elder", null)
+                        .WithMany()
+                        .HasForeignKey("EldersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DiseaseCategoryMedicalRecord", b =>

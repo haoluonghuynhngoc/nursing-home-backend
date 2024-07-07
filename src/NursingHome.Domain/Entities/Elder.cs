@@ -27,4 +27,5 @@ public class Elder : BaseAuditableEntity<int>
     public virtual ICollection<HealthReport> HealthReports { get; set; } = new HashSet<HealthReport>();
     //public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
+    public virtual ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
 }
