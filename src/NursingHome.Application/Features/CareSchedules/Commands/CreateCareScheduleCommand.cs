@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using NursingHome.Application.Features.NurseSchedule.Models;
+using NursingHome.Application.Features.NurseSchedules.Models;
 using NursingHome.Application.Models;
 
 namespace NursingHome.Application.Features.CareSchedules.Commands;
