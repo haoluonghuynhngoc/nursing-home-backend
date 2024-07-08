@@ -25,4 +25,5 @@ public class ServicePackage : BaseAuditableEntity<int>
     public virtual ServicePackageCategory ServicePackageCategory { get; set; } = default!;
     public virtual ICollection<ServicePackageDate> ServicePackageDates { get; set; } = new HashSet<ServicePackageDate>();
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
+    public virtual ICollection<ScheduledServiceDetail> ScheduledServiceDetails { get; set; } = new HashSet<ScheduledServiceDetail>();
 }
