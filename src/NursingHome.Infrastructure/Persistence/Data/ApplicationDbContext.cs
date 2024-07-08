@@ -34,6 +34,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<CareSchedule> CareSchedules { get; set; }
     public DbSet<NursingPackage> NursingPackages { get; set; }
     public DbSet<OrderDetail> OrderDetails { get; set; }
+    public DbSet<ScheduledService> ScheduledServices { get; set; }
+    public DbSet<ScheduledServiceDetail> ScheduledServiceDetails { get; set; }
+    public DbSet<ScheduledTime> ScheduledTimes { get; set; }
+    public DbSet<PotentialCustomer> PotentialCustomers { get; set; }
     //public ApplicationDbContext()
     //{
     //}

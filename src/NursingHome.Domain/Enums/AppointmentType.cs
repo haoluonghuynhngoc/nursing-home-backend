@@ -1,5 +1,8 @@
 ﻿namespace NursingHome.Domain.Enums;
 public enum AppointmentType
 {
-    None
+    None,
+    FollowUpVisit,
+    ProcedureCompletion,
+    Consultation,
 }
