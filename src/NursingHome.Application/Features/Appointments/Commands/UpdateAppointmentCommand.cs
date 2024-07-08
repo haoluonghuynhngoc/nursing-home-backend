@@ -9,11 +9,14 @@ public record UpdateAppointmentCommand : IRequest<MessageResponse>
 {
     [JsonIgnore]
     public int Id { get; set; }
-
     public string Name { get; set; } = default!;
-    public string? Description { get; set; }
-    public DateTime Date { get; set; }
+    public string? Content { get; set; }
+    public DateOnly Date { get; set; }
+    [JsonIgnore]
+    public AppointmentStatus Status => AppointmentStatus.Pending;
     public AppointmentType Type { get; set; }
     public string? Notes { get; set; }
+    public Guid UserId { get; set; }
+    public int? NursingPackageId { get; set; }
     public ICollection<CreateElderAppointmentRequest> Elders { get; set; } = new HashSet<CreateElderAppointmentRequest>();
 }

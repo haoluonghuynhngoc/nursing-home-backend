@@ -33,14 +33,14 @@ public class AppointmentsController(ISender sender) : ControllerBase
         return await sender.Send(command, cancellationToken);
     }
 
-    [HttpPost("RegisterPackage")]
-    public async Task<ActionResult<RegisterAppointmentResponse>> CreateAppointmentRegisterPackageAsync(RegisterAppointmentCommand command, CancellationToken cancellationToken)
-    {
-        return await sender.Send(command, cancellationToken);
-    }
-
     [HttpPut("{id}")]
     public async Task<ActionResult<MessageResponse>> UpdateAppointmentAsync(int id, UpdateAppointmentCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { Id = id }, cancellationToken);
+    }
+
+    [HttpPut("ChangeStatus/{id}")]
+    public async Task<ActionResult<MessageResponse>> ChangeStatusAppointmentAsync(int id, ChangeStatusAppointmentCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }

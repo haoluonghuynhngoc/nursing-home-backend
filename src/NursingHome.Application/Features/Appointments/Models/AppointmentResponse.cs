@@ -7,5 +7,5 @@ public record AppointmentResponse : BaseAppointmentResponse
 {
     public BaseUserResponse User { get; set; } = default!;
     public BaseNursingPackageResponse NursingPackage { get; set; } = default!;
-    public ICollection<ElderRoomResponse> Elders { get; set; } = new HashSet<ElderRoomResponse>();
+    public virtual ICollection<ElderRoomResponse> Elders { get; set; } = new HashSet<ElderRoomResponse>();
 }

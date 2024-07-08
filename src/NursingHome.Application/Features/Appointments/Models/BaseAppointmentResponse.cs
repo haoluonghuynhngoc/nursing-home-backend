@@ -5,12 +5,11 @@ namespace NursingHome.Application.Features.Appointments.Models;
 public record BaseAppointmentResponse : BaseAuditableEntityResponse<int>
 {
     public string Name { get; set; } = default!;
-    public string? Description { get; set; }
-    public DateTime Date { get; set; }
+    public string? Content { get; set; }
+    public DateOnly Date { get; set; }
+    public AppointmentStatus Status { get; set; }
     public AppointmentType Type { get; set; }
     public string? Notes { get; set; }
-    //    public Guid UserId { get; set; }
-    //    public virtual User User { get; set; } = default!;
-    //    public int? NursingPackageId { get; set; }
-    //    public virtual NursingPackage NursingPackage { get; set; } = default!;
+    //public Guid UserId { get; set; }
+    //public int? NursingPackageId { get; set; }
 }

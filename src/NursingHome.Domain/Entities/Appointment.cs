@@ -7,8 +7,10 @@ namespace NursingHome.Domain.Entities;
 public class Appointment : BaseAuditableEntity<int>
 {
     public string Name { get; set; } = default!;
-    public string? Description { get; set; }
-    public DateTime Date { get; set; }
+    public string? Content { get; set; }
+    public DateOnly Date { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
+    public AppointmentStatus Status { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public AppointmentType Type { get; set; }
     public string? Notes { get; set; }
