@@ -47,6 +47,14 @@ public class OrdersController(ISender sender) : ControllerBase
         return await sender.Send(command with { returnUrl = returnUrl }, cancellationToken);
     }
 
+    [HttpPost("service-package-payment")]
+    public async Task<ActionResult<MessageResponse>> PaymentOrderServicePackage(
+    PaymentOrderCommand command,
+    CancellationToken cancellationToken)
+    {
+        return await sender.Send(command, cancellationToken);
+    }
+
     [HttpPost("nursing-package")]
     public async Task<ActionResult<MessageResponse>> CreateOrderNursingPackage(
         CreateOrderNursingPackageCommand command,

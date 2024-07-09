@@ -103,7 +103,8 @@ internal class CreateOrderServicePackageCommandHandler(
         {
             TransactionMethod.Momo => await MomoPaymentServiceHandler(order, request.returnUrl),
             TransactionMethod.VnPay => await VnPayPaymentServiceHandler(order, request.returnUrl),
-            _ => "payment success"
+            TransactionMethod.None => "The Order Has Been Saved In The System, Please Pay Before The Due Date",
+            _ => "Payment Success"
         };
 
         return new MessageResponse(paymentUrl);
