@@ -13,6 +13,7 @@ public sealed record GetAllScheduledServiceQuery : PaginationRequest<ScheduledSe
 {
     public string? Search { get; set; }
     public ScheduledServiceStatus? Status { get; set; }
+    public Guid? UserId { get; set; }
     public override Expression<Func<ScheduledService, bool>> GetExpressions()
     {
         if (!string.IsNullOrWhiteSpace(Search))
@@ -22,6 +23,7 @@ public sealed record GetAllScheduledServiceQuery : PaginationRequest<ScheduledSe
                 .And(u => EF.Functions.Like(u.Name, $"%{Search}%"));
         }
         Expression = Expression.And(_ => !Status.HasValue || _.Status == Status);
+        Expression = Expression.And(_ => !UserId.HasValue || _.UserId == UserId);
         return Expression;
     }
 }

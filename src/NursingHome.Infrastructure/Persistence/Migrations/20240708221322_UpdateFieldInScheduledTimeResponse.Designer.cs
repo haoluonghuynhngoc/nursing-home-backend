@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NursingHome.Infrastructure.Persistence.Data;
 
@@ -11,9 +12,11 @@ using NursingHome.Infrastructure.Persistence.Data;
 namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240708221322_UpdateFieldInScheduledTimeResponse")]
+    partial class UpdateFieldInScheduledTimeResponse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1204,7 +1207,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("longtext");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("PotentialCustomers");
                 });
@@ -1504,21 +1512,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Shifts");
-                });
-
-            modelBuilder.Entity("PotentialCustomerUser", b =>
-                {
-                    b.Property<int>("PotentialCustomersId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("PotentialCustomersId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("PotentialCustomerUser");
                 });
 
             modelBuilder.Entity("AppointmentElder", b =>
@@ -1879,6 +1872,17 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("ServicePackage");
                 });
 
+            modelBuilder.Entity("NursingHome.Domain.Entities.PotentialCustomer", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Identities.User", "User")
+                        .WithMany("PotentialCustomers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.Room", b =>
                 {
                     b.HasOne("NursingHome.Domain.Entities.Block", "Block")
@@ -1963,21 +1967,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("ServicePackage");
                 });
 
-            modelBuilder.Entity("PotentialCustomerUser", b =>
-                {
-                    b.HasOne("NursingHome.Domain.Entities.PotentialCustomer", null)
-                        .WithMany()
-                        .HasForeignKey("PotentialCustomersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NursingHome.Domain.Entities.Identities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("NursingHome.Domain.Entities.Block", b =>
                 {
                     b.Navigation("Rooms");
@@ -2048,6 +2037,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("NurseSchedules");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("PotentialCustomers");
 
                     b.Navigation("ScheduledServices");
 
