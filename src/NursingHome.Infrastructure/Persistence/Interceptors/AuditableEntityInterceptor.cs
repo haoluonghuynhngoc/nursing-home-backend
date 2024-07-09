@@ -29,13 +29,15 @@ public class AuditableEntityInterceptor(IHttpContextAccessor httpContextAccessor
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedBy = CurrentUserId;
-                entry.Entity.CreatedAt = DateTimeOffset.UtcNow;
+                // entry.Entity.CreatedAt = DateTimeOffset.UtcNow;
+                entry.Entity.CreatedAt = DateTime.Now;
             }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Entity.ModifiedBy = CurrentUserId;
-                entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
+                // entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
+                entry.Entity.ModifiedAt = DateTime.Now;
             }
 
             // nếu dùng delete này thì tất cả entity phải kế thừa BaseAuditableEntity
