@@ -4,6 +4,6 @@ namespace NursingHome.Domain.Entities;
 public class ScheduledTime : BaseAuditableEntity<int>
 {
     public DateOnly Date { get; set; }
-    public int ScheduledServiceId { get; set; }
-    public virtual ScheduledService ScheduledService { get; set; } = default!;
+    public int ScheduledServiceDetailId { get; set; }
+    public virtual ScheduledServiceDetail ScheduledServiceDetail { get; set; } = default!;
 }

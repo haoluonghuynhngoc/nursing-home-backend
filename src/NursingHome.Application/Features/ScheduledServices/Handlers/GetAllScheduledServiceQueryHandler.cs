@@ -5,7 +5,7 @@ using NursingHome.Application.Features.ScheduledServices.Queries;
 using NursingHome.Domain.Entities;
 using NursingHome.Shared.Pages;
 
-namespace NursingHome.Application.Features.ScheduledServices.Commands;
+namespace NursingHome.Application.Features.ScheduledServices.Handlers;
 internal class GetAllScheduledServiceQueryHandler(IUnitOfWork unitOfWork)
     : IRequestHandler<GetAllScheduledServiceQuery, PaginatedResponse<ScheduledServiceResponse>>
 {

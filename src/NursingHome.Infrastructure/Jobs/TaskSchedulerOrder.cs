@@ -13,6 +13,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
     private readonly IGenericRepository<Contract> _contractRepository;
     private readonly IGenericRepository<Order> _orderRepository;
     private readonly IGenericRepository<OrderDetail> _orderDetailRepository;
+    private readonly IGenericRepository<ScheduledService> _scheduledServiceRepository;
 
     public TaskSchedulerOrder(IUnitOfWork unitOfWork, ILogger<TaskSchedulerOrder> logger)
     {
@@ -20,6 +21,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
         _contractRepository = unitOfWork.Repository<Contract>();
         _orderRepository = unitOfWork.Repository<Order>();
         _orderDetailRepository = unitOfWork.Repository<OrderDetail>();
+        _scheduledServiceRepository = unitOfWork.Repository<ScheduledService>();
         this.logger = logger;
     }
     public async Task CheckContractExpirationAsync()
@@ -101,58 +103,60 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             var currentDate = DateOnly.FromDateTime(DateTime.Now);
 
             var listOrderDetails = await _orderDetailRepository.FindAsync(
-                expression: _ => _.Status != OrderDetailStatus.Finalized,
+                expression: _ => _.Status == OrderDetailStatus.Repeatable,
                 includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
 
-            // Nhóm các OrderDetail theo UserId
-            var groupedOrderDetails = new Dictionary<Guid, List<OrderDetail>>();
+            // Nhóm các ScheduledServiceDetail theo UserId
+            var groupedOrderDetails = new Dictionary<Guid, List<ScheduledServiceDetail>>();
 
             foreach (var item in listOrderDetails)
             {
-                if (item.Status == OrderDetailStatus.Repeatable)
+                var userId = item.Order.UserId;
+
+                if (!groupedOrderDetails.ContainsKey(userId))
                 {
-                    // gom dữ liệu theo userId theo key value  
-                    var userId = item.Order.UserId;
-                    if (!groupedOrderDetails.ContainsKey(userId))
-                    {
-                        groupedOrderDetails[userId] = new List<OrderDetail>();
-                    }
-
-                    var orderDetail = new OrderDetail();
-                    orderDetail.Price = item.Price;
-                    orderDetail.Quantity = item.Quantity;
-                    orderDetail.Type = item.Type;
-                    orderDetail.Status = item.Status;
-                    orderDetail.ServicePackageId = item.ServicePackageId;
-                    orderDetail.ElderId = item.ElderId;
-                    orderDetail.OrderDates = new List<OrderDate>();
-
-                    foreach (var orderDate in item.OrderDates)
-                    {
-                        // check đơn hàng này có phải của hơn hàng của tháng này không nếu phải thì thêm vào đơn cho tháng sau
-                        if (orderDate.Date.Month == currentDate.Month)
-                        {
-                            orderDetail.OrderDates.Add(new OrderDate()
-                            {
-                                Date = orderDate.Date.AddMonths(1),
-                                Status = OrderDateStatus.InComplete
-                            });
-                        }
-                    }
-                    groupedOrderDetails[userId].Add(orderDetail);
+                    groupedOrderDetails[userId] = new List<ScheduledServiceDetail>();
                 }
+
+                var scheduledServiceDetail = new ScheduledServiceDetail();
+                scheduledServiceDetail.ElderId = item.ElderId;
+                scheduledServiceDetail.ServicePackageId = item.ServicePackageId;
+                scheduledServiceDetail.ScheduledTimes = new HashSet<ScheduledTime>();
+                // ScheduledService
+                foreach (var orderDate in item.OrderDates)
+                {
+                    // check đơn hàng này có phải của tháng hiện tại không, nếu phải thì thêm vào đơn cho tháng sau
+                    if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
+                    {
+                        scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime()
+                        {
+                            // sai ở đây nó chỉ cộng cho tháng nào phù hợp chứ khôgn đúng ngày 
+                            Date = orderDate.Date.AddMonths(1)
+                        });
+                    }
+                }
+
+                // Chỉ thêm ScheduledServiceDetail nếu có ScheduledTimes
+                if (scheduledServiceDetail.ScheduledTimes.Any())
+                {
+                    groupedOrderDetails[userId].Add(scheduledServiceDetail);
+                }
+
             }
 
-            // Tạo các đơn hàng mới cho từng người dùng
-            foreach (var iteam in groupedOrderDetails)
+            // Tạo các gói dịch vụ theo ngày lặp lại cho từng người dùng
+            foreach (var item in groupedOrderDetails)
             {
-                var order = new Order
+                var scheduledService = new ScheduledService
                 {
-                    UserId = iteam.Key,
-                    OrderDetails = iteam.Value
+                    Name = $"Gói dịch vụ gia hạn Tháng {currentDate.AddMonths(1).Month}",
+                    UserId = item.Key,
+                    ScheduledServiceDetails = item.Value,
+                    Status = ScheduledServiceStatus.None
                 };
-                await _orderRepository.CreateAsync(order);
+                await _scheduledServiceRepository.CreateAsync(scheduledService);
             }
+
             await _unitOfWork.CommitAsync();
         }
         catch (Exception ex)
@@ -160,6 +164,22 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             logger.LogError(ex, "An error occurred while creating renewal notifications.");
         }
     }
+
+    //// Lấy ngày hợp lệ của tháng sau
+    //public bool IsNextMonthValidDate(DateOnly currentDate)
+    //{
+    //    try
+    //    {
+    //        var firstDayOfCurrentMonth = new DateOnly(currentDate.Year, currentDate.Month, 1);
+    //        var firstDayOfNextMonth = firstDayOfCurrentMonth.AddMonths(1);
+    //        var lastDayOfNextMonth = new DateOnly(firstDayOfNextMonth.Year, firstDayOfNextMonth.Month, DateTime.DaysInMonth(firstDayOfNextMonth.Year, firstDayOfNextMonth.Month));
+    //        return currentDate.Day <= lastDayOfNextMonth.Day;
+    //    }
+    //    catch (ArgumentOutOfRangeException)
+    //    {
+    //        return false;
+    //    }
+    //}
 
     public void PrintNow()
     {
