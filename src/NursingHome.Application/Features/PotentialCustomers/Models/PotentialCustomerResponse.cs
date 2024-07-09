@@ -3,5 +3,5 @@
 namespace NursingHome.Application.Features.PotentialCustomers.Models;
 public record PotentialCustomerResponse : BasePotentialCustomerResponse
 {
-    public BaseUserResponse User { get; set; } = default!;
+    public ICollection<BaseUserResponse> Users { get; set; } = new HashSet<BaseUserResponse>();
 }

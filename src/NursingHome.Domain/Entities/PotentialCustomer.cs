@@ -14,6 +14,5 @@ public class PotentialCustomer : BaseAuditableEntity<int>
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? Address { get; set; }
-    public Guid UserId { get; set; }
-    public virtual User User { get; set; } = default!;
+    public virtual ICollection<User> Users { get; set; } = new HashSet<User>();
 }

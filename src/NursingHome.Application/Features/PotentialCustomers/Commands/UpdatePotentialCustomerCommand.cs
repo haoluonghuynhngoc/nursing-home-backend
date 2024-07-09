@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using NursingHome.Application.Features.Users.Models;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Enums;
 using System.Text.Json.Serialization;
@@ -15,5 +16,5 @@ public record UpdatePotentialCustomerCommand : IRequest<MessageResponse>
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? Address { get; set; }
-    public Guid UserId { get; set; }
+    public ICollection<CreateUserRequest> Users { get; set; } = new HashSet<CreateUserRequest>();
 }

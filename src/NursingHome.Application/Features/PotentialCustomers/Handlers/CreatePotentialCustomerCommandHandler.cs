@@ -1,6 +1,5 @@
 ﻿using Mapster;
 using MediatR;
-using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.PotentialCustomers.Commands;
@@ -17,12 +16,15 @@ internal class CreatePotentialCustomerCommandHandler(IUnitOfWork unitOfWork)
 
     public async Task<MessageResponse> Handle(CreatePotentialCustomerCommand request, CancellationToken cancellationToken)
     {
-        if (!await _userRepository.ExistsByAsync(_ => _.Id == request.UserId, cancellationToken))
-        {
-            throw new NotFoundException(nameof(User), request.UserId);
-        }
+        //if (!await _userRepository.ExistsByAsync(_ => _.Id == request.UserId, cancellationToken))
+        //{
+        //    throw new NotFoundException(nameof(User), request.UserId);
+        //}
+        var user = await _userRepository.FindAsync(_ =>
+        request.Users.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
 
         var potentialCustomer = request.Adapt<PotentialCustomer>();
+        potentialCustomer.Users = user;
 
         await _potentialCustomerRepository.CreateAsync(potentialCustomer, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
