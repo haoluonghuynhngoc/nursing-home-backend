@@ -12,10 +12,14 @@ public sealed record GetAllCareScheduleQuery : PaginationRequest<CareSchedule>
 {
     public DateOnly? Date { get; set; }
     public int? RoomId { get; set; }
+    public Guid? UserId { get; set; }
     public override Expression<Func<CareSchedule, bool>> GetExpressions()
     {
         Expression = Expression.And(cs => !Date.HasValue || cs.Date == Date);
         Expression = Expression.And(cs => !RoomId.HasValue || cs.RoomId == RoomId);
+        Expression = Expression.And(cs => !UserId.HasValue
+        || (cs.NurseSchedules != null && cs.NurseSchedules.Any(_ => _.UserId == UserId)));
+
         return Expression;
     }
 }
