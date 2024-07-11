@@ -92,7 +92,33 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             logger.LogError(ex, "An error occurred while checking order detail expiration.");
         }
     }
+    public async Task CheckOrderExpirationAsync()
+    {
+        try
+        {
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            // check cai nay 
+            var listOrders = await _orderRepository.FindAsync(
+                expression: _ => _.Status != OrderStatus.UnPaid
+                || _.Status != OrderStatus.Failed, includeFunc: _ => _.Include(x => x.OrderDetails));
 
+            foreach (var order in listOrders)
+            {
+                if (order.DueDate < currentDate)
+                {
+                    order.Status = OrderStatus.OverDue;
+                    foreach (var orderDetail in order.OrderDetails)
+                    {
+                        orderDetail.Status = OrderDetailStatus.Finalized;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while checking order expiration.");
+        }
+    }
     // Chưa kiểm tra hàm này 
     // hiển thị lên thông báo để người dùng có thể gia hạn gói dịch vụ
     // Chỉ hiện thị những gói dịch vụ cho tháng sau chứ không được vược quá 2 tháng
@@ -122,6 +148,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 scheduledServiceDetail.ElderId = item.ElderId;
                 scheduledServiceDetail.ServicePackageId = item.ServicePackageId;
                 scheduledServiceDetail.ScheduledTimes = new HashSet<ScheduledTime>();
+                scheduledServiceDetail.Type = item.Type;
                 // ScheduledService
                 foreach (var orderDate in item.OrderDates)
                 {
@@ -181,12 +208,4 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
     //    }
     //}
 
-    public void PrintNow()
-    {
-        logger.LogInformation($"Order Test: {DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt")}");
-    }
-    public void PrintTimeNow()
-    {
-        logger.LogInformation($"Time Test: {DateTime.Now.ToString("dd/MM/yyyy hh:mm:ss tt")}");
-    }
 }

@@ -40,6 +40,7 @@ internal class CreateScheduleServiceCommandHandler(IUnitOfWork unitOfWork)
             scheduledServiceDetail.ElderId = item.ElderId;
             scheduledServiceDetail.ServicePackageId = item.ServicePackageId;
             scheduledServiceDetail.ScheduledTimes = new HashSet<ScheduledTime>();
+            scheduledServiceDetail.Type = item.Type;
             // ScheduledService
             foreach (var orderDate in item.OrderDates)
             {

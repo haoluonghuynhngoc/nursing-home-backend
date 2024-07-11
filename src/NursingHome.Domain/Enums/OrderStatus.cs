@@ -5,5 +5,5 @@ public enum OrderStatus
     Failed, // đơn hàng thanh toán nhưng thất bại => thanh toán lại
     Paid, // đơn hàng đã thanh toán
     OverDue, // đơn hàng quá hạn thanh toán => hủy đơn hàng
-    Cancelled, // đơn hàng bị hủy
+    //Cancelled, // đơn hàng bị hủy
 }

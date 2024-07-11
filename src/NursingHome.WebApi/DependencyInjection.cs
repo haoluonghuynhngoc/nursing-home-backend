@@ -191,13 +191,10 @@ public static class DependencyInjection
     }
     private static void UpdateRecurringJobSchedule()
     {
-
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("create-renewal-notification", _ => _.CreateDisplayRenewalNotificationAsync(), "20 23 24 * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-detail-date", _ => _.CheckOrderDetailExpirationAsync(), "45 23 * * *");
+        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-expired", _ => _.CheckOrderExpirationAsync(), "20 23 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-contract-expiration-everyday", _ => _.CheckContractExpirationAsync(), "0 0 * * *");
-
-        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("print-time-task-scheduler-order", _ => _.PrintNow(), "0 0 27 * *");
-        RecurringJob.AddOrUpdate<ITimeService>("print-time-time-service", _ => _.PrintTimeNow(), "0 0 27 * *");
     }
 
     private static void UseExceptionApplication(this IApplicationBuilder app)

@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 namespace NursingHome.Application.Features.Users.Models;
 public record UserResponse : BaseUserResponse
 {
-    public ICollection<BaseUserNurseScheduleResponse> NurseSchedules { get; set; } = new HashSet<BaseUserNurseScheduleResponse>();
+    public ICollection<BaseNurseScheduleNoNurseResponse> NurseSchedules { get; set; } = new HashSet<BaseNurseScheduleNoNurseResponse>();
     public ICollection<RoleResponse> Roles { get; set; } = new HashSet<RoleResponse>();
     public ICollection<ElderRoomResponse> Elders { get; set; } = new HashSet<ElderRoomResponse>();
     public ICollection<BaseContractResponse> Contracts { get; set; } = new HashSet<BaseContractResponse>();

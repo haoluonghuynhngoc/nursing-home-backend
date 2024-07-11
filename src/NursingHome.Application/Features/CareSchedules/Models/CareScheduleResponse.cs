@@ -5,5 +5,5 @@ namespace NursingHome.Application.Features.CareSchedules.Models;
 public record CareScheduleResponse : BaseCareScheduleResponse
 {
     public BaseRoomResponse Room { get; set; } = default!;
-    public ICollection<BaseCareSchedulesNurseSchedulesResponse> NurseSchedules { get; set; } = new HashSet<BaseCareSchedulesNurseSchedulesResponse>();
+    public ICollection<BaseNurseScheduledNoCareScheduleResponse> NurseSchedules { get; set; } = new HashSet<BaseNurseScheduledNoCareScheduleResponse>();
 }
