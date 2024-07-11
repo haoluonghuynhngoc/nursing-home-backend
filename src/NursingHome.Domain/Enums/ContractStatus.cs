@@ -6,7 +6,7 @@ public enum ContractStatus
 
     Pending, // đã gia hạn nhưng chưa sử dụng hợp đồng  pending, valist, invalist, cancel
     Valid,
-    Invalid,
+    //Invalid,
     Expired,
     Cancelled
 }

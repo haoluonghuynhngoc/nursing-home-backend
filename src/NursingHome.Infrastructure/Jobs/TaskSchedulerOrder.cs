@@ -34,26 +34,30 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 expression: _ => _.Status != ContractStatus.Expired && _.Status != ContractStatus.Cancelled);
             foreach (var contract in listContracts)
             {
-                var notificationDate = contract.EndDate.AddDays(-3);
-                if (notificationDate == currentDate)
-                {
-                    // gửi email thông báo sắp hết hạn
-                }
-
                 if (contract.StartDate == currentDate)
                 {
                     contract.Status = ContractStatus.Valid;
                     // gửi mail thông báo hợp đồng đã được kích hoạt
+                    // gửi thông báo qua app
                 }
-                //if (contract.StartDate < currentDate && contract.EndDate > currentDate)
-                //{
-                //    // thực hiện 1 vài cái gì đó 
-                //}
+
+                var notificationDate = contract.EndDate;
+                if (notificationDate.AddDays(-10) == currentDate)
+                {
+                    // gửi email thông báo sắp hết hạn
+                    // gửi thông báo qua app
+                }
                 if (contract.EndDate <= currentDate)
                 {
                     contract.Status = ContractStatus.Expired;
                     // gửi email thông báo hợp đồng đã hết hạn
+                    // gửi thông báo qua app
                 }
+
+                //if (contract.StartDate < currentDate && contract.EndDate > currentDate)
+                //{
+                //    // thực hiện 1 vài cái gì đó 
+                //}
 
                 await _contractRepository.UpdateAsync(contract);
                 await _unitOfWork.CommitAsync();
@@ -64,7 +68,44 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             logger.LogError(ex, "An error occurred while checking contract expiration.");
         }
     }
+    public async Task CheckOrderExpirationAsync()
+    {
+        try
+        {
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            // check cai nay 
+            var listOrders = await _orderRepository.FindAsync(
+                expression: _ => _.Status == OrderStatus.UnPaid
+                || _.Status == OrderStatus.Failed, includeFunc: _ => _.Include(x => x.OrderDetails)
+                .ThenInclude(x => x.OrderDates)); // include tiếp vào thằng ở trong luôn 
 
+            foreach (var order in listOrders)
+            {
+                if (order.DueDate < currentDate)
+                {
+                    order.Status = OrderStatus.OverDue;
+                    foreach (var orderDetail in order.OrderDetails)
+                    {
+                        orderDetail.Status = OrderDetailStatus.Finalized;
+                        foreach (var orderDate in orderDetail.OrderDates)
+                        {
+                            orderDate.Status = OrderDateStatus.NotPerformed;
+                        }
+                    }
+                }
+                await _orderRepository.UpdateAsync(order);
+            }
+            await _unitOfWork.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while checking order expiration.");
+        }
+    }
+
+    // Hàm này chưa kiểm tra nên chưa cho nó vào db 
+    // Lỗi logic có thể nếu tháng sau không có ngày thì chưa lập lại được ngày đó thì có thể nó hủy luôn
+    // Trường hợp tốt nhât là thêm field status nếu ngày chưa lập lại thì thêm
     public async Task CheckOrderDetailExpirationAsync()
     {
         try
@@ -92,33 +133,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             logger.LogError(ex, "An error occurred while checking order detail expiration.");
         }
     }
-    public async Task CheckOrderExpirationAsync()
-    {
-        try
-        {
-            var currentDate = DateOnly.FromDateTime(DateTime.Now);
-            // check cai nay 
-            var listOrders = await _orderRepository.FindAsync(
-                expression: _ => _.Status != OrderStatus.UnPaid
-                || _.Status != OrderStatus.Failed, includeFunc: _ => _.Include(x => x.OrderDetails));
 
-            foreach (var order in listOrders)
-            {
-                if (order.DueDate < currentDate)
-                {
-                    order.Status = OrderStatus.OverDue;
-                    foreach (var orderDetail in order.OrderDetails)
-                    {
-                        orderDetail.Status = OrderDetailStatus.Finalized;
-                    }
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "An error occurred while checking order expiration.");
-        }
-    }
     // Chưa kiểm tra hàm này 
     // hiển thị lên thông báo để người dùng có thể gia hạn gói dịch vụ
     // Chỉ hiện thị những gói dịch vụ cho tháng sau chứ không được vược quá 2 tháng

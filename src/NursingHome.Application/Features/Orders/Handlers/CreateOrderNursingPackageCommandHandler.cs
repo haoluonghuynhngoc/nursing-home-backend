@@ -26,20 +26,22 @@ internal class CreateOrderNursingPackageCommandHandler(IUnitOfWork unitOfWork) :
 
         foreach (var item in request.OrderDetails)
         {
-            var nursingPakcage = await _contractRepository.FindByIdAsync(item.ContractId, cancellationToken);
-            if (nursingPakcage == null)
+            var contract = await _contractRepository.FindByIdAsync(item.ContractId, cancellationToken);
+            if (contract == null)
             {
                 throw new NotFoundException(nameof(Contract), item.ContractId);
             }
-            item.Price = nursingPakcage.Price;
-            item.ElderId = nursingPakcage.ElderId;
+            //var totalDate = (contract.EndDate.ToDateTime(TimeOnly.MinValue) - contract.StartDate.ToDateTime(TimeOnly.MinValue)).Days;
+            //var totalMonths = (contract.EndDate.Year - contract.StartDate.Year) * 12 + contract.EndDate.Month - contract.StartDate.Month;
+            item.Price = contract.Price * (contract.EndDate.Year - contract.StartDate.Year) * 12 + contract.EndDate.Month - contract.StartDate.Month;
+            item.ElderId = contract.ElderId;
         }
 
         var order = request.Adapt<Order>();
         order.Status = OrderStatus.Paid;
         order.Method = TransactionMethod.Cash;
         order.Amount = (double)(request.OrderDetails?.Sum(detail => detail.Price) ?? 0);
-        order.DueDate = DateOnly.FromDateTime(DateTime.Today).AddMonths(1);
+        order.DueDate = DateOnly.FromDateTime(DateTime.Today);
 
         await _orderRepository.CreateAsync(order, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);

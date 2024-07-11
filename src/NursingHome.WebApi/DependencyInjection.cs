@@ -191,6 +191,8 @@ public static class DependencyInjection
     }
     private static void UpdateRecurringJobSchedule()
     {
+        // mỗi phút chạy 1 lần "* * * * *"
+
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("create-renewal-notification", _ => _.CreateDisplayRenewalNotificationAsync(), "20 23 24 * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-detail-date", _ => _.CheckOrderDetailExpirationAsync(), "45 23 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-expired", _ => _.CheckOrderExpirationAsync(), "20 23 * * *");
