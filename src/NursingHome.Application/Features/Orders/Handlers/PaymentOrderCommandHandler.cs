@@ -25,6 +25,9 @@ internal class PaymentOrderCommandHandler(
             expression: _ => _.Id == request.OrderId) // && _.Method == TransactionMethod.None
             ?? throw new NotFoundException(nameof(NursingPackage), request.OrderId);
 
+        order.PaymentReferenceId = Guid.NewGuid();
+        await unitOfWork.CommitAsync(cancellationToken);
+
         var paymentUrl = request.Method switch
         {
             TransactionMethod.Momo => await MomoPaymentServiceHandler(order, request.returnUrl),
