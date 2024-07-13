@@ -39,9 +39,9 @@ public class EldersController(ISender sender) : ControllerBase
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<MessageResponse>> DeleteElder(int id, CancellationToken cancellationToken)
-    {
-        return await sender.Send(new DeleteElderCommand(id), cancellationToken);
-    }
+    //[HttpDelete("{id}")]
+    //public async Task<ActionResult<MessageResponse>> DeleteElder(int id, CancellationToken cancellationToken)
+    //{
+    //    return await sender.Send(new DeleteElderCommand(id), cancellationToken);
+    //}
 }

@@ -3,5 +3,5 @@
 namespace NursingHome.Application.Features.CareSchedules.Models;
 public record BaseCareScheduleNoNurseScheduleResponse : BaseCareScheduleResponse
 {
-    public BaseRoomNoElderResponse Room { get; set; } = default!;
+    public RoomResponse Room { get; set; } = default!;
 }

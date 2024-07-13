@@ -33,21 +33,22 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
-        if (!await _roomRepository.ExistsByAsync(_ => _.AvailableBed))
-        {
-            throw new FieldResponseException(604, "Room is full");
-        }
+
         var room = await _roomRepository.FindByAsync(x => x.Id == request.RoomId
-           , includeFunc: _ => _.Include(x => x.NursingPackage), cancellationToken: cancellationToken);
-        if (room?.NursingPackageId == null)
+           , includeFunc: _ => _.Include(x => x.NursingPackage).Include(x => x.Elders), cancellationToken: cancellationToken)
+            ?? throw new NotFoundException($"Room Have Id {request.RoomId} Is Not Found");
+        if (room.NursingPackageId == null)
         {
             throw new FieldResponseException(605, "Room Not Have Package");
         }
-        if (room?.NursingPackageId != request.NursingPackageId)
+        if (room.NursingPackageId != request.NursingPackageId)
         {
             throw new FieldResponseException(606, $"This Room Does Not Contain A Nursing Package With Id {request.NursingPackageId}");
         }
-
+        if (!(room.NursingPackage.Capacity > room.Elders.Count()))
+        {
+            throw new FieldResponseException(604, "Room is full");
+        }
         var diseaseCategories = await _diseaseCategoryRepository.FindAsync(_ =>
         request.MedicalRecord.DiseaseCategories.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
         var elder = request.Adapt<Elder>();
