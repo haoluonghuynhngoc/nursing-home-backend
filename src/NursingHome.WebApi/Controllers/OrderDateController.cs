@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NursingHome.Application.Features.OrderDates.Commands;
+using NursingHome.Application.Features.OrderDates.Models;
+using NursingHome.Application.Features.OrderDates.Queries;
 using NursingHome.Application.Models;
 
 namespace NursingHome.WebApi.Controllers;
@@ -18,5 +20,10 @@ public class OrderDateController(ISender sender) : ControllerBase
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
-
+    [HttpGet("{id}")]
+    public async Task<ActionResult<OrderDateResponse>> GetOrderDayByIdAsync(int id,
+            CancellationToken cancellationToken)
+    {
+        return await sender.Send(new GetOrderDateByIdQuery(id), cancellationToken);
+    }
 }

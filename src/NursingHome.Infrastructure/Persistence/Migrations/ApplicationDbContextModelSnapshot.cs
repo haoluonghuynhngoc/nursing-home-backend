@@ -1067,6 +1067,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("PaymentReferenceId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("PaymentUrl")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(24)");
@@ -1089,6 +1092,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
@@ -1099,9 +1105,14 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(24)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderDetailId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("OrderDates");
                 });
@@ -1851,7 +1862,13 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("NursingHome.Domain.Entities.Identities.User", "User")
+                        .WithMany("OrderDates")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("OrderDetail");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.OrderDetail", b =>
@@ -2050,6 +2067,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("NurseSchedules");
+
+                    b.Navigation("OrderDates");
 
                     b.Navigation("Orders");
 
