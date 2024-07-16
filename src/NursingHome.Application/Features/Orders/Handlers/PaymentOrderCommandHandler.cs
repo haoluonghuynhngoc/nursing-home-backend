@@ -24,6 +24,12 @@ internal class PaymentOrderCommandHandler(
         var order = await _orderRepository.FindByAsync(
             expression: _ => _.Id == request.OrderId) // && _.Method == TransactionMethod.None
             ?? throw new NotFoundException(nameof(NursingPackage), request.OrderId);
+        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+
+        if (order.DueDate < currentDate)
+        {
+            throw new BadRequestException("Order is expired");
+        }
 
         order.PaymentReferenceId = Guid.NewGuid();
         await unitOfWork.CommitAsync(cancellationToken);
@@ -54,7 +60,8 @@ internal class PaymentOrderCommandHandler(
         {
             Amount = (long)order.Amount,
             Info = order.Description,
-            PaymentReferenceId = order.Id.ToString(),
+            //PaymentReferenceId = order.Id.ToString(),
+            PaymentReferenceId = order.PaymentReferenceId.ToString(),
             Time = order.CreatedAt.Value,
             returnUrl = returnUrl
         });
