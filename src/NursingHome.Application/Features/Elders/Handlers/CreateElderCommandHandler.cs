@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
@@ -11,14 +12,15 @@ using NursingHome.Domain.Entities.Identities;
 using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Elders.Handlers;
-internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateElderCommand, MessageResponse>
+internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
+    ILogger<CreateElderCommandHandler> logger) : IRequestHandler<CreateElderCommand, MessageResponse>
 {
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     private readonly IGenericRepository<Room> _roomRepository = unitOfWork.Repository<Room>();
     private readonly IGenericRepository<NursingPackage> _nursingPackageRepository = unitOfWork.Repository<NursingPackage>();
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     private readonly IGenericRepository<DiseaseCategory> _diseaseCategoryRepository = unitOfWork.Repository<DiseaseCategory>();
-
+    private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
     public async Task<MessageResponse> Handle(CreateElderCommand request, CancellationToken cancellationToken)
     {
         if (await _elderRepository.ExistsByAsync(x => x.CCCD == request.CCCD))
@@ -33,6 +35,11 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
+        //if (await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId
+        //&& request.Contract.Price != _.Price, cancellationToken))
+        //{
+        //    throw new FieldResponseException(614, $"The Price {request.Contract.Price} Does Not Match The Price Of The Nursing Package {request.NursingPackageId}.");
+        //}
 
         var room = await _roomRepository.FindByAsync(x => x.Id == request.RoomId
            , includeFunc: _ => _.Include(x => x.NursingPackage).Include(x => x.Elders), cancellationToken: cancellationToken)
@@ -60,13 +67,56 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
             ? ContractStatus.Pending
             : ContractStatus.Valid;
 
+        var contract = request.Contract.Adapt<Contract>();
         elder.Contracts = new List<Contract> {
-            request.Contract.Adapt<Contract>()
+            contract
         };
         await _elderRepository.CreateAsync(elder, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 
+        // Thêm tự động order khi tạo mới elder
+        await CreateOrderNursingPackage(elder, contract, request.UserId);
+
         return new MessageResponse(Resource.CreatedSuccess);
     }
-}
 
+    private async Task CreateOrderNursingPackage(Elder elder, Contract contract, Guid userId)
+    {
+
+        try
+        {
+            var order = new Order
+            {
+                UserId = userId,
+                Method = TransactionMethod.Cash,
+                Status = OrderStatus.Paid,
+                Description = $"The elderly person named {elder.Name} has paid for the retirement package on {DateOnly.FromDateTime(DateTime.Now)}.",
+                Amount = (double)contract.Price,
+                Content = "Payment For Nursing Care Service Package",
+                Notes = "None",
+                PaymentDate = DateTime.UtcNow,
+                DueDate = DateOnly.FromDateTime(DateTime.Today),
+                OrderDetails = new List<OrderDetail>
+            {
+                new OrderDetail
+                {
+                    Contract = contract,
+                    Price = contract.Price,
+                    ElderId = elder.Id,
+                    Quantity = 1,
+                    Notes = $"Pay for the elderly care package for the elderly person {elder.Name}",
+                    Status = OrderDetailStatus.Finalized,
+                    Type = OrderDetailType.One_Time,
+                }
+            }
+            };
+            await _orderRepository.CreateAsync(order);
+            await unitOfWork.CommitAsync();
+        }
+
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An Error Occurred While Creating Order For Elder.");
+        }
+    }
+}
