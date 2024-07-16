@@ -20,6 +20,12 @@ public class ScheduledServiceController(ISender sender) : ControllerBase
     {
         return Ok(await sender.Send(request, cancellationToken));
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<MessageResponse>> RemoveScheduledServiceAsync(int id, CancellationToken cancellationToken)
+    {
+        return Ok(await sender.Send(new RemoveScheduleServiceCommand(id), cancellationToken));
+    }
     /// <summary>
     /// hàm này chỉ để test nên không cần phải sài 
     /// </summary>

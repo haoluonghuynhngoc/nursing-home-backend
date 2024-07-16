@@ -121,7 +121,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 if (orderDetail.Status == OrderDetailStatus.NonRepeatable)
                 {
                     // Kiểm tra nếu không có ngày nào trong OrderDates lớn hơn currentDate thì đổi trạng thái
-                    if (orderDetail.OrderDates.All(orderDate => orderDate.Date < currentDate))
+                    if (orderDetail.OrderDates != null && orderDetail.OrderDates.All(orderDate => orderDate.Date < currentDate))
                     {
                         orderDetail.Status = OrderDetailStatus.Finalized;
                     }
