@@ -15,5 +15,11 @@ public record ElderResponse : BaseElderResponse
     public ICollection<OrderDetailNotElderAndContractResponse> OrderDetails { get; set; } = new HashSet<OrderDetailNotElderAndContractResponse>();
     public ICollection<BaseAppointmentResponse> Appointments { get; set; } = new HashSet<BaseAppointmentResponse>();
     public ICollection<BaseContractNursingPackageResponse> Contracts { get; set; } = new HashSet<BaseContractNursingPackageResponse>();
-    public BaseContractNursingPackageResponse? ContractsInUse => Contracts.FirstOrDefault(x => x.Status == ContractStatus.Pending);
+    // public BaseContractNursingPackageResponse? ContractsInUse => Contracts.FirstOrDefault(x => x.Status == ContractStatus.Pending);
+    public BaseContractNursingPackageResponse? ContractsInUse =>
+        Contracts.FirstOrDefault(x => x.Status == ContractStatus.Valid) ??
+        Contracts.FirstOrDefault(x => x.Status == ContractStatus.Pending) ??
+        Contracts.Where(x => x.Status == ContractStatus.Expired)
+                 .OrderByDescending(x => x.EndDate)
+                 .FirstOrDefault();
 }
