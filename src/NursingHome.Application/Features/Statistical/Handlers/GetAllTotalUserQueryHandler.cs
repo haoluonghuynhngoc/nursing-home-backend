@@ -14,33 +14,7 @@ internal sealed class GetAllTotalUserQueryHandler(
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     public async Task<TotalUserResponse> Handle(GetAllTotalUserQuery request, CancellationToken cancellationToken)
     {
-        //var listUser = await _userRepository.FindAsync(user => user.IsActive,
-        //    includeFunc: user => user.Include(_ => _.UserRoles).ThenInclude(role => role.Role));
 
-        //var totalCustomer = listUser.SelectMany(customer => customer.UserRoles)
-        //    .Count(role => role.Role.Name == RoleUserName.Customer.ToString());
-
-        //var totalDirector = listUser.SelectMany(director => director.UserRoles)
-        //    .Count(role => role.Role.Name == RoleUserName.Director.ToString());
-
-        //var totalManager = listUser.SelectMany(manager => manager.UserRoles)
-        //    .Count(role => role.Role.Name == RoleUserName.Manager.ToString());
-
-        //var totalStaff = listUser.SelectMany(staff => staff.UserRoles)
-        //    .Count(role => role.Role.Name == RoleUserName.Staff.ToString());
-
-        //var totalNurse = listUser.SelectMany(nurse => nurse.UserRoles)
-        //    .Count(role => role.Role.Name == RoleUserName.Nurse.ToString());
-
-        //return new TotalUserResponse
-        //{
-        //    TotalUser = listUser.Count,
-        //    TotalCustomer = totalCustomer,
-        //    TotalDirector = totalDirector,
-        //    TotalManager = totalManager,
-        //    TotalNurse = totalNurse,
-        //    TotalStaff = totalStaff,
-        //};
         var listUser = await _userRepository.FindAsync(user => user.IsActive,
             includeFunc: user => user.Include(_ => _.UserRoles).ThenInclude(role => role.Role));
 
