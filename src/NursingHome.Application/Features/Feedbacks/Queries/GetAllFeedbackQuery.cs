@@ -12,6 +12,7 @@ public sealed record GetAllFeedbackQuery : PaginationRequest<FeedBack>, IRequest
 {
     public string? Search { get; set; }
     public Guid? UserId { get; set; }
+    public int? OrderDetailId { get; set; }
     public override Expression<Func<FeedBack, bool>> GetExpressions()
     {
         if (!string.IsNullOrWhiteSpace(Search))
@@ -21,6 +22,7 @@ public sealed record GetAllFeedbackQuery : PaginationRequest<FeedBack>, IRequest
                 .And(u => EF.Functions.Like(u.Title, $"%{Search}%"));
         }
         Expression = Expression.And(_ => !UserId.HasValue || _.UserId == UserId);
+        Expression = Expression.And(_ => !OrderDetailId.HasValue || _.OrderDetailId == OrderDetailId);
         return Expression;
     }
 }

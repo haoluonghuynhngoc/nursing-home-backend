@@ -95,7 +95,6 @@ internal class CreateOrderServicePackageCommandHandler(
         order.Status = OrderStatus.UnPaid;
         order.PaymentReferenceId = Guid.NewGuid();
         order.Amount = (double)(request.OrderDetails?.Sum(detail => detail.Price) ?? 0);
-
         var paymentUrl = request.Method switch
         {
             TransactionMethod.Momo => await MomoPaymentServiceHandler(order, request.returnUrl),
@@ -132,7 +131,8 @@ internal class CreateOrderServicePackageCommandHandler(
         {
             Amount = (long)order.Amount,
             Info = order.Description,
-            PaymentReferenceId = order.Id.ToString(),
+            //PaymentReferenceId = order.Id.ToString(),
+            PaymentReferenceId = order.PaymentReferenceId.ToString(),
             Time = order.CreatedAt.Value,
             returnUrl = returnUrl
         });

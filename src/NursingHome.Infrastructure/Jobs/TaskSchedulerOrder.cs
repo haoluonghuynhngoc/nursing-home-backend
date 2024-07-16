@@ -77,7 +77,8 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             var listOrders = await _orderRepository.FindAsync(
                 expression: _ => _.Status == OrderStatus.UnPaid
                 || _.Status == OrderStatus.Failed, includeFunc: _ => _.Include(x => x.OrderDetails)
-                .ThenInclude(x => x.OrderDates)); // include tiếp vào thằng ở trong luôn 
+                .ThenInclude(x => x.OrderDates)
+                .AsNoTracking()); // Thêm AsNoTracking để tăng hiệu suất nếu không cần theo dõi các thay đổi
 
             foreach (var order in listOrders)
             {
@@ -170,11 +171,18 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                     // check đơn hàng này có phải của tháng hiện tại không, nếu phải thì thêm vào đơn cho tháng sau
                     if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
                     {
-                        scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime()
+                        // Lập lại 1 ngày thì sẽ cộng lên 1 tháng 
+                        if (item.Type == OrderDetailType.RecurringDay)
                         {
-                            // sai ở đây nó chỉ cộng cho tháng nào phù hợp chứ khôgn đúng ngày 
-                            Date = orderDate.Date.AddMonths(1)
-                        });
+                            scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime()
+                            {
+                                Date = orderDate.Date.AddMonths(1) // cái này có thể giả quyết bằng các cho UI chăn 5 ngày cuối tháng
+                            });
+                        }
+                        if (item.Type == OrderDetailType.RecurringWeeks)
+                        {
+                            // chua xong
+                        }
                     }
                 }
 
@@ -222,5 +230,31 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
     //        return false;
     //    }
     //}
+    private void GetDateInMonnth()
+    {
+        DateTime nextMonth = DateTime.Now.AddMonths(2);
+        int year = nextMonth.Year;
+        int month = nextMonth.Month;
 
+        // Tính số ngày trong tháng đó
+        int daysInMonth = DateTime.DaysInMonth(year, month);
+
+        List<DateTime> mondays = new List<DateTime>();
+
+        for (int day = 1; day <= daysInMonth; day++)
+        {
+            DateTime date = new DateTime(year, month, day);
+            if (date.DayOfWeek == DayOfWeek.Monday)
+            {
+                mondays.Add(date);
+            }
+        }
+
+        // In ra các ngày thứ Hai
+        Console.WriteLine($"Các ngày thứ Hai trong tháng {month}/{year} là:");
+        foreach (var monday in mondays)
+        {
+            Console.WriteLine(monday.ToString("dd/MM/yyyy"));
+        }
+    }
 }

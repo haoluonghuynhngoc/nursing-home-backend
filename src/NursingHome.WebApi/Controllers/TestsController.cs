@@ -1,9 +1,12 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Contracts.Services.Notifications;
 using NursingHome.Application.Models.Notifications;
+using NursingHome.Domain.Entities;
 using NursingHome.Domain.Enums;
 using System.Text.Json;
 
@@ -14,8 +17,11 @@ namespace NursingHome.WebApi.Controllers;
 public class TestsController(
     INotifier notifier,
     ICurrentUserService currentUserService,
-    ICacheService cacheService) : ControllerBase
+    ICacheService cacheService,
+    IUnitOfWork unitOfWork) : ControllerBase
 {
+    private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
+
     /// <summary>
     /// Only used for backend testing
     /// </summary>
@@ -65,6 +71,43 @@ public class TestsController(
     {
         await cacheService.RemoveAsync(key, cancellationToken);
         return Ok("Okey");
+    }
+    // nữa sẽ xóa 
+    [HttpPost("checkOrderExpiration")]
+    public async Task<IActionResult> CheckOrderExpirationApiAsync()
+    {
+        try
+        {
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            // check cai nay 
+            var listOrders = await _orderRepository.FindAsync(
+                expression: _ => _.Status == OrderStatus.UnPaid
+                || _.Status == OrderStatus.Failed, includeFunc: _ => _.Include(x => x.OrderDetails)
+                .ThenInclude(x => x.OrderDates)
+                .AsNoTracking()); // Thêm AsNoTracking để tăng hiệu suất nếu không cần theo dõi các thay đổi
+
+            foreach (var order in listOrders)
+            {
+                if (order.DueDate < currentDate)
+                {
+                    order.Status = OrderStatus.OverDue;
+                    foreach (var orderDetail in order.OrderDetails)
+                    {
+                        orderDetail.Status = OrderDetailStatus.Finalized;
+                        foreach (var orderDate in orderDetail.OrderDates)
+                        {
+                            orderDate.Status = OrderDateStatus.NotPerformed;
+                        }
+                    }
+                }
+                await _orderRepository.UpdateAsync(order);
+            }
+            await unitOfWork.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+        }
+        return Ok("Check Order Succesfully");
     }
     //[HttpGet("cache/package/{key}")]
     //public async Task<IActionResult> GetCachePackage(string key, CancellationToken cancellationToken)
