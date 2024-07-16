@@ -16,5 +16,6 @@ public record CreateAppointmentCommand : IRequest<MessageResponse>
     public string? Notes { get; set; }
     public Guid UserId { get; set; }
     public int? NursingPackageId { get; set; }
+    public int? ContractId { get; set; }
     public ICollection<CreateElderAppointmentRequest> Elders { get; set; } = new HashSet<CreateElderAppointmentRequest>();
 }

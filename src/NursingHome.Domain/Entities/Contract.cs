@@ -25,6 +25,7 @@ public class Contract : BaseAuditableEntity<int>
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
     //public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+    public virtual ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
     public virtual ICollection<Image> Images { get; set; } = new HashSet<Image>();
 }

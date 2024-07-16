@@ -15,7 +15,7 @@ internal class CreateAppointmentCommandHandler(IUnitOfWork unitOfWork) : IReques
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     private readonly IGenericRepository<NursingPackage> _nursingPackageRepository = unitOfWork.Repository<NursingPackage>();
-
+    private readonly IGenericRepository<Contract> _contractRepository = unitOfWork.Repository<Contract>();
     public async Task<MessageResponse> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
         if (!await _userRepository.ExistsByAsync(_ => _.Id == request.UserId, cancellationToken))
@@ -26,7 +26,14 @@ internal class CreateAppointmentCommandHandler(IUnitOfWork unitOfWork) : IReques
         {
             if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId, cancellationToken))
             {
-                throw new NotFoundException(nameof(NursingPackage), request.UserId);
+                throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
+            }
+        }
+        if (request.ContractId != null)
+        {
+            if (!await _contractRepository.ExistsByAsync(_ => _.Id == request.ContractId, cancellationToken))
+            {
+                throw new NotFoundException(nameof(Contract), request.ContractId);
             }
         }
         foreach (var elder in request.Elders)

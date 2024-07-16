@@ -17,6 +17,7 @@ public record GetAppointmentsQuery : PaginationRequest<Appointment>, IRequest<Pa
     public AppointmentType? Type { get; set; }
     public AppointmentStatus? Status { get; set; }
     public int? NursingPackageId { get; set; }
+    public int? ContractId { get; set; }
     public override Expression<Func<Appointment, bool>> GetExpressions()
     {
         Expression = Expression.And(_ => string.IsNullOrWhiteSpace(Search) || EF.Functions.Like(_.Name, $"%{Search}%"));
@@ -24,6 +25,7 @@ public record GetAppointmentsQuery : PaginationRequest<Appointment>, IRequest<Pa
         Expression = Expression.And(_ => !Date.HasValue || _.Date == Date);
         Expression = Expression.And(_ => !Type.HasValue || _.Type == Type);
         Expression = Expression.And(_ => !Status.HasValue || _.Status == Status);
+        Expression = Expression.And(_ => !ContractId.HasValue || !_.ContractId.HasValue || _.ContractId == ContractId);
         Expression = Expression.And(_ => !NursingPackageId.HasValue || !_.NursingPackageId.HasValue || _.NursingPackageId == NursingPackageId);
         return Expression;
     }

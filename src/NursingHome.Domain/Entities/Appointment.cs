@@ -18,5 +18,7 @@ public class Appointment : BaseAuditableEntity<int>
     public virtual User User { get; set; } = default!;
     public int? NursingPackageId { get; set; }
     public virtual NursingPackage NursingPackage { get; set; } = default!;
+    public int? ContractId { get; set; }
+    public virtual Contract Contract { get; set; } = default!;
     public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();
 }
