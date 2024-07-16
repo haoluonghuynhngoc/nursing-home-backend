@@ -19,6 +19,7 @@ public class Order : BaseAuditableEntity<int>
     public string? Description { get; set; }
     public string? Content { get; set; }
     public string? Notes { get; set; }
+    public string? PaymentUrl { get; set; }
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
