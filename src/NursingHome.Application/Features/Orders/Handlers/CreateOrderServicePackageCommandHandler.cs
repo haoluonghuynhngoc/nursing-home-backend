@@ -96,9 +96,6 @@ internal class CreateOrderServicePackageCommandHandler(
         order.PaymentReferenceId = Guid.NewGuid();
         order.Amount = (double)(request.OrderDetails?.Sum(detail => detail.Price) ?? 0);
 
-        await _orderRepository.CreateAsync(order, cancellationToken);
-        await unitOfWork.CommitAsync(cancellationToken);
-
         var paymentUrl = request.Method switch
         {
             TransactionMethod.Momo => await MomoPaymentServiceHandler(order, request.returnUrl),
@@ -106,6 +103,14 @@ internal class CreateOrderServicePackageCommandHandler(
             TransactionMethod.None => "The Order Has Been Saved In The System, Please Pay Before The Due Date",
             _ => "Payment Success"
         };
+
+        if (request.Method == TransactionMethod.Momo || request.Method == TransactionMethod.VnPay)
+        {
+            order.PaymentUrl = paymentUrl;
+        }
+
+        await _orderRepository.CreateAsync(order, cancellationToken);
+        await unitOfWork.CommitAsync(cancellationToken);
 
         return new MessageResponse(paymentUrl);
     }

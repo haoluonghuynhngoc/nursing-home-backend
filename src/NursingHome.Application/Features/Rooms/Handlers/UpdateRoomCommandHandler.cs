@@ -22,9 +22,14 @@ internal sealed class UpdateRoomCommandHandler(
         {
             throw new NotFoundException(nameof(Block), request.BlockId);
         }
+        //if (!await _nursingPackageRepository.ExistsByAsync(_ => request.NursingPackageId.HasValue && _.Id == request.NursingPackageId))
+        //{
+        //    throw new NotFoundException(nameof(NursingPackage), request.BlockId);
+        //}
 
         var room = await _roomRepository.FindByAsync(
-            expression: _ => _.Id == request.Id, includeFunc: _ => _.Include(x => x.Elders))
+            expression: _ => _.Id == request.Id,
+            includeFunc: _ => _.Include(x => x.Elders).Include(n => n.NursingPackage))
              ?? throw new NotFoundException(nameof(Room), request.Id);
 
         //if (await _roomRepository.ExistsByAsync(_ => _.Id != request.Id && (_.Name == request.Name && _.BlockId == room.BlockId)))
@@ -35,10 +40,10 @@ internal sealed class UpdateRoomCommandHandler(
         {
             throw new ConflictException($"Room Have Name {request.Name} In Block Have Block ID Is {request.BlockId}");
         }
-        Console.WriteLine("Room Name: " + room.Elders);
+
         if (request.NursingPackageId != null)
         {
-            if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.Id))
+            if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId))
             {
                 throw new FieldResponseException(612, "Nursing Package Is Null");
             }
