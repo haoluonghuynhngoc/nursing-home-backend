@@ -18,66 +18,114 @@ internal class CreateScheduleServiceCommandHandler(IUnitOfWork unitOfWork)
     public async Task<MessageResponse> Handle(CreateScheduleServiceCommand request, CancellationToken cancellationToken)
     {
 
-        var currentDate = DateOnly.FromDateTime(DateTime.Now);
-
-        var listOrderDetails = await _orderDetailRepository.FindAsync(
-            expression: _ => _.Status == OrderDetailStatus.Repeatable,
-            includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
-
-        // Nhóm các ScheduledServiceDetail theo UserId
-        var groupedOrderDetails = new Dictionary<Guid, List<ScheduledServiceDetail>>();
-
-        foreach (var item in listOrderDetails)
+        try
         {
-            var userId = item.Order.UserId;
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            var nextMonth = currentDate.AddMonths(1);
 
-            if (!groupedOrderDetails.ContainsKey(userId))
-            {
-                groupedOrderDetails[userId] = new List<ScheduledServiceDetail>();
-            }
+            var listOrderDetails = await _orderDetailRepository.FindAsync(
+                expression: _ => _.Status == OrderDetailStatus.Repeatable,
+                includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
 
-            var scheduledServiceDetail = new ScheduledServiceDetail();
-            scheduledServiceDetail.ElderId = item.ElderId;
-            scheduledServiceDetail.ServicePackageId = item.ServicePackageId;
-            scheduledServiceDetail.ScheduledTimes = new HashSet<ScheduledTime>();
-            scheduledServiceDetail.Type = item.Type;
-            // ScheduledService
-            foreach (var orderDate in item.OrderDates)
+            var groupedOrderDetails = new Dictionary<Guid, List<ScheduledServiceDetail>>();
+
+            foreach (var item in listOrderDetails)
             {
-                // check đơn hàng này có phải của tháng hiện tại không, nếu phải thì thêm vào đơn cho tháng sau
-                if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
+                var userId = item.Order.UserId;
+
+                if (!groupedOrderDetails.ContainsKey(userId))
                 {
-                    scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime()
+                    groupedOrderDetails[userId] = new List<ScheduledServiceDetail>();
+                }
+
+                var scheduledServiceDetail = new ScheduledServiceDetail
+                {
+                    ElderId = item.ElderId,
+                    ServicePackageId = item.ServicePackageId,
+                    ScheduledTimes = new HashSet<ScheduledTime>(),
+                    Type = item.Type
+                };
+
+                if (item.Type == OrderDetailType.RecurringDay)
+                {
+                    foreach (var orderDate in item.OrderDates)
                     {
-                        // sai ở đây nó chỉ cộng cho tháng nào phù hợp chứ khôgn đúng ngày 
-                        Date = orderDate.Date.AddMonths(1)
-                    });
+                        if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
+                        {
+                            scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                            {
+                                Date = orderDate.Date.AddMonths(1)
+                            });
+                        }
+                    }
+                }
+                else if (item.Type == OrderDetailType.RecurringWeeks)
+                {
+                    var daysOfWeekInList = item.OrderDates
+                        .Select(orderDate => orderDate.Date.DayOfWeek)
+                        .Distinct()
+                        .OrderBy(day => day)
+                        .ToList();
+
+                    foreach (var dayOfWeek in daysOfWeekInList)
+                    {
+                        var datesInNextMonth = GetDatesInNextMonth(dayOfWeek);
+                        foreach (var date in datesInNextMonth)
+                        {
+                            if (date.Month == nextMonth.Month && date.Year == nextMonth.Year)
+                            {
+                                scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                                {
+                                    Date = date
+                                });
+                            }
+                        }
+                    }
+                }
+
+                if (scheduledServiceDetail.ScheduledTimes.Any())
+                {
+                    groupedOrderDetails[userId].Add(scheduledServiceDetail);
                 }
             }
 
-            // Chỉ thêm ScheduledServiceDetail nếu có ScheduledTimes
-            if (scheduledServiceDetail.ScheduledTimes.Any())
+            foreach (var item in groupedOrderDetails)
             {
-                groupedOrderDetails[userId].Add(scheduledServiceDetail);
+                var scheduledService = new ScheduledService
+                {
+                    Name = $"Gói dịch vụ gia hạn Tháng {nextMonth.Month}",
+                    UserId = item.Key,
+                    ScheduledServiceDetails = item.Value,
+                    Status = ScheduledServiceStatus.None
+                };
+                await _scheduledServiceRepository.CreateAsync(scheduledService);
             }
 
+            await unitOfWork.CommitAsync();
         }
-
-        // Tạo các gói dịch vụ theo ngày lặp lại cho từng người dùng
-        foreach (var item in groupedOrderDetails)
+        catch (Exception ex)
         {
-            var scheduledService = new ScheduledService
-            {
-                Name = $"Gói dịch vụ gia hạn Tháng {currentDate.AddMonths(1).Month}",
-                UserId = item.Key,
-                ScheduledServiceDetails = item.Value,
-                Status = ScheduledServiceStatus.None
-            };
-            await _scheduledServiceRepository.CreateAsync(scheduledService);
-        }
 
-        await unitOfWork.CommitAsync();
+        }
         return new MessageResponse(Resource.CreatedSuccess);
     }
+    private List<DateOnly> GetDatesInNextMonth(DayOfWeek dayOfWeek)
+    {
+        DateTime nextMonth = DateTime.Now.AddMonths(1);
+        int year = nextMonth.Year;
+        int month = nextMonth.Month;
 
+        int daysInMonth = DateTime.DaysInMonth(year, month);
+        List<DateOnly> specificDays = new List<DateOnly>();
+
+        for (int day = 1; day <= daysInMonth; day++)
+        {
+            DateOnly date = new DateOnly(year, month, day);
+            if (date.DayOfWeek == dayOfWeek)
+            {
+                specificDays.Add(date);
+            }
+        }
+        return specificDays;
+    }
 }

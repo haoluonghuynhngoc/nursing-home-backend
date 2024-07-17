@@ -73,7 +73,6 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
         try
         {
             var currentDate = DateOnly.FromDateTime(DateTime.Now);
-            // check cai nay 
             var listOrders = await _orderRepository.FindAsync(
                 expression: _ => _.Status == OrderStatus.UnPaid
                 || _.Status == OrderStatus.Failed, includeFunc: _ => _.Include(x => x.OrderDetails)
@@ -136,19 +135,17 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
     }
 
     // Chưa kiểm tra hàm này 
-    // hiển thị lên thông báo để người dùng có thể gia hạn gói dịch vụ
-    // Chỉ hiện thị những gói dịch vụ cho tháng sau chứ không được vược quá 2 tháng
     public async Task CreateDisplayRenewalNotificationAsync()
     {
         try
         {
             var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            var nextMonth = currentDate.AddMonths(1);
 
             var listOrderDetails = await _orderDetailRepository.FindAsync(
                 expression: _ => _.Status == OrderDetailStatus.Repeatable,
                 includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
 
-            // Nhóm các ScheduledServiceDetail theo UserId
             var groupedOrderDetails = new Dictionary<Guid, List<ScheduledServiceDetail>>();
 
             foreach (var item in listOrderDetails)
@@ -160,46 +157,62 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                     groupedOrderDetails[userId] = new List<ScheduledServiceDetail>();
                 }
 
-                var scheduledServiceDetail = new ScheduledServiceDetail();
-                scheduledServiceDetail.ElderId = item.ElderId;
-                scheduledServiceDetail.ServicePackageId = item.ServicePackageId;
-                scheduledServiceDetail.ScheduledTimes = new HashSet<ScheduledTime>();
-                scheduledServiceDetail.Type = item.Type;
-                // ScheduledService
-                foreach (var orderDate in item.OrderDates)
+                var scheduledServiceDetail = new ScheduledServiceDetail
                 {
-                    // check đơn hàng này có phải của tháng hiện tại không, nếu phải thì thêm vào đơn cho tháng sau
-                    if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
+                    ElderId = item.ElderId,
+                    ServicePackageId = item.ServicePackageId,
+                    ScheduledTimes = new HashSet<ScheduledTime>(),
+                    Type = item.Type
+                };
+
+                if (item.Type == OrderDetailType.RecurringDay)
+                {
+                    foreach (var orderDate in item.OrderDates)
                     {
-                        // Lập lại 1 ngày thì sẽ cộng lên 1 tháng 
-                        if (item.Type == OrderDetailType.RecurringDay)
+                        if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
                         {
-                            scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime()
+                            scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
                             {
-                                Date = orderDate.Date.AddMonths(1) // cái này có thể giả quyết bằng các cho UI chăn 5 ngày cuối tháng
+                                Date = orderDate.Date.AddMonths(1)
                             });
                         }
-                        if (item.Type == OrderDetailType.RecurringWeeks)
+                    }
+                }
+                else if (item.Type == OrderDetailType.RecurringWeeks)
+                {
+                    var daysOfWeekInList = item.OrderDates
+                        .Select(orderDate => orderDate.Date.DayOfWeek)
+                        .Distinct()
+                        .OrderBy(day => day)
+                        .ToList();
+
+                    foreach (var dayOfWeek in daysOfWeekInList)
+                    {
+                        var datesInNextMonth = GetDatesInNextMonth(dayOfWeek);
+                        foreach (var date in datesInNextMonth)
                         {
-                            // chua xong
+                            if (date.Month == nextMonth.Month && date.Year == nextMonth.Year)
+                            {
+                                scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                                {
+                                    Date = date
+                                });
+                            }
                         }
                     }
                 }
 
-                // Chỉ thêm ScheduledServiceDetail nếu có ScheduledTimes
                 if (scheduledServiceDetail.ScheduledTimes.Any())
                 {
                     groupedOrderDetails[userId].Add(scheduledServiceDetail);
                 }
-
             }
 
-            // Tạo các gói dịch vụ theo ngày lặp lại cho từng người dùng
             foreach (var item in groupedOrderDetails)
             {
                 var scheduledService = new ScheduledService
                 {
-                    Name = $"Gói dịch vụ gia hạn Tháng {currentDate.AddMonths(1).Month}",
+                    Name = $"Gói dịch vụ gia hạn Tháng {nextMonth.Month}",
                     UserId = item.Key,
                     ScheduledServiceDetails = item.Value,
                     Status = ScheduledServiceStatus.None
@@ -214,47 +227,144 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             logger.LogError(ex, "An error occurred while creating renewal notifications.");
         }
     }
-
-    //// Lấy ngày hợp lệ của tháng sau
-    //public bool IsNextMonthValidDate(DateOnly currentDate)
-    //{
-    //    try
-    //    {
-    //        var firstDayOfCurrentMonth = new DateOnly(currentDate.Year, currentDate.Month, 1);
-    //        var firstDayOfNextMonth = firstDayOfCurrentMonth.AddMonths(1);
-    //        var lastDayOfNextMonth = new DateOnly(firstDayOfNextMonth.Year, firstDayOfNextMonth.Month, DateTime.DaysInMonth(firstDayOfNextMonth.Year, firstDayOfNextMonth.Month));
-    //        return currentDate.Day <= lastDayOfNextMonth.Day;
-    //    }
-    //    catch (ArgumentOutOfRangeException)
-    //    {
-    //        return false;
-    //    }
-    //}
-    private void GetDateInMonnth()
+    private List<DateOnly> GetDatesInNextMonth(DayOfWeek dayOfWeek)
     {
-        DateTime nextMonth = DateTime.Now.AddMonths(2);
+        DateTime nextMonth = DateTime.Now.AddMonths(1);
         int year = nextMonth.Year;
         int month = nextMonth.Month;
 
-        // Tính số ngày trong tháng đó
         int daysInMonth = DateTime.DaysInMonth(year, month);
-
-        List<DateTime> mondays = new List<DateTime>();
+        List<DateOnly> specificDays = new List<DateOnly>();
 
         for (int day = 1; day <= daysInMonth; day++)
         {
-            DateTime date = new DateTime(year, month, day);
-            if (date.DayOfWeek == DayOfWeek.Monday)
+            DateOnly date = new DateOnly(year, month, day);
+            if (date.DayOfWeek == dayOfWeek)
             {
-                mondays.Add(date);
+                specificDays.Add(date);
             }
         }
-
-        // In ra các ngày thứ Hai
-        Console.WriteLine($"Các ngày thứ Hai trong tháng {month}/{year} là:");
-        foreach (var monday in mondays)
-        {
-            Console.WriteLine(monday.ToString("dd/MM/yyyy"));
-        }
+        return specificDays;
     }
+
+    //public async Task CreateDisplayRenewalNotificationAsync()
+    //{
+    //    try
+    //    {
+    //        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+    //        var nextMonth = currentDate.AddMonths(1);
+
+    //        var listOrderDetails = await _orderDetailRepository.FindAsync(
+    //            expression: _ => _.Status == OrderDetailStatus.Repeatable,
+    //            includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
+
+    //        // Nhóm các ScheduledServiceDetail theo UserId
+    //        var groupedOrderDetails = new Dictionary<Guid, List<ScheduledServiceDetail>>();
+
+    //        foreach (var item in listOrderDetails)
+    //        {
+    //            var userId = item.Order.UserId;
+
+    //            if (!groupedOrderDetails.ContainsKey(userId))
+    //            {
+    //                groupedOrderDetails[userId] = new List<ScheduledServiceDetail>();
+    //            }
+
+    //            var scheduledServiceDetail = new ScheduledServiceDetail();
+    //            scheduledServiceDetail.ElderId = item.ElderId;
+    //            scheduledServiceDetail.ServicePackageId = item.ServicePackageId;
+    //            scheduledServiceDetail.ScheduledTimes = new HashSet<ScheduledTime>();
+    //            scheduledServiceDetail.Type = item.Type;
+
+    //            // Lập lại 1 ngày thì sẽ cộng lên 1 tháng Done
+    //            if (item.Type == OrderDetailType.RecurringDay)
+    //            {
+    //                foreach (var orderDate in item.OrderDates)
+    //                {
+    //                    // check đơn hàng này có phải của tháng hiện tại không, nếu phải thì thêm vào đơn cho tháng sau
+    //                    if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
+    //                    {
+
+    //                        scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime()
+    //                        {
+    //                            Date = orderDate.Date.AddMonths(1) // cái này có thể giả quyết bằng các cho UI chặn 5 ngày cuối tháng
+    //                        });
+
+    //                    }
+    //                }
+    //            }
+    //            // Lập lại theo tuần 
+    //            if (item.Type == OrderDetailType.RecurringWeeks)
+    //            {
+    //                var daysOfWeekInList = item.OrderDates //  List<DayOfWeek>
+    //                    .Select(orderDate => orderDate.Date.DayOfWeek)  // Lấy DayOfWeek từ Date
+    //                    .Distinct()
+    //                    .OrderBy(day => day)
+    //                    .ToList();
+    //                foreach (var dayOfWeek in daysOfWeekInList)
+    //                {
+    //                    var datesInMonth = GetDatesInMonth(dayOfWeek);
+    //                    foreach (var date in datesInMonth)
+    //                    {
+    //                        if (date.Month == nextMonth.Month && date.Year == nextMonth.Year)
+    //                        {
+    //                            scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime()
+    //                            {
+    //                                Date = date
+    //                            });
+    //                        }
+    //                    }
+    //                }
+    //            }
+
+    //            // Chỉ thêm ScheduledServiceDetail nếu có ScheduledTimes
+    //            if (scheduledServiceDetail.ScheduledTimes.Any())
+    //            {
+    //                groupedOrderDetails[userId].Add(scheduledServiceDetail);
+    //            }
+    //        }
+
+    //        // Tạo các gói dịch vụ theo ngày lặp lại cho từng người dùng
+    //        foreach (var item in groupedOrderDetails)
+    //        {
+    //            var scheduledService = new ScheduledService
+    //            {
+    //                Name = $"Gói dịch vụ gia hạn Tháng {nextMonth.Month}",
+    //                UserId = item.Key,
+    //                ScheduledServiceDetails = item.Value,
+    //                Status = ScheduledServiceStatus.None
+    //            };
+    //            await _scheduledServiceRepository.CreateAsync(scheduledService);
+    //        }
+
+    //        await _unitOfWork.CommitAsync();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        logger.LogError(ex, "An error occurred while creating renewal notifications.");
+    //    }
+    //}
+    //private List<DateOnly> GetDatesInMonth(DayOfWeek dayOfWeek, DateTime nextMonth)
+    //{
+    //    // Lấy tháng kế tiếp từ ngày hiện tại
+    //    //DateTime nextMonth = DateTime.Now.AddMonths(1); // Chọn tháng kế tiếp (1 tháng sau)
+    //    int year = nextMonth.Year;
+    //    int month = nextMonth.Month;
+
+    //    // Tính số ngày trong tháng đó
+    //    int daysInMonth = DateTime.DaysInMonth(year, month);
+
+    //    // Danh sách chứa các ngày tương ứng với ngày trong tuần cụ thể
+    //    List<DateOnly> specificDays = new List<DateOnly>();
+
+    //    for (int day = 1; day <= daysInMonth; day++)
+    //    {
+    //        DateOnly date = new DateOnly(year, month, day);
+    //        if (date.DayOfWeek == dayOfWeek)
+    //        {
+    //            specificDays.Add(date);
+    //        }
+    //    }
+    //    return specificDays;
+    //}
 }
