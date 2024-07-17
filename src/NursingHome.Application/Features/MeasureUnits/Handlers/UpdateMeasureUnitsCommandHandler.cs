@@ -12,15 +12,18 @@ internal class UpdateMeasureUnitsCommandHandler(IUnitOfWork unitOfWork)
     : IRequestHandler<UpdateMeasureUnitsCommand, MessageResponse>
 {
     private readonly IGenericRepository<MeasureUnit> _measureUnitRepository = unitOfWork.Repository<MeasureUnit>();
+    private readonly IGenericRepository<HealthCategory> _healthCategoryRepository = unitOfWork.Repository<HealthCategory>();
     public async Task<MessageResponse> Handle(UpdateMeasureUnitsCommand request, CancellationToken cancellationToken)
     {
-        //if (await _measureUnitRepository.ExistsByAsync(_ => _.Id != request.Id && _.Name == request.Name))
-        //{
-        //    throw new ConflictException($"Health Category Have Name {request.Name} In DataBase");
-        //}
-        // chưa check nếu nó trùng tên với cái khác trong db và healthCategory
         var measureUnit = await _measureUnitRepository.FindByAsync(
      expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Measure Unit Have Id {request.Id} Is Not Found");
+
+        if (await _healthCategoryRepository.ExistsByAsync(_ => _.Id == measureUnit.HealthCategoryId
+        && _.MeasureUnits.Any(mu => mu.Name == request.Name)))
+        {
+            throw new ConflictException($"Measure Units Have Name {request.Name} In Health Category Have Block ID Is {measureUnit.HealthCategoryId}");
+        }
+
         request.Adapt(measureUnit);
         await _measureUnitRepository.UpdateAsync(measureUnit);
         await unitOfWork.CommitAsync();

@@ -10,6 +10,14 @@ namespace NursingHome.WebApi.Controllers;
 [Authorize]
 public class MeasureUnitController(ISender sender) : ControllerBase
 {
+    [HttpPost]
+    public async Task<ActionResult<MessageResponse>> CreateMeasureUnitAsync(
+        int healthCategoryId,
+       CreateMeasureUnitCommand command,
+       CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { HealthCategoryId = healthCategoryId }, cancellationToken);
+    }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<MessageResponse>> UpdateMeasureUnitAsync(
