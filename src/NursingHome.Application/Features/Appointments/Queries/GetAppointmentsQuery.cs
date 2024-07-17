@@ -18,15 +18,17 @@ public record GetAppointmentsQuery : PaginationRequest<Appointment>, IRequest<Pa
     public AppointmentStatus? Status { get; set; }
     public int? NursingPackageId { get; set; }
     public int? ContractId { get; set; }
+
     public override Expression<Func<Appointment, bool>> GetExpressions()
     {
-        Expression = Expression.And(_ => string.IsNullOrWhiteSpace(Search) || EF.Functions.Like(_.Name, $"%{Search}%"));
-        Expression = Expression.And(_ => !UserId.HasValue || _.UserId == UserId);
-        Expression = Expression.And(_ => !Date.HasValue || _.Date == Date);
-        Expression = Expression.And(_ => !Type.HasValue || _.Type == Type);
-        Expression = Expression.And(_ => !Status.HasValue || _.Status == Status);
-        Expression = Expression.And(_ => !ContractId.HasValue || !_.ContractId.HasValue || _.ContractId == ContractId);
-        Expression = Expression.And(_ => !NursingPackageId.HasValue || !_.NursingPackageId.HasValue || _.NursingPackageId == NursingPackageId);
+        Expression = Expression.And(_ => string.IsNullOrWhiteSpace(Search) || EF.Functions.Like(_.Name, $"%{Search}%"))
+            .And(_ => !UserId.HasValue || _.UserId == UserId)
+            .And(_ => !Date.HasValue || _.Date == Date)
+            .And(_ => !Type.HasValue || _.Type == Type)
+            .And(_ => !Status.HasValue || _.Status == Status)
+            .And(_ => !ContractId.HasValue || _.ContractId == ContractId)
+            .And(_ => !NursingPackageId.HasValue || _.NursingPackageId == NursingPackageId);
+
         return Expression;
     }
 }
