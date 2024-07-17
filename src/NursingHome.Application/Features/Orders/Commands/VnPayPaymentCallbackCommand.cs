@@ -6,7 +6,6 @@ public record VnPayPaymentCallbackCommand : IRequest
     public string? vnp_TransactionStatus { get; set; } = default!;
 
     public string? vnp_TmnCode { get; set; } = default!;
-
     public long? vnp_Amount { get; set; } = default!;
 
     public string? vnp_BankCode { get; set; } = default!;

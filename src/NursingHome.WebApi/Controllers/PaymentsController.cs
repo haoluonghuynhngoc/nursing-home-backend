@@ -19,8 +19,8 @@ public class PaymentsController(ISender sender) : ControllerBase
 
     [HttpGet("vnpay-callback")]
     public async Task<IActionResult> VnPayPaymentCallback(
-        [FromQuery] VnPayPaymentCallbackCommand callback,
-        CancellationToken cancellationToken)
+    [FromQuery] VnPayPaymentCallbackCommand callback,
+    CancellationToken cancellationToken)
     {
         await sender.Send(callback, cancellationToken);
         return Redirect($"{callback.returnUrl}?isSuccess={callback.IsSuccess}");

@@ -62,7 +62,8 @@ internal class PaymentOrderCommandHandler(
             Info = order.Description,
             //PaymentReferenceId = order.Id.ToString(),
             PaymentReferenceId = order.PaymentReferenceId.ToString(),
-            Time = order.CreatedAt.Value,
+            //Time = order.CreatedAt.Value,
+            Time = order.CreatedAt != null ? order.CreatedAt.Value : DateTime.UtcNow,
             returnUrl = returnUrl
         });
     }

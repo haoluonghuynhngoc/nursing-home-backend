@@ -70,7 +70,7 @@ internal class CreateOrderServicePackageCommandHandler(
                     {
                         if (orderDetail.OrderDates.Any(_ => _.Date == date))
                         {
-                            throw new FieldResponseException(611, $"Elder already has this service package in Date {date}");
+                            throw new FieldResponseException(611, $"Elder already has this service package in Date {date.ToString("dd/MM/yyyy")} ");
                         }
                     });
                 }
@@ -127,13 +127,14 @@ internal class CreateOrderServicePackageCommandHandler(
 
     private async Task<string> VnPayPaymentServiceHandler(Order order, string returnUrl)
     {
+        Console.WriteLine($"VnPayPaymentServiceHandler {order.PaymentReferenceId}");
         return await vnPayPaymentService.CreatePaymentAsync(new VnPayPayment
         {
             Amount = (long)order.Amount,
             Info = order.Description,
             //PaymentReferenceId = order.Id.ToString(),
             PaymentReferenceId = order.PaymentReferenceId.ToString(),
-            Time = order.CreatedAt.Value,
+            Time = order.CreatedAt != null ? order.CreatedAt.Value : DateTime.UtcNow,
             returnUrl = returnUrl
         });
     }
