@@ -41,7 +41,7 @@ internal sealed class UpdateRoomCommandHandler(
             throw new ConflictException($"Room Have Name {request.Name} In Block Have Block ID Is {request.BlockId}");
         }
 
-        if (request.NursingPackageId != null)
+        if (request.NursingPackageId != null && room.NursingPackageId != request.NursingPackageId)
         {
             if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId))
             {
