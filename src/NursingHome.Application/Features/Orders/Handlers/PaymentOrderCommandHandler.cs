@@ -31,6 +31,7 @@ internal class PaymentOrderCommandHandler(
             throw new BadRequestException("Order is expired");
         }
 
+        order.Method = request.Method;
         order.PaymentReferenceId = Guid.NewGuid();
         await unitOfWork.CommitAsync(cancellationToken);
 
