@@ -48,7 +48,8 @@ internal class CreateOrderServicePackageCommandHandler(
                 {
                     item.OrderDates.Select(_ => _.Date).ToList().ForEach(date =>
                     {
-                        if (orderDetail.OrderDates.Any(_ => _.Date.Day == date.Day))
+                        if (orderDetail.OrderDates.Any(_ => _.Date.Day == date.Day
+                        && _.Date.Month == date.Month & _.Date.Year == date.Year))
                         {
                             throw new FieldResponseException(609, $"Elder already has this service package in Date Of Month {date.Day}");
                         }
@@ -58,7 +59,8 @@ internal class CreateOrderServicePackageCommandHandler(
                 {
                     item.OrderDates.Select(_ => _.Date).ToList().ForEach(date =>
                     {
-                        if (orderDetail.OrderDates.Any(_ => _.Date.DayOfWeek == date.DayOfWeek))
+                        if (orderDetail.OrderDates.Any(_ => _.Date.DayOfWeek == date.DayOfWeek
+                         && _.Date.Month == date.Month & _.Date.Year == date.Year))
                         {
                             throw new FieldResponseException(610, $"Elder already has this service package in day of the week {date.DayOfWeek}");
                         }

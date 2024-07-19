@@ -52,6 +52,21 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.ToTable("DiseaseCategoryMedicalRecord");
                 });
 
+            modelBuilder.Entity("NurseScheduleShift", b =>
+                {
+                    b.Property<int>("NurseSchedulersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShiftsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NurseSchedulersId", "ShiftsId");
+
+                    b.HasIndex("ShiftsId");
+
+                    b.ToTable("NurseScheduleShift");
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.Appointment", b =>
                 {
                     b.Property<int>("Id")
@@ -946,17 +961,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int>("CareScheduleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShiftId")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CareScheduleId");
-
-                    b.HasIndex("ShiftId");
 
                     b.HasIndex("UserId");
 
@@ -1571,6 +1581,21 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NurseScheduleShift", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.NurseSchedule", null)
+                        .WithMany()
+                        .HasForeignKey("NurseSchedulersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NursingHome.Domain.Entities.Shift", null)
+                        .WithMany()
+                        .HasForeignKey("ShiftsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("NursingHome.Domain.Entities.Appointment", b =>
                 {
                     b.HasOne("NursingHome.Domain.Entities.Contract", "Contract")
@@ -1835,12 +1860,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NursingHome.Domain.Entities.Shift", "Shift")
-                        .WithMany("NurseSchedulers")
-                        .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("NursingHome.Domain.Entities.Identities.User", "User")
                         .WithMany("NurseSchedules")
                         .HasForeignKey("UserId")
@@ -1848,8 +1867,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("CareSchedule");
-
-                    b.Navigation("Shift");
 
                     b.Navigation("User");
                 });
@@ -2145,11 +2162,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("NursingHome.Domain.Entities.ServicePackageCategory", b =>
                 {
                     b.Navigation("ServicePackages");
-                });
-
-            modelBuilder.Entity("NursingHome.Domain.Entities.Shift", b =>
-                {
-                    b.Navigation("NurseSchedulers");
                 });
 #pragma warning restore 612, 618
         }

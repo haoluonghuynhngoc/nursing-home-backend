@@ -134,8 +134,6 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
         }
     }
 
-    // Chưa kiểm tra hàm này 
-    // start 
     //public async Task CreateDisplayRenewalNotificationAsync()
     //{
     //    try

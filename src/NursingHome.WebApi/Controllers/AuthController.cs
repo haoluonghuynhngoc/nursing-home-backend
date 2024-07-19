@@ -26,7 +26,7 @@ public class AuthController(ISender sender) : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPost("login")]
-    public async Task<ActionResult<AccessTokenResponse>> Login(LoginRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<AccessTokenResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
     {
         return await sender.Send(request, cancellationToken);
     }

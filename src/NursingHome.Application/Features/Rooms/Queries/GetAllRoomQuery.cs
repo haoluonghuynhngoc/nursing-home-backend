@@ -15,6 +15,10 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
     public string? Search { get; set; }
     public int? NursingPackageId { get; set; }
     public RoomType? Type { get; set; }
+    /// <summary>
+    /// AvailableBed true là phòng còn giường có thể cho thêm người vào 
+    /// </summary>
+    public bool? AvailableBed { get; set; }
     public override Expression<Func<Room, bool>> GetExpressions()
     {
         if (!string.IsNullOrWhiteSpace(Search))
@@ -24,9 +28,9 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
                 .And(u => EF.Functions.Like(u.Name, $"%{Search}%"));
         }
         Expression = Expression
-            .And(r => !Type.HasValue || r.Type == Type);
-        Expression = Expression
-           .And(r => !NursingPackageId.HasValue || r.NursingPackageId == NursingPackageId);
+            .And(r => !Type.HasValue || r.Type == Type)
+            .And(r => !NursingPackageId.HasValue || r.NursingPackageId == NursingPackageId)
+            .And(r => !AvailableBed.HasValue || r.AvailableBed == AvailableBed);
         return Expression;
     }
 
