@@ -18,7 +18,7 @@ public class UsersController(ISender sender) : ControllerBase
     /// Get the exact account currently logged in
     /// </summary>
     [HttpGet("profile")]
-    public async Task<ActionResult<UserResponse>> GetProfile(CancellationToken cancellationToken)
+    public async Task<ActionResult<UserResponse>> GetProfileAsync(CancellationToken cancellationToken)
     {
         return await sender.Send(new GetProfileQuery(), cancellationToken);
     }
@@ -34,7 +34,7 @@ public class UsersController(ISender sender) : ControllerBase
     /// Get all profile users
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<UserResponse>>> GetAllProfileUsers(
+    public async Task<ActionResult<PaginatedResponse<UserResponse>>> GetAllProfileUsersAsync(
         [FromQuery] GetAllProfileUserQuery request,
         CancellationToken cancellationToken)
     {
@@ -42,7 +42,7 @@ public class UsersController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<MessageResponse>> UpdateShiftAsync(
+    public async Task<ActionResult<MessageResponse>> UpdateUserAsync(
            Guid id,
            UpdateUserCommand command, CancellationToken cancellationToken)
     {
@@ -53,7 +53,7 @@ public class UsersController(ISender sender) : ControllerBase
     /// Update the currently logged in user
     /// </summary>
     [HttpPut("profile")]
-    public async Task<ActionResult<MessageResponse>> UpdateProfile(UpdateProfileCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> UpdateProfileAsync(UpdateProfileCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
@@ -62,7 +62,7 @@ public class UsersController(ISender sender) : ControllerBase
     /// mặt định là role Nurse
     /// </summary>
     [HttpPost("system-register")]
-    public async Task<ActionResult<MessageResponse>> RegisterSystemProfile(RoleUserName roleRegister, RegisterUserSystemCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> RegisterSystemProfileAsync(RoleUserName roleRegister, RegisterUserSystemCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command with { RoleRegister = roleRegister }, cancellationToken);
     }
@@ -71,7 +71,7 @@ public class UsersController(ISender sender) : ControllerBase
     /// </summary>
     [HttpPost("customer-register")]
     [AllowAnonymous]
-    public async Task<ActionResult<MessageResponse>> RegisterUserProfile(RegisterCutomerCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> RegisterUserProfileAsync(RegisterCutomerCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
@@ -79,7 +79,7 @@ public class UsersController(ISender sender) : ControllerBase
     /// Hàm này dựa vào token đang đăng nhập để sử dụng khi mà tài khoảng đó chưa có password, nếu có password thì sẽ không thể thay đổi password
     /// </summary>
     [HttpPatch("set-password")]
-    public async Task<ActionResult<MessageResponse>> SetPassword(SetPasswordCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> SetPasswordAsync(SetPasswordCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
