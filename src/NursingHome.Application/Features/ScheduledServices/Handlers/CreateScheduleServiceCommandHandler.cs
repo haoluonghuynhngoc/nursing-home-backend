@@ -27,6 +27,7 @@ internal class CreateScheduleServiceCommandHandler(IUnitOfWork unitOfWork)
                 expression: _ => _.Status == OrderDetailStatus.Repeatable,
                 includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
 
+            // Dictionary để nhóm dữ liệu theo UserId và gộp các ScheduledServiceDetail trùng lặp
             var groupedOrderDetails = new Dictionary<Guid, List<ScheduledServiceDetail>>();
 
             foreach (var item in listOrderDetails)
@@ -89,15 +90,38 @@ internal class CreateScheduleServiceCommandHandler(IUnitOfWork unitOfWork)
                 }
             }
 
-            foreach (var item in groupedOrderDetails)
+            // Gộp các ScheduledServiceDetail trùng lặp
+            var mergedServiceDetails = new List<ScheduledService>();
+
+            foreach (var group in groupedOrderDetails)
             {
+                var userId = group.Key;
+                var details = group.Value;
+
+                var groupedDetails = details
+                    .GroupBy(detail => new { detail.ElderId, detail.ServicePackageId, detail.Type })
+                    .Select(g => new ScheduledServiceDetail
+                    {
+                        ElderId = g.Key.ElderId,
+                        ServicePackageId = g.Key.ServicePackageId,
+                        Type = g.Key.Type,
+                        ScheduledTimes = new HashSet<ScheduledTime>(g.SelectMany(detail => detail.ScheduledTimes))
+                    })
+                    .ToList();
+
                 var scheduledService = new ScheduledService
                 {
                     Name = $"Gói dịch vụ gia hạn Tháng {nextMonth.Month}",
-                    UserId = item.Key,
-                    ScheduledServiceDetails = item.Value,
+                    UserId = userId,
+                    ScheduledServiceDetails = groupedDetails,
                     Status = ScheduledServiceStatus.None
                 };
+
+                mergedServiceDetails.Add(scheduledService);
+            }
+
+            foreach (var scheduledService in mergedServiceDetails)
+            {
                 await _scheduledServiceRepository.CreateAsync(scheduledService);
             }
 

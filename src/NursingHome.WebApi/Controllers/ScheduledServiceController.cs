@@ -30,8 +30,9 @@ public class ScheduledServiceController(ISender sender) : ControllerBase
     /// hàm này chỉ để test nên không cần phải sài 
     /// </summary>
     [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreateScheduledService(CreateScheduleServiceCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreateScheduledService(
+        CancellationToken cancellationToken)
     {
-        return await sender.Send(command, cancellationToken);
+        return await sender.Send(new CreateScheduleServiceCommand(), cancellationToken);
     }
 }
