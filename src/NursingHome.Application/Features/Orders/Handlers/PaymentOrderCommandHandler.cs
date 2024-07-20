@@ -26,9 +26,14 @@ internal class PaymentOrderCommandHandler(
             ?? throw new NotFoundException(nameof(NursingPackage), request.OrderId);
         var currentDate = DateOnly.FromDateTime(DateTime.Now);
 
+        if (order.Status == OrderStatus.Paid)
+        {
+            throw new BadRequestException("Order Has Been Paid");
+        }
+
         if (order.DueDate < currentDate)
         {
-            throw new BadRequestException("Order is expired");
+            throw new BadRequestException("Order Is Expired");
         }
 
         order.Method = request.Method;

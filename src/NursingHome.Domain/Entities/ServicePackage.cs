@@ -18,7 +18,7 @@ public class ServicePackage : BaseAuditableEntity<int>
     [Column(TypeName = "nvarchar(24)")]
     public PackageType Type { get; set; } = default!;
     public DateOnly StartRegistrationDate { get; set; }
-    public DateOnly EndRegistrationStartDate { get; set; }
+    public DateOnly EndRegistrationDate { get; set; }
     public DateOnly? EventDate { get; set; }
     //public int TotalDate => ServicePackageDates.Count;
     public int ServicePackageCategoryId { get; set; }
