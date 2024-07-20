@@ -15,8 +15,8 @@ public class HealthCategoryController(ISender sender) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<PaginatedResponse<HealthCategoryResponse>>> GetAllHealthCateroryWithPaginAsync(
-   [FromQuery] GetAllHealthCategoryQuery query,
-   CancellationToken cancellationToken)
+        [FromQuery] GetAllHealthCategoryQuery query,
+        CancellationToken cancellationToken)
     {
         return await sender.Send(query, cancellationToken);
     }

@@ -14,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class EldersController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<ElderResponse>>> GetElders(
+    public async Task<ActionResult<PaginatedResponse<ElderResponse>>> GetEldersAsync(
         [FromQuery] GetEldersQuery query,
         CancellationToken cancellationToken)
     {
@@ -22,19 +22,19 @@ public class EldersController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ElderResponse>> GetElderById(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<ElderResponse>> GetElderByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new GetElderByIdQuery(id), cancellationToken);
     }
 
     [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreateElder(CreateElderCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreateElderAsync(CreateElderCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<MessageResponse>> UpdateElder(int id, UpdateElderCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> UpdateElderAsync(int id, UpdateElderCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }

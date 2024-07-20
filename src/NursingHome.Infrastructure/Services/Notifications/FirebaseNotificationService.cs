@@ -48,7 +48,7 @@ public class FirebaseNotificationService : IFirebaseNotificationService
         var messages = new Message
         {
             Token = "1212",
-            Data = notification.ObjectToDictionary(),
+            Data = notification.Data?.ObjectToDictionary(),
             Notification = new FirebaseAdmin.Messaging.Notification()
             {
                 Title = notification.Title,

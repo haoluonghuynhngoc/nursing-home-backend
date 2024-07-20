@@ -14,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class ContractController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<ContractResponse>>> GetAllContractsAllBlocksWithAsync(
+    public async Task<ActionResult<PaginatedResponse<ContractResponse>>> GetAllContractWithAsync(
         [FromQuery] GetAllContractQuery request,
         CancellationToken cancellationToken)
     {
@@ -46,7 +46,7 @@ public class ContractController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<MessageResponse>> UpdateContractAsync(
+    public async Task<ActionResult<MessageResponse>> DeleteContractAsync(
         int id,
         RemoveContractCommand command,
         CancellationToken cancellationToken)
