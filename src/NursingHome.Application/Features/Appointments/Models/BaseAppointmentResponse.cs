@@ -6,6 +6,7 @@ public record BaseAppointmentResponse : BaseAuditableEntityResponse<int>
 {
     public string Name { get; set; } = default!;
     public string? Content { get; set; }
+    public string? Reason { get; set; }
     public DateOnly Date { get; set; }
     public AppointmentStatus Status { get; set; }
     public AppointmentType Type { get; set; }

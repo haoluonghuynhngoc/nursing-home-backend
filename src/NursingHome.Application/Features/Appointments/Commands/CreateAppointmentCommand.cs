@@ -9,6 +9,7 @@ public record CreateAppointmentCommand : IRequest<MessageResponse>
 {
     public string Name { get; set; } = default!;
     public string? Content { get; set; }
+    public string? Reason { get; set; }
     public DateOnly Date { get; set; }
     [JsonIgnore]
     public AppointmentStatus Status => AppointmentStatus.Pending;

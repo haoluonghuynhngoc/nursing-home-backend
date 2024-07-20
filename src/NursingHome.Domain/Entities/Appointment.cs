@@ -8,6 +8,7 @@ public class Appointment : BaseAuditableEntity<int>
 {
     public string Name { get; set; } = default!;
     public string? Content { get; set; }
+    public string? Reason { get; set; }
     public DateOnly Date { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public AppointmentStatus Status { get; set; }
