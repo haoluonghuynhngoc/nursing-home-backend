@@ -14,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class ServicePackageController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<ServicePackageResponse>>> GetPackages(
+    public async Task<ActionResult<PaginatedResponse<ServicePackageResponse>>> GetPackagesAsync(
          [FromQuery] GetAllServicePackageQuery query,
          CancellationToken cancellationToken)
     {
@@ -22,25 +22,25 @@ public class ServicePackageController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ServicePackageResponse>> GetPackageById(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<ServicePackageResponse>> GetPackageByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new GetServicePackageByIdQuery(id), cancellationToken);
     }
 
     [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreatePackage(CreateServicePackageCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreatePackageAsync(CreateServicePackageCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<MessageResponse>> UpdatePackage(int id, UpdateServicePackageCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> UpdatePackageAsync(int id, UpdateServicePackageCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<MessageResponse>> DeletePackage(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> DeletePackageAsync(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new DeleteServicepackageCommand(id), cancellationToken);
     }

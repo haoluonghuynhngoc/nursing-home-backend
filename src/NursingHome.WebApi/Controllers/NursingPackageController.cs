@@ -14,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class NursingPackageController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<NursingPackageResponse>>> GetNursingPackages(
+    public async Task<ActionResult<PaginatedResponse<NursingPackageResponse>>> GetNursingPackagesAsync(
         [FromQuery] GetAllNursingPackageQuery query,
         CancellationToken cancellationToken)
     {
@@ -22,24 +22,24 @@ public class NursingPackageController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<NursingPackageResponse>> GetNursingPackageById(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<NursingPackageResponse>> GetNursingPackageByIdAsync(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new GetNursingPackageByIdQuery(id), cancellationToken);
     }
 
     [HttpPost("AddNursingPackageToRoom")]
-    public async Task<ActionResult<MessageResponse>> AddNursingPackageToRoom(AddNursingPackageToRoomCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> AddNursingPackageToRoomAsync(AddNursingPackageToRoomCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
     [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreateNursingPackage(CreateNursingPackageCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> CreateNursingPackageAsync(CreateNursingPackageCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command, cancellationToken);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<MessageResponse>> UpdateNursingPackage(int id, UpdateNursingPackageCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<MessageResponse>> UpdateNursingPackageAsync(int id, UpdateNursingPackageCommand command, CancellationToken cancellationToken)
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
