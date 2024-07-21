@@ -6,5 +6,4 @@ public sealed record GetCareServiceQuery : IRequest<CareServiceResponse>
 {
     public int RoomId { get; set; }
     public DateOnly Date { get; set; }
-
 }
