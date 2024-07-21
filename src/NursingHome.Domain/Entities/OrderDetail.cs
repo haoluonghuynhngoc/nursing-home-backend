@@ -1,4 +1,5 @@
-﻿using NursingHome.Domain.Common;
+﻿using EntityFrameworkCore.Projectables;
+using NursingHome.Domain.Common;
 using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,6 +19,8 @@ public class OrderDetail : BaseEntity<int>
     public virtual Contract Contract { get; set; } = default!;
     public int? ElderId { get; set; }
     public virtual Elder Elder { get; set; } = default!;
+    [Projectable]
+    public bool IsPain => Order.Status == OrderStatus.Paid;
     public int OrderId { get; set; }
     public virtual Order Order { get; set; } = default!;
     public virtual ICollection<OrderDate> OrderDates { get; set; } = new List<OrderDate>();

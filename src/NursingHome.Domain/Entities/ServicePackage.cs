@@ -13,7 +13,7 @@ public class ServicePackage : BaseAuditableEntity<int>
     public int RegistrationLimit { get; set; }
     public int TimeBetweenServices { get; set; }
     [Projectable]
-    public int TotalOrder => OrderDetails.Count;
+    public int TotalOrder => OrderDetails.Count(_ => _.IsPain == true);
     public string? ImageUrl { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public PackageType Type { get; set; } = default!;

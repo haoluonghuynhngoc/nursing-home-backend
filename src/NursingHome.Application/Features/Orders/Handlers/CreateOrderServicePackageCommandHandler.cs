@@ -6,6 +6,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Contracts.Services.Payments;
 using NursingHome.Application.Features.Orders.Commands;
+using NursingHome.Application.Features.ServicePackages.Models;
 using NursingHome.Application.Models;
 using NursingHome.Application.Models.Payments;
 using NursingHome.Domain.Entities;
@@ -34,6 +35,16 @@ internal class CreateOrderServicePackageCommandHandler(
         }
         foreach (var item in request.OrderDetails)
         {
+            var servicePackage = await _servicePackageRepository.FindByAsync<ServicePackageResponse>(x => x.Id == item.ServicePackageId, cancellationToken)
+                ?? throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
+            if (servicePackage.TotalOrder >= servicePackage.RegistrationLimit)
+            {
+                throw new FieldResponseException(614, $"The service package has enough people, please choose another service");
+            }
+            if (servicePackage.EndRegistrationDate < DateOnly.FromDateTime(DateTime.Today))
+            {
+                throw new FieldResponseException(615, $"The translation package has expired, please choose another service");
+            }
             if (!await _elderRepository.ExistsByAsync(_ => _.Id == item.ElderId, cancellationToken))
             {
                 throw new NotFoundException(nameof(Elder), item.ElderId);
@@ -41,7 +52,9 @@ internal class CreateOrderServicePackageCommandHandler(
 
             var listOrderDetail = await _orderDetailRepository.FindAsync(_ => _.ElderId == item.ElderId
             && _.ServicePackageId == item.ServicePackageId
-            && _.Status != OrderDetailStatus.Finalized, includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.ServicePackage));
+            && _.Status != OrderDetailStatus.Finalized, includeFunc: _ => _.Include(x => x.OrderDates)
+            .Include(x => x.ServicePackage).Include(x => x.Order));
+
             foreach (var orderDetail in listOrderDetail)
             {
                 if (orderDetail.Type == OrderDetailType.RecurringDay)
@@ -68,14 +81,6 @@ internal class CreateOrderServicePackageCommandHandler(
                 }
                 if (orderDetail.Type == OrderDetailType.One_Time)
                 {
-                    if (orderDetail.ServicePackage.TotalOrder >= orderDetail.ServicePackage.RegistrationLimit)
-                    {
-                        throw new FieldResponseException(614, $"The service package has enough people, please choose another service");
-                    }
-                    if (orderDetail.ServicePackage.EndRegistrationDate < DateOnly.FromDateTime(DateTime.Today))
-                    {
-                        throw new FieldResponseException(615, $"The translation package has expired, please choose another service");
-                    }
                     item.OrderDates.Select(_ => _.Date).ToList().ForEach(date =>
                     {
                         if (orderDetail.OrderDates.Any(_ => _.Date == date))
@@ -95,9 +100,6 @@ internal class CreateOrderServicePackageCommandHandler(
             {
                 item.Status = OrderDetailStatus.Repeatable;
             }
-            var servicePackage = await _servicePackageRepository.FindByIdAsync(item.ServicePackageId, cancellationToken)
-                ?? throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
-
             item.Price = servicePackage.Price * item.TotalFutureDates;
         }
 

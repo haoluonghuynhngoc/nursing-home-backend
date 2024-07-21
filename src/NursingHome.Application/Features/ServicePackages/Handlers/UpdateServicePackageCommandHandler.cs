@@ -27,6 +27,7 @@ internal class UpdateServicePackageCommandHandler(IUnitOfWork unitOfWork) : IReq
         }
 
         request.Adapt(package);
+        await _servicePackageRepository.UpdateAsync(package);
         await unitOfWork.CommitAsync(cancellationToken);
 
         return new MessageResponse(Resource.UpdatedSuccess);

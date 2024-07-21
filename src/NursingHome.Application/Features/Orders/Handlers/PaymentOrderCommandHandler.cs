@@ -1,9 +1,12 @@
-﻿using MediatR;
+﻿using LinqKit;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Contracts.Services.Payments;
 using NursingHome.Application.Features.Orders.Commands;
+using NursingHome.Application.Features.ServicePackages.Models;
 using NursingHome.Application.Models;
 using NursingHome.Application.Models.Payments;
 using NursingHome.Domain.Entities;
@@ -18,11 +21,13 @@ internal class PaymentOrderCommandHandler(
     IVnPayPaymentService vnPayPaymentService) : IRequestHandler<PaymentOrderCommand, MessageResponse>
 {
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
+    private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
 
     public async Task<MessageResponse> Handle(PaymentOrderCommand request, CancellationToken cancellationToken)
     {
         var order = await _orderRepository.FindByAsync(
-            expression: _ => _.Id == request.OrderId) // && _.Method == TransactionMethod.None
+            expression: _ => _.Id == request.OrderId    // && _.Method == TransactionMethod.None
+            , includeFunc: _ => _.Include(x => x.OrderDetails).ThenInclude(x => x.ServicePackage))
             ?? throw new NotFoundException(nameof(NursingPackage), request.OrderId);
         var currentDate = DateOnly.FromDateTime(DateTime.Now);
 
@@ -36,6 +41,19 @@ internal class PaymentOrderCommandHandler(
             throw new BadRequestException("Order Is Expired");
         }
 
+        foreach (var item in order.OrderDetails)
+        {
+            var servicePackage = await _servicePackageRepository.FindByAsync<ServicePackageResponse>(x => x.Id == item.ServicePackageId, cancellationToken)
+                ?? throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
+            if (servicePackage.TotalOrder >= servicePackage.RegistrationLimit)
+            {
+                throw new FieldResponseException(614, $"The service package has enough people, please choose another service");
+            }
+            if (servicePackage.EndRegistrationDate < DateOnly.FromDateTime(DateTime.Today))
+            {
+                throw new FieldResponseException(615, $"The translation package has expired, please choose another service");
+            }
+        }
         order.Method = request.Method;
         order.PaymentReferenceId = Guid.NewGuid();
         await unitOfWork.CommitAsync(cancellationToken);
