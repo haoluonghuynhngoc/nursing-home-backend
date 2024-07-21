@@ -6,6 +6,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.MeasureUnits.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.MeasureUnits.Handlers;
 internal class CreateMeasureUnitCommandHandler(IUnitOfWork unitOfWork)
@@ -20,10 +21,11 @@ internal class CreateMeasureUnitCommandHandler(IUnitOfWork unitOfWork)
             throw new NotFoundException(nameof(HealthCategory), request.HealthCategoryId);
         }
         if (await _healthCategoryRepository.ExistsByAsync(_ => _.Id == request.HealthCategoryId
-        && _.MeasureUnits.Any(mu => mu.Name == request.Name)))
+        && _.MeasureUnits.Any(mu => mu.Name == request.Name && mu.State != StateType.Deleted)))
         {
             throw new ConflictException($"Measure Units Have Name {request.Name} In Health Category Have Block ID Is {request.HealthCategoryId}");
         }
+
         var measureUnits = request.Adapt<MeasureUnit>();
         await _measureUnitRepository.CreateAsync(measureUnits, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
