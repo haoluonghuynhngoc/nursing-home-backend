@@ -41,5 +41,7 @@
 
 		<!--Fack Data-->
 		<PackageReference Include="Bogus" Version="34.0.2" />
+
+		<PackageReference Include="Community.Expo.Server.SDK" Version="1.2.2" />
 	</ItemGroup>
 </Project>

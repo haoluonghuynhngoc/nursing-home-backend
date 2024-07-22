@@ -1,4 +1,6 @@
-﻿using Hangfire;
+﻿using ExpoCommunityNotificationServer.Client;
+using ExpoCommunityNotificationServer.Models;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -114,4 +116,19 @@ public class TestsController(
     //{
     //    return Ok(await cacheService.GetAsync<InfoStaffGennerateQrPaymentModel>(key, cancellationToken));
     //}
+
+    [HttpPost("exxpo")]
+    public async Task<IActionResult> PostCahcePackage()
+    {
+        IPushApiClient _client = new PushApiClient("your token here");
+        PushTicketRequest pushTicketRequest = new PushTicketRequest()
+        {
+            PushTo = new List<string>() { "ExponentPushToken[fxc4drPagqlftQNP2D1JSg]" },
+            PushTitle = "TEST 1",
+            PushBody = "TEST 1"
+        };
+
+        PushTicketResponse result = await _client.SendPushAsync(pushTicketRequest);
+        return Ok(result);
+    }
 }
