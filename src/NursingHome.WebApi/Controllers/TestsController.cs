@@ -120,12 +120,12 @@ public class TestsController(
     [HttpPost("exxpo")]
     public async Task<IActionResult> PostCahcePackage()
     {
-        IPushApiClient _client = new PushApiClient("your token here");
+        IPushApiClient _client = new PushApiClient("ehAXa94NsN6NnpSTLLZkb2vnmxZC3Y-vF0k7xDkk");
         PushTicketRequest pushTicketRequest = new PushTicketRequest()
         {
-            PushTo = new List<string>() { "ExponentPushToken[fxc4drPagqlftQNP2D1JSg]" },
-            PushTitle = "TEST 1",
-            PushBody = "TEST 1"
+            PushTo = new List<string>() { "ExponentPushToken[fxc4drPagqlftQNP2D1JSg]", "ExponentPushToken[LYbkmXI2vH3-PvFNIzVRTW]" },
+            PushTitle = "moi tao",
+            PushBody = "TEST 11111"
         };
 
         PushTicketResponse result = await _client.SendPushAsync(pushTicketRequest);

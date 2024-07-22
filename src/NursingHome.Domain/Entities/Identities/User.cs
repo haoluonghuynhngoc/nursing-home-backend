@@ -34,7 +34,7 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public virtual ICollection<Device> Devices { get; set; } = new HashSet<Device>();
     public virtual ICollection<Contract> Contracts { get; set; } = new HashSet<Contract>();
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-    public virtual ICollection<NurseSchedule> NurseSchedules { get; set; } = new HashSet<NurseSchedule>();
+    public virtual ICollection<UserNurseSchedule> UserNurseSchedules { get; set; } = new HashSet<UserNurseSchedule>();
     public virtual ICollection<FeedBack> FeedBacks { get; set; } = new HashSet<FeedBack>();
     public virtual ICollection<OrderDate> OrderDates { get; set; } = new HashSet<OrderDate>();
     public virtual ICollection<UserRole> UserRoles { get; set; } = new HashSet<UserRole>();

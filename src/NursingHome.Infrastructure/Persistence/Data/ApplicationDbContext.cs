@@ -38,6 +38,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ScheduledServiceDetail> ScheduledServiceDetails { get; set; }
     public DbSet<ScheduledTime> ScheduledTimes { get; set; }
     public DbSet<PotentialCustomer> PotentialCustomers { get; set; }
+    public DbSet<UserNurseSchedule> UserNurseSchedules { get; set; }
     //public ApplicationDbContext()
     //{
     //}
@@ -76,5 +77,18 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasForeignKey(ur => ur.UserId);
         });
 
+        modelBuilder.Entity<UserNurseSchedule>()
+            .HasKey(uns => new { uns.UserId, uns.NurseScheduleId });
+
+        modelBuilder.Entity<UserNurseSchedule>()
+            .HasOne(uns => uns.User)
+            .WithMany(u => u.UserNurseSchedules)
+            .HasForeignKey(uns => uns.UserId);
+
+        modelBuilder.Entity<UserNurseSchedule>()
+            .HasOne(uns => uns.NurseSchedule)
+            .WithMany(ns => ns.UserNurseSchedules)
+            .HasForeignKey(uns => uns.NurseScheduleId);
     }
 }
+
