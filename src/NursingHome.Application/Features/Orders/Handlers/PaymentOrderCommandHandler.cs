@@ -29,7 +29,7 @@ internal class PaymentOrderCommandHandler(
             expression: _ => _.Id == request.OrderId    // && _.Method == TransactionMethod.None
             , includeFunc: _ => _.Include(x => x.OrderDetails).ThenInclude(x => x.ServicePackage))
             ?? throw new NotFoundException(nameof(NursingPackage), request.OrderId);
-        var currentDate = DateOnly.FromDateTime(DateTime.Now);
+        var currentDate = DateOnly.FromDateTime(DateTime.Now.AddHours(7));
 
         if (order.Status == OrderStatus.Paid)
         {
@@ -45,13 +45,16 @@ internal class PaymentOrderCommandHandler(
         {
             var servicePackage = await _servicePackageRepository.FindByAsync<ServicePackageResponse>(x => x.Id == item.ServicePackageId, cancellationToken)
                 ?? throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
-            if (servicePackage.TotalOrder >= servicePackage.RegistrationLimit)
+            if (servicePackage.Type == PackageType.OneDay)
             {
-                throw new FieldResponseException(614, $"The service package has enough people, please choose another service");
-            }
-            if (servicePackage.EndRegistrationDate < DateOnly.FromDateTime(DateTime.Today))
-            {
-                throw new FieldResponseException(615, $"The translation package has expired, please choose another service");
+                if (servicePackage.RegistrationLimit > 0 && servicePackage.TotalOrder >= servicePackage.RegistrationLimit)
+                {
+                    throw new FieldResponseException(614, $"The service package has enough people, please choose another service");
+                }
+                if (servicePackage.EndRegistrationDate != DateOnly.MinValue && servicePackage.EndRegistrationDate < DateOnly.FromDateTime(DateTime.Today))
+                {
+                    throw new FieldResponseException(615, $"The translation package has expired, please choose another service");
+                }
             }
         }
         order.Method = request.Method;

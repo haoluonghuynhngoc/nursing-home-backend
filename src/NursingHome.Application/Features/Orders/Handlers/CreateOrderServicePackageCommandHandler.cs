@@ -37,13 +37,16 @@ internal class CreateOrderServicePackageCommandHandler(
         {
             var servicePackage = await _servicePackageRepository.FindByAsync<ServicePackageResponse>(x => x.Id == item.ServicePackageId, cancellationToken)
                 ?? throw new NotFoundException(nameof(ServicePackage), item.ServicePackageId);
-            if (servicePackage.TotalOrder >= servicePackage.RegistrationLimit)
+            if (servicePackage.Type == PackageType.OneDay)
             {
-                throw new FieldResponseException(614, $"The service package has enough people, please choose another service");
-            }
-            if (servicePackage.EndRegistrationDate < DateOnly.FromDateTime(DateTime.Today))
-            {
-                throw new FieldResponseException(615, $"The translation package has expired, please choose another service");
+                if (servicePackage.RegistrationLimit > 0 && servicePackage.TotalOrder >= servicePackage.RegistrationLimit)
+                {
+                    throw new FieldResponseException(614, $"The service package has enough people, please choose another service");
+                }
+                if (servicePackage.EndRegistrationDate != DateOnly.MinValue && servicePackage.EndRegistrationDate < DateOnly.FromDateTime(DateTime.Today))
+                {
+                    throw new FieldResponseException(615, $"The translation package has expired, please choose another service");
+                }
             }
             if (!await _elderRepository.ExistsByAsync(_ => _.Id == item.ElderId, cancellationToken))
             {

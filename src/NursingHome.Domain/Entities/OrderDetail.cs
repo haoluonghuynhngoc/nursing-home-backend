@@ -20,7 +20,7 @@ public class OrderDetail : BaseEntity<int>
     public int? ElderId { get; set; }
     public virtual Elder Elder { get; set; } = default!;
     [Projectable]
-    public bool IsPain => Order.Status == OrderStatus.Paid;
+    public bool IsPain => Order != null && Order.Status == OrderStatus.Paid;
     public int OrderId { get; set; }
     public virtual Order Order { get; set; } = default!;
     public virtual ICollection<OrderDate> OrderDates { get; set; } = new List<OrderDate>();
