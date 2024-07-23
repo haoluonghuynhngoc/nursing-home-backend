@@ -5,8 +5,8 @@ using NursingHome.Application.Models;
 namespace NursingHome.Application.Features.CareSchedules.Commands;
 public sealed record CreateCareScheduleCommand : IRequest<MessageResponse>
 {
-
-    public ICollection<DateOnly> Dates { get; set; } = new List<DateOnly>();
+    public int CareMonth { get; set; }
+    public int CareYear { get; set; }
     public string? Notes { get; set; }
     public int RoomId { get; set; }
     public ICollection<CreateNurseScheduleRequest> NurseSchedules { get; set; } = new HashSet<CreateNurseScheduleRequest>();

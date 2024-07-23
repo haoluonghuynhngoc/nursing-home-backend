@@ -1,6 +1,10 @@
-﻿namespace NursingHome.Application.Features.NurseSchedules.Models;
+﻿using NursingHome.Application.Features.UserNurseSchedules.Models;
+using NursingHome.Domain.Enums;
+
+namespace NursingHome.Application.Features.NurseSchedules.Models;
 public record CreateNurseScheduleRequest
 {
-    public int ShiftId { get; set; }
-    public Guid UserId { get; set; }
+    public ShiftWorkerName ShiftWorkerName { get; set; } = default!;
+    //public ICollection<CreateShiftRequest> Shifts { get; set; } = new HashSet<CreateShiftRequest>();
+    public ICollection<UserNurseScheduleRequest> UserNurseSchedules { get; set; } = new HashSet<UserNurseScheduleRequest>();
 }

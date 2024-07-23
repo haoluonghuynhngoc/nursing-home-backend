@@ -26,13 +26,7 @@ public class CareScheduleController(ISender sender) : ControllerBase
     {
         return await sender.Send(new GetCareScheduleByIdQuery(id), cancellationToken);
     }
-    // GetTotalNumberOfNursesOnDutyQuery
-    [HttpGet("number-of-nurses")]
-    public async Task<ActionResult<PaginatedResponse<CareScheduleResponse>>> GetTotalNumberOfNursesOnDutyAsync(
-     CancellationToken cancellationToken)
-    {
-        return Ok(await sender.Send(new GetTotalNumberOfNursesOnDutyQuery(), cancellationToken));
-    }
+
     [HttpPost]
     public async Task<ActionResult<MessageResponse>> CreateCareScheduleAsync(
         CreateCareScheduleCommand command,
