@@ -18,12 +18,12 @@ internal class PaymentOrderCommandHandler(
     IUnitOfWork unitOfWork,
     //ICurrentUserService currentUserService,
     IMomoPaymentService momoPaymentService,
-    IVnPayPaymentService vnPayPaymentService) : IRequestHandler<PaymentOrderCommand, MessageResponse>
+    IVnPayPaymentService vnPayPaymentService) : IRequestHandler<PaymentOrderCommand, MessageOrderResponse>
 {
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
     private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
 
-    public async Task<MessageResponse> Handle(PaymentOrderCommand request, CancellationToken cancellationToken)
+    public async Task<MessageOrderResponse> Handle(PaymentOrderCommand request, CancellationToken cancellationToken)
     {
         var order = await _orderRepository.FindByAsync(
             expression: _ => _.Id == request.OrderId    // && _.Method == TransactionMethod.None
@@ -68,7 +68,12 @@ internal class PaymentOrderCommandHandler(
             _ => "Payment Success"
         };
 
-        return new MessageResponse(paymentUrl);
+        // return new MessageResponse(paymentUrl);
+        return new MessageOrderResponse
+        {
+            OrderId = order.Id,
+            Message = paymentUrl
+        };
     }
     private async Task<string> MomoPaymentServiceHandler(Order order, string returnUrl)
     {

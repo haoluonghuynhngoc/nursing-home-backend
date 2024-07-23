@@ -39,7 +39,7 @@ public class OrdersController(ISender sender) : ControllerBase
     }
 
     [HttpPost("service-package")]
-    public async Task<ActionResult<MessageResponse>> CreateOrderServicePackage(
+    public async Task<ActionResult<MessageOrderResponse>> CreateOrderServicePackage(
         string returnUrl,
         CreateOrderServicePackageCommand command,
         CancellationToken cancellationToken)
@@ -48,7 +48,7 @@ public class OrdersController(ISender sender) : ControllerBase
     }
 
     [HttpPost("service-package-payment")]
-    public async Task<ActionResult<MessageResponse>> PaymentOrderServicePackage(
+    public async Task<ActionResult<MessageOrderResponse>> PaymentOrderServicePackage(
     PaymentOrderCommand command,
     CancellationToken cancellationToken)
     {

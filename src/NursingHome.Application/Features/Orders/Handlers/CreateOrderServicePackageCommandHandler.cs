@@ -18,14 +18,14 @@ internal class CreateOrderServicePackageCommandHandler(
     IUnitOfWork unitOfWork,
     ICurrentUserService currentUserService,
     IMomoPaymentService momoPaymentService,
-    IVnPayPaymentService vnPayPaymentService) : IRequestHandler<CreateOrderServicePackageCommand, MessageResponse>
+    IVnPayPaymentService vnPayPaymentService) : IRequestHandler<CreateOrderServicePackageCommand, MessageOrderResponse>
 {
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
     private readonly IGenericRepository<OrderDetail> _orderDetailRepository = unitOfWork.Repository<OrderDetail>();
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
-    public async Task<MessageResponse> Handle(CreateOrderServicePackageCommand request, CancellationToken cancellationToken)
+    public async Task<MessageOrderResponse> Handle(CreateOrderServicePackageCommand request, CancellationToken cancellationToken)
     {
         var userId = await currentUserService.FindCurrentUserIdAsync();
         request.UserId = userId; //hơi thừa nhưng có thể sửa lại sau này
@@ -126,7 +126,11 @@ internal class CreateOrderServicePackageCommandHandler(
         await _orderRepository.CreateAsync(order, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 
-        return new MessageResponse(paymentUrl);
+        return new MessageOrderResponse
+        {
+            OrderId = order.Id,
+            Message = paymentUrl
+        };
     }
 
     private async Task<string> MomoPaymentServiceHandler(Order order, string returnUrl)

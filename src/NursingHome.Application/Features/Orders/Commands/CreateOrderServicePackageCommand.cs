@@ -5,7 +5,7 @@ using NursingHome.Domain.Enums;
 using System.Text.Json.Serialization;
 
 namespace NursingHome.Application.Features.Orders.Commands;
-public record CreateOrderServicePackageCommand : IRequest<MessageResponse>
+public record CreateOrderServicePackageCommand : IRequest<MessageOrderResponse>
 {
     //[JsonIgnore]
     //public double Amount { get; set; }
