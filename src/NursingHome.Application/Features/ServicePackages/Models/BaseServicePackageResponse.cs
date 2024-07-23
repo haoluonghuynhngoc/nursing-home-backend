@@ -9,7 +9,7 @@ public record BaseServicePackageResponse : BaseEntityResponse<int>
     public decimal Price { get; set; }
     public string? Duration { get; set; }
     public int RegistrationLimit { get; set; }
-
+    public StateType State { get; set; }
     public int TimeBetweenServices { get; set; }
     public int TotalOrder { get; set; }
     public string? ImageUrl { get; set; }

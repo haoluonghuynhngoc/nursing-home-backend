@@ -45,7 +45,13 @@ public class HealthCategoryController(ISender sender) : ControllerBase
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
-
+    [HttpPut("{id}/change-state")]
+    public async Task<ActionResult<MessageResponse>> ChangeStateHealthCateroryAsync(
+    int id, UpdateStateHealthCategoryCommand command,
+    CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { Id = id }, cancellationToken);
+    }
     [HttpDelete("{id}")]
     public async Task<ActionResult<MessageResponse>> DeleteHealthCateroryAsync(int id, CancellationToken cancellationToken)
     {

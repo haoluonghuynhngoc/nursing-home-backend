@@ -45,6 +45,13 @@ public class PotentialCustomerController(ISender sender) : ControllerBase
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
 
+    [HttpPut("{id}/change-state")]
+    public async Task<ActionResult<MessageResponse>> ChangeStatePotentialCustomerAsync(
+        int id, ChangeStatePotentialCustomerCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { Id = id }, cancellationToken);
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult<MessageResponse>> UpdatePotentialCustomerAsync(
         int id,

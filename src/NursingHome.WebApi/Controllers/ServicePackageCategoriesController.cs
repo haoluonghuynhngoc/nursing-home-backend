@@ -37,6 +37,13 @@ public class ServicePackageCategoriesController(ISender sender) : ControllerBase
         return await sender.Send(command, cancellationToken);
     }
 
+    [HttpPut("{id}/change-state")]
+    public async Task<ActionResult<MessageResponse>> ChangeStatePackageCategoryAsync(
+        int id, ChangeStateServicePackageCategoryCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { Id = id }, cancellationToken);
+    }
+
     [HttpPut("{id}")]
     public async Task<ActionResult<MessageResponse>> UpdateServicePackageCategoryAsync(
         int id,

@@ -3,4 +3,5 @@ public enum StateType
 {
     Active,
     Deleted
+    // InActive
 }

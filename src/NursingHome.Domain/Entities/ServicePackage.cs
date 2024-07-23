@@ -10,6 +10,8 @@ public class ServicePackage : BaseAuditableEntity<int>
     public string Description { get; set; } = default!;
     public decimal Price { get; set; }
     public string? Duration { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
+    public StateType State { get; set; }
     public int RegistrationLimit { get; set; }
     public int TimeBetweenServices { get; set; }
     [Projectable]

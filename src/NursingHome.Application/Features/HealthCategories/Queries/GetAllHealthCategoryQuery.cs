@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Features.HealthCategories.Models;
 using NursingHome.Application.Models.Pages;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 using NursingHome.Shared.Pages;
 using System.Linq.Expressions;
 
@@ -11,7 +12,7 @@ namespace NursingHome.Application.Features.HealthCategories.Queries;
 public sealed record GetAllHealthCategoryQuery : PaginationRequest<HealthCategory>, IRequest<PaginatedResponse<HealthCategoryResponse>>
 {
     public string? Search { get; set; }
-
+    public StateType? State { get; set; }
     public int[] Ints { get; set; } = Array.Empty<int>();
 
     public override Expression<Func<HealthCategory, bool>> GetExpressions()
@@ -21,7 +22,10 @@ public sealed record GetAllHealthCategoryQuery : PaginationRequest<HealthCategor
             Search = Search.Trim();
             Expression = Expression.And(u => EF.Functions.Like(u.Name, $"%{Search}%"));
         }
-
+        if (State.HasValue)
+        {
+            Expression = Expression.And(_ => _.State == State);
+        }
         Expression = Expression.And(u => !Ints.Any() || Ints.Contains(u.Id));
         return Expression;
     }

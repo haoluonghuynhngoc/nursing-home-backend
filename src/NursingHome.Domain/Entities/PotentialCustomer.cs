@@ -8,6 +8,8 @@ public class PotentialCustomer : BaseAuditableEntity<int>
 {
     public string? FullName { get; set; }
     public string? PhoneNumber { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
+    public StateType State { get; set; }
     public string? Email { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public PotentialCustomerStatus Status { get; set; }

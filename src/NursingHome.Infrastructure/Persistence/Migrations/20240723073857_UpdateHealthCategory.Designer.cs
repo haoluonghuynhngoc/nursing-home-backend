@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NursingHome.Infrastructure.Persistence.Data;
 
@@ -11,9 +12,11 @@ using NursingHome.Infrastructure.Persistence.Data;
 namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240723073857_UpdateHealthCategory")]
+    partial class UpdateHealthCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1031,10 +1034,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<int>("RegistrationLimit")
                         .HasColumnType("int");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(24)");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(24)");
@@ -1235,10 +1234,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(24)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1475,10 +1470,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<DateOnly>("StartRegistrationDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(24)");
-
                     b.Property<int>("TimeBetweenServices")
                         .HasColumnType("int");
 
@@ -1504,10 +1495,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(24)");
 
                     b.HasKey("Id");
 

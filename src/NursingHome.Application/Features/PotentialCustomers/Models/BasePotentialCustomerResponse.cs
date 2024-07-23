@@ -7,6 +7,7 @@ public record BasePotentialCustomerResponse : BaseAuditableEntityResponse<int>
     public string? FullName { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
+    public StateType State { get; set; }
     public PotentialCustomerStatus Status { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }

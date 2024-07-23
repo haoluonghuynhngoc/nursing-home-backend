@@ -9,6 +9,8 @@ public class NursingPackage : BaseAuditableEntity<int>
     public string Description { get; set; } = default!; // sửa lại chổ này 
     [Column(TypeName = "nvarchar(24)")]
     public NursingPackageType Type { get; set; } = default!;
+    [Column(TypeName = "nvarchar(24)")]
+    public StateType State { get; set; }
     public decimal Price { get; set; }
     public int RegistrationLimit { get; set; }
     public string? ImageUrl { get; set; }

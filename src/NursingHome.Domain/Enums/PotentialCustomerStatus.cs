@@ -3,6 +3,6 @@ public enum PotentialCustomerStatus
 {
     New,
     Contacted,
-    Closed,
-    Rejected
+    //Closed,
+    //Rejected
 }

@@ -43,7 +43,12 @@ public class NursingPackageController(ISender sender) : ControllerBase
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
-
+    [HttpPut("{id}/change-state")]
+    public async Task<ActionResult<MessageResponse>> ChangeStateNursingPackageAsync(
+        int id, ChangeStateNursingPackageCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { Id = id }, cancellationToken);
+    }
     //[HttpDelete("{id}")]
     //public async Task<ActionResult<MessageResponse>> DeleteNursingPackage(int id, CancellationToken cancellationToken)
     //{
