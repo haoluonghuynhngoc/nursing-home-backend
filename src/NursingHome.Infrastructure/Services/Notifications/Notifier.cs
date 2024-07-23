@@ -2,7 +2,6 @@ using Mapster;
 using Microsoft.Extensions.Logging;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Contracts.Services.Notifications;
-using NursingHome.Application.Extensions;
 using NursingHome.Application.Models.Notifications;
 using NursingHome.Domain.Entities;
 using NursingHome.Domain.Enums;
@@ -20,6 +19,7 @@ public class Notifier : INotifier
         ISignalRNotificationService signalRNotificationService,
         IFirebaseNotificationService firebaseNotificationService,
         ISmsNotificationService smsNotificationService,
+        IExpoNotificationService expoNotificationService,
         ILogger<Notifier> logger,
         IUnitOfWork unitOfWork)
     {
@@ -27,32 +27,10 @@ public class Notifier : INotifier
         _logger = logger;
         _unitOfWork = unitOfWork;
 
-        _provider.Attach(NotificationType.VerificationCode, new List<INotificationService>()
-        {
-            smsNotificationService
-        });
-
-        _provider.Attach(NotificationType.SystemStaffCreated, new List<INotificationService>()
-        {
-            firebaseNotificationService,
-            signalRNotificationService,
-        });
-
         _provider.Attach(new List<NotificationType>()
         {
-            NotificationType.CustomerPackageCanceled,
-            NotificationType.CustomerPaymentPackage,
-            NotificationType.CustomerPackageCreated,
-            NotificationType.CustomerPackageCompleted,
-            NotificationType.CustomerPackageReturned,
-            NotificationType.PackageExprire,
-            NotificationType.PackageReceive,
-        }, firebaseNotificationService);
-
-        _provider.Attach(new List<NotificationType>()
-        {
-            NotificationType.NotiPackagePaymentSuccessForStaff,
-        }, signalRNotificationService);
+            NotificationType.ExpoPush,
+        }, expoNotificationService);
 
     }
 
@@ -61,7 +39,6 @@ public class Notifier : INotifier
         bool isSaved = true,
         CancellationToken cancellationToken = default)
     {
-        notificationRequset.InitNotification();
 
         if (isSaved)
         {

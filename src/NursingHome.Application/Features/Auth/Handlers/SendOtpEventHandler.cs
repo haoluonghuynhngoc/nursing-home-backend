@@ -13,7 +13,7 @@ internal sealed class SendOtpEventHandler(INotifier notifier) : INotificationHan
         {
             PhoneNumber = notification.PhoneNumber,
             Data = notification.Otp,
-            Type = NotificationType.VerificationCode
+            Type = NotificationType.ExpoPush
         };
 
         await notifier.NotifyAsync(notificationMessage, false, cancellationToken);

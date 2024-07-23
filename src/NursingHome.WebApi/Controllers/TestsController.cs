@@ -32,8 +32,10 @@ public class TestsController(
     {
         var notificationMessage = new NotificationRequest
         {
-            Type = NotificationType.SystemStaffCreated,
+            Type = NotificationType.ExpoPush,
             UserId = await currentUserService.FindCurrentUserIdAsync(),
+            Title = "Test Notification",
+            Content = "This is a test notification",
             Data = JsonSerializer.Serialize(new
             {
                 Id = Guid.NewGuid(),
@@ -120,6 +122,7 @@ public class TestsController(
     [HttpPost("exxpo")]
     public async Task<IActionResult> PostCahcePackage()
     {
+        //IPushApiClient _client = new PushApiClient("ehAXa94NsN6NnpSTLLZkb2vnmxZC3Y-vF0k7xDkk");
         IPushApiClient _client = new PushApiClient("ehAXa94NsN6NnpSTLLZkb2vnmxZC3Y-vF0k7xDkk");
         PushTicketRequest pushTicketRequest = new PushTicketRequest()
         {

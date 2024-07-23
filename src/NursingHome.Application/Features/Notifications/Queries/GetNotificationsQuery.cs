@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Features.Notifications.Models;
 using NursingHome.Application.Models.Pages;
 using NursingHome.Domain.Entities;
-using NursingHome.Domain.Enums;
 using System.Linq.Expressions;
 
 namespace NursingHome.Application.Features.Notifications.Queries;
@@ -15,8 +14,6 @@ public sealed record GetNotificationsQuery : PaginationRequest<Notification>, IR
     /// Search field is search for title or content
     /// </summary>
     public string? Search { get; set; }
-    public NotificationType? Type { get; set; }
-    public NotificationLevel? Level { get; set; }
 
     /// <summary>
     /// Format for From is "yyyy-MM-dd" or "MM/dd/yyyy"
@@ -43,8 +40,6 @@ public sealed record GetNotificationsQuery : PaginationRequest<Notification>, IR
             Expression = Expression.Or(notification => EF.Functions.Like(notification.Title, $"%{Search}%"));
         }
 
-        Expression = Expression.And(notification => !Type.HasValue || notification.Type == Type);
-        Expression = Expression.And(notification => !Level.HasValue || notification.Level == Level);
         Expression = Expression.And(notification => !From.HasValue || notification.CreatedAt >= From);
         Expression = Expression.And(notification => !To.HasValue || notification.CreatedAt <= To);
         Expression = Expression.And(notification => !IsRead.HasValue || notification.IsRead == IsRead);

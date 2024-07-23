@@ -50,6 +50,7 @@ public static class DependencyInjection
             .AddScoped<ISignalRNotificationService, SignalRNotificationService>()
             .AddScoped<IFirebaseNotificationService, FirebaseNotificationService>()
             .AddScoped<ISmsNotificationService, SmsNotificationService>()
+            .AddScoped<IExpoNotificationService, ExpoNotificationService>()
             .AddTransient<IEmailSender, EmailSender>()
             .AddTransient<ISmsSender, SmsSender>()
             .AddSingleton<ITimeService, TimeService>()
