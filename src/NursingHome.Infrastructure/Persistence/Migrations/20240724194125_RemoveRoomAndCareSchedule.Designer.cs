@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NursingHome.Infrastructure.Persistence.Data;
 
@@ -11,9 +12,11 @@ using NursingHome.Infrastructure.Persistence.Data;
 namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240724194125_RemoveRoomAndCareSchedule")]
+    partial class RemoveRoomAndCareSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +38,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasIndex("EldersId");
 
                     b.ToTable("AppointmentElder");
-                });
-
-            modelBuilder.Entity("CareScheduleRoom", b =>
-                {
-                    b.Property<int>("CareSchedulesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoomsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CareSchedulesId", "RoomsId");
-
-                    b.HasIndex("RoomsId");
-
-                    b.ToTable("CareScheduleRoom");
                 });
 
             modelBuilder.Entity("DiseaseCategoryMedicalRecord", b =>
@@ -1723,21 +1711,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasOne("NursingHome.Domain.Entities.Elder", null)
                         .WithMany()
                         .HasForeignKey("EldersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CareScheduleRoom", b =>
-                {
-                    b.HasOne("NursingHome.Domain.Entities.CareSchedule", null)
-                        .WithMany()
-                        .HasForeignKey("CareSchedulesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NursingHome.Domain.Entities.Room", null)
-                        .WithMany()
-                        .HasForeignKey("RoomsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

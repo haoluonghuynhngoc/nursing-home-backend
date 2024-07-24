@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NursingHome.Infrastructure.Persistence.Data;
 
@@ -11,9 +12,11 @@ using NursingHome.Infrastructure.Persistence.Data;
 namespace NursingHome.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240723201616_CreatSchedule")]
+    partial class CreatSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,21 +40,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.ToTable("AppointmentElder");
                 });
 
-            modelBuilder.Entity("CareScheduleRoom", b =>
-                {
-                    b.Property<int>("CareSchedulesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoomsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CareSchedulesId", "RoomsId");
-
-                    b.HasIndex("RoomsId");
-
-                    b.ToTable("CareScheduleRoom");
-                });
-
             modelBuilder.Entity("DiseaseCategoryMedicalRecord", b =>
                 {
                     b.Property<int>("DiseaseCategoriesId")
@@ -65,21 +53,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasIndex("MedicalRecordsId");
 
                     b.ToTable("DiseaseCategoryMedicalRecord");
-                });
-
-            modelBuilder.Entity("MonthlyCalendarDetailShift", b =>
-                {
-                    b.Property<int>("NurseSchedulersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShiftsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("NurseSchedulersId", "ShiftsId");
-
-                    b.HasIndex("ShiftsId");
-
-                    b.ToTable("MonthlyCalendarDetailShift");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Appointment", b =>
@@ -186,7 +159,12 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("CareSchedules");
                 });
@@ -393,9 +371,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CareScheduleId")
-                        .HasColumnType("int");
-
                     b.Property<DateTimeOffset?>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -421,8 +396,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CareScheduleId");
 
                     b.HasIndex("EmployeeTypeId");
 
@@ -1727,21 +1700,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CareScheduleRoom", b =>
-                {
-                    b.HasOne("NursingHome.Domain.Entities.CareSchedule", null)
-                        .WithMany()
-                        .HasForeignKey("CareSchedulesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NursingHome.Domain.Entities.Room", null)
-                        .WithMany()
-                        .HasForeignKey("RoomsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DiseaseCategoryMedicalRecord", b =>
                 {
                     b.HasOne("NursingHome.Domain.Entities.DiseaseCategory", null)
@@ -1753,21 +1711,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.HasOne("NursingHome.Domain.Entities.MedicalRecord", null)
                         .WithMany()
                         .HasForeignKey("MedicalRecordsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MonthlyCalendarDetailShift", b =>
-                {
-                    b.HasOne("NursingHome.Domain.Entities.MonthlyCalendarDetail", null)
-                        .WithMany()
-                        .HasForeignKey("NurseSchedulersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NursingHome.Domain.Entities.Shift", null)
-                        .WithMany()
-                        .HasForeignKey("ShiftsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1793,6 +1736,17 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("NursingPackage");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NursingHome.Domain.Entities.CareSchedule", b =>
+                {
+                    b.HasOne("NursingHome.Domain.Entities.Room", "Room")
+                        .WithMany("CareSchedules")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Contract", b =>
@@ -1852,12 +1806,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("NursingHome.Domain.Entities.EmployeeSchedule", b =>
                 {
-                    b.HasOne("NursingHome.Domain.Entities.CareSchedule", "CareSchedule")
-                        .WithMany("EmployeeSchedules")
-                        .HasForeignKey("CareScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("NursingHome.Domain.Entities.EmployeeType", "EmployeeType")
                         .WithMany("EmployeeSchedules")
                         .HasForeignKey("EmployeeTypeId")
@@ -1869,8 +1817,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CareSchedule");
 
                     b.Navigation("EmployeeType");
 
@@ -2224,11 +2170,6 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Navigation("Rooms");
                 });
 
-            modelBuilder.Entity("NursingHome.Domain.Entities.CareSchedule", b =>
-                {
-                    b.Navigation("EmployeeSchedules");
-                });
-
             modelBuilder.Entity("NursingHome.Domain.Entities.Contract", b =>
                 {
                     b.Navigation("Appointments");
@@ -2339,6 +2280,8 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("NursingHome.Domain.Entities.Room", b =>
                 {
+                    b.Navigation("CareSchedules");
+
                     b.Navigation("Elders");
                 });
 

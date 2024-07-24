@@ -11,7 +11,6 @@ public class Room : BaseEntity<int>
 
     [Column(TypeName = "nvarchar(24)")]
     public RoomType? Type { get; set; }
-
     public int BlockId { get; set; }
     public virtual Block Block { get; set; } = default!;
     public int? NursingPackageId { get; set; }

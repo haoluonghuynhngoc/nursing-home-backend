@@ -6,3 +6,58 @@ _ VNPAYMENT
 + Account Login : haoluonghuynh2001@gmail.com
 + Account Password : Ngoch@o2001
 + Link Test : https://sandbox.vnpayment.vn/apis/vnpay-demo/
+
+_ Date Calendar
+{
+  "name": "NV1",
+  "monthlyCalendarDetails": [
+    {
+      "shiftNames": "Morning",
+      "dateInMonth": [
+         1,4,7,10,13,16,19,22,25,28,31
+      ]
+    },
+    {
+      "shiftNames": "Night",
+      "dateInMonth": [
+        2,5,8,11,14,17,20,23,26,29
+      ]
+    }
+  ]
+}
+//=======================================================
+{
+  "name": "NV2",
+  "monthlyCalendarDetails": [
+    {
+      "shiftNames": "Morning",
+      "dateInMonth": [
+         3,6,9,12,15,18,21,24,27,30
+      ]
+    },
+    {
+      "shiftNames": "Night",
+      "dateInMonth": [
+        1,4,7,10,13,16,19,22,25,28,31
+      ]
+    }
+  ]
+}
+//=======================================================
+{
+  "name": "NV3",
+  "monthlyCalendarDetails": [
+    {
+      "shiftNames": "Morning",
+      "dateInMonth": [
+         2,5,8,11,14,17,20,23,26,29
+      ]
+    },
+    {
+      "shiftNames": "Night",
+      "dateInMonth": [
+        3,6,9,12,15,18,21,24,27,30
+      ]
+    }
+  ]
+}

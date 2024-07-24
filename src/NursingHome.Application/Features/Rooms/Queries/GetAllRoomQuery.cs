@@ -15,6 +15,8 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
     public string? Search { get; set; }
     public int? NursingPackageId { get; set; }
     public RoomType? Type { get; set; }
+    public int? CareMonth { get; set; }
+    public int? CareYear { get; set; }
     /// <summary>
     /// AvailableBed true là phòng còn giường có thể cho thêm người vào 
     /// </summary>
@@ -31,6 +33,14 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
             .And(r => !Type.HasValue || r.Type == Type)
             .And(r => !NursingPackageId.HasValue || r.NursingPackageId == NursingPackageId)
             .And(r => !AvailableBed.HasValue || r.AvailableBed == AvailableBed);
+        //if (CareMonth != null)
+        //{
+        //    Expression = Expression.And(r => !r.CareSchedules.Any(_ => _.CareMonth == CareMonth));
+        //}
+        //if (CareYear != null)
+        //{
+        //    Expression = Expression.And(r => !r.CareSchedules.Any(_ => _.CareYear == CareYear));
+        //}
         return Expression;
     }
 

@@ -29,7 +29,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Room> Rooms { get; set; }
     public DbSet<ServicePackageCategory> ServicePackageCategories { get; set; }
     public DbSet<ServicePackageDate> ServicePackageDates { get; set; }
-    public DbSet<NurseSchedule> NurseSchedules { get; set; }
     public DbSet<Shift> Shifts { get; set; }
     public DbSet<CareSchedule> CareSchedules { get; set; }
     public DbSet<NursingPackage> NursingPackages { get; set; }
@@ -38,7 +37,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ScheduledServiceDetail> ScheduledServiceDetails { get; set; }
     public DbSet<ScheduledTime> ScheduledTimes { get; set; }
     public DbSet<PotentialCustomer> PotentialCustomers { get; set; }
-    public DbSet<UserNurseSchedule> UserNurseSchedules { get; set; }
+    public DbSet<EmployeeSchedule> EmployeeSchedules { get; set; }
+    public DbSet<MonthlyCalendar> MonthlyCalendars { get; set; }
+    public DbSet<MonthlyCalendarDetail> MonthlyCalendarDetails { get; set; }
+    public DbSet<EmployeeType> EmployeeTypes { get; set; }
     //public ApplicationDbContext()
     //{
     //}
@@ -77,18 +79,18 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasForeignKey(ur => ur.UserId);
         });
 
-        modelBuilder.Entity<UserNurseSchedule>()
-            .HasKey(uns => new { uns.UserId, uns.NurseScheduleId });
+        //modelBuilder.Entity<UserNurseSchedule>()
+        //    .HasKey(uns => new { uns.UserId, uns.NurseScheduleId });
 
-        modelBuilder.Entity<UserNurseSchedule>()
-            .HasOne(uns => uns.User)
-            .WithMany(u => u.UserNurseSchedules)
-            .HasForeignKey(uns => uns.UserId);
+        //modelBuilder.Entity<UserNurseSchedule>()
+        //    .HasOne(uns => uns.User)
+        //    .WithMany(u => u.UserNurseSchedules)
+        //    .HasForeignKey(uns => uns.UserId);
 
-        modelBuilder.Entity<UserNurseSchedule>()
-            .HasOne(uns => uns.NurseSchedule)
-            .WithMany(ns => ns.UserNurseSchedules)
-            .HasForeignKey(uns => uns.NurseScheduleId);
+        //modelBuilder.Entity<UserNurseSchedule>()
+        //    .HasOne(uns => uns.NurseSchedule)
+        //    .WithMany(ns => ns.UserNurseSchedules)
+        //    .HasForeignKey(uns => uns.NurseScheduleId);
     }
 }
 

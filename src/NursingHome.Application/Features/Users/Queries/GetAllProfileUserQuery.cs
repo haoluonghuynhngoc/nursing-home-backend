@@ -50,12 +50,6 @@ public sealed record GetAllProfileUserQuery : PaginationRequest<User>, IRequest<
         {
             Expression = Expression.And(u => u.IsActive == IsActive);
         }
-        // chưa check cái này 
-        if (CareMonth != null && CareYear != null)
-        {
-            Expression = Expression.And(u => !u.UserNurseSchedules.Any(uns =>
-            uns.NurseSchedule.CareSchedule.CareMonth == CareMonth && uns.NurseSchedule.CareSchedule.CareYear == CareYear));
-        }
         return Expression;
     }
 }

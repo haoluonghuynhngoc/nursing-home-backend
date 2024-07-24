@@ -20,6 +20,7 @@ internal class CreateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
             throw new ConflictException($"Nursing Package Have Name {request.Name} In DataBase");
         }
         var nursingPackage = request.Adapt<NursingPackage>();
+        nursingPackage.Capacity *= 3;
         await _nursingPackageRepository.CreateAsync(nursingPackage, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 

@@ -9,5 +9,5 @@ public class Shift : BaseEntity<int>
     public ShiftName Name { get; set; } = default!;
     public TimeOnly StartTime { get; set; } = default!;
     public TimeOnly EndTime { get; set; } = default!;
-    public virtual ICollection<NurseSchedule> NurseSchedulers { get; set; } = new HashSet<NurseSchedule>();
+    public virtual ICollection<MonthlyCalendarDetail> NurseSchedulers { get; set; } = new HashSet<MonthlyCalendarDetail>();
 }

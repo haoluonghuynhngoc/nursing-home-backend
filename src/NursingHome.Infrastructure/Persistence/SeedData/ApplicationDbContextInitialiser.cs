@@ -106,6 +106,24 @@ public class ApplicationDbContextInitialiser(
             }
             await unitOfWork.CommitAsync();
         }
+
+        if (!await unitOfWork.Repository<MonthlyCalendar>().ExistsByAsync())
+        {
+            foreach (var item in EmployeeScheduleSeed.DefaultMonthlyCalendar)
+            {
+                await unitOfWork.Repository<MonthlyCalendar>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
+        if (!await unitOfWork.Repository<EmployeeType>().ExistsByAsync())
+        {
+            foreach (var item in EmployeeScheduleSeed.Default)
+            {
+                await unitOfWork.Repository<EmployeeType>().CreateAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
+
         if (!await unitOfWork.Repository<Role>().ExistsByAsync())
         {
             foreach (var item in RoleSeed.Default)
@@ -201,4 +219,15 @@ public class ApplicationDbContextInitialiser(
         }
 
     }
+    //private static MonthlyCalendarDetail CreateMonthlyCalendarDetail(int date,, params ShiftName[] shiftNames)
+    //{
+    //    return new MonthlyCalendarDetail
+    //    {
+    //        Shifts = DefaultShift.Where(shift => shiftNames.Contains(shift.Name)).ToHashSet(),
+    //        MonthlyCalendar = new MonthlyCalendar
+    //        {
+    //            DateInMonth = date
+    //        }
+    //    };
+    //}
 }
