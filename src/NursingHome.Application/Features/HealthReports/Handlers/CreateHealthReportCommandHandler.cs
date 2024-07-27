@@ -1,15 +1,21 @@
-﻿using Mapster;
+﻿using Hangfire;
+using Mapster;
 using MediatR;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
+using NursingHome.Application.Contracts.Services.Notifications;
 using NursingHome.Application.Features.HealthReports.Commands;
 using NursingHome.Application.Models;
+using NursingHome.Application.Models.Notifications;
 using NursingHome.Domain.Entities;
 using NursingHome.Domain.Enums;
+using System.Text.Json;
 
 namespace NursingHome.Application.Features.HealthReports.Handlers;
-internal class CreateHealthReportCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateHealthReportCommand, MessageResponse>
+internal class CreateHealthReportCommandHandler(
+    IUnitOfWork unitOfWork,
+    INotifier notifier) : IRequestHandler<CreateHealthReportCommand, MessageResponse>
 {
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     private readonly IGenericRepository<HealthReport> _healthReportRepository = unitOfWork.Repository<HealthReport>();
@@ -21,6 +27,9 @@ internal class CreateHealthReportCommandHandler(IUnitOfWork unitOfWork) : IReque
         {
             throw new NotFoundException(nameof(Elder), request.ElderId);
         }
+        var elder = await _elderRepository.FindByAsync(_ => _.Id == request.ElderId)
+            ?? throw new NotFoundException(nameof(Elder), request.ElderId);
+
         foreach (var healthReportDetail in request.HealthReportDetails)
         {
             if (!await _healthCategoryRepository.ExistsByAsync(_ => _.Id == healthReportDetail.HealthCategoryId, cancellationToken))
@@ -47,6 +56,38 @@ internal class CreateHealthReportCommandHandler(IUnitOfWork unitOfWork) : IReque
         await _healthReportRepository.CreateAsync(healthReport, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 
+        if (healthReport.HealthReportDetails.Any(_ => _.IsWarning))
+        {
+            SendNotification(healthReport.Id, "Cảnh Báo Báo Cáo Sức Khỏe",
+                $"Xin vui lòng kiểm tra lại báo cáo sức khỏe của Ông/Bà {elder.Name} ngày {DateOnly.FromDateTime(DateTime.Now):dd/MM/yyyy}.",
+                elder.UserId, NotificationLevel.Warning, cancellationToken);
+        }
+        else
+        {
+            SendNotification(healthReport.Id, "Báo Cáo Sức Khỏe",
+                $"Ông/Bà {elder.Name} đã đo chi số ngày {DateOnly.FromDateTime(DateTime.Now):dd/MM/yyyy}",
+                elder.UserId, NotificationLevel.Information, cancellationToken);
+        }
+
         return new MessageResponse(Resource.CreatedSuccess);
+    }
+
+    private void SendNotification(int id, string title, string content, Guid userId, NotificationLevel notificationLevel, CancellationToken cancellationToken)
+    {
+
+        var notificationMessage = new NotificationRequest
+        {
+            Type = NotificationType.ExpoPush,
+            UserId = userId,
+            Level = notificationLevel,
+            Title = title,
+            Content = content,
+            Data = JsonSerializer.Serialize(new
+            {
+                Id = id,
+                Entity = nameof(HealthReport)
+            })
+        };
+        BackgroundJob.Enqueue(() => notifier.NotifyAsync(notificationMessage, true, cancellationToken));
     }
 }

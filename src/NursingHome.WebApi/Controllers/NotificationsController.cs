@@ -12,9 +12,7 @@ namespace NursingHome.WebApi.Controllers;
 [Authorize]
 public class NotificationsController(ISender sender) : ControllerBase
 {
-    /// <summary>
-    /// Only used for backend testing
-    /// </summary>
+
     [HttpGet]
     public async Task<ActionResult<NotificationPaginatedResponse>> GetNotifications(
         [FromQuery] GetNotificationsQuery request,
@@ -22,17 +20,13 @@ public class NotificationsController(ISender sender) : ControllerBase
     {
         return await sender.Send(request, cancellationToken);
     }
-    /// <summary>
-    /// Only used for backend testing
-    /// </summary>
+
     [HttpGet("{id}")]
     public async Task<ActionResult<NotificationResponse>> GetNotificationById(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new GetNotificationByIdQuery(id), cancellationToken);
     }
-    /// <summary>
-    /// Only used for backend testing
-    /// </summary>
+
     [HttpPatch("{id}")]
     public async Task<ActionResult<MessageResponse>> UpdateNotificationStatus(
         int id,
@@ -41,26 +35,20 @@ public class NotificationsController(ISender sender) : ControllerBase
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
-    /// <summary>
-    /// Only used for backend testing
-    /// </summary>
+
     [HttpPatch("readAll")]
     public async Task<ActionResult<MessageResponse>> ReadAllNotification(
         CancellationToken cancellationToken)
     {
         return await sender.Send(new ReadAllNotificationCommand(), cancellationToken);
     }
-    /// <summary>
-    /// Only used for backend testing
-    /// </summary>
+
     [HttpDelete("{id}")]
     public async Task<ActionResult<MessageResponse>> DeleteNotification(int id, CancellationToken cancellationToken)
     {
         return await sender.Send(new DeleteNotificationCommand(id), cancellationToken);
     }
-    /// <summary>
-    /// Only used for backend testing
-    /// </summary>
+
     [HttpDelete]
     public async Task<ActionResult<MessageResponse>> DeleteListNotification(
         DeleteListNotificationCommand command,

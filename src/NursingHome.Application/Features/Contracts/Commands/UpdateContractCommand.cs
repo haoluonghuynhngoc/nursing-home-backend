@@ -9,6 +9,7 @@ public sealed record UpdateContractCommand : IRequest<MessageResponse>
     [JsonIgnore]
     public int Id { get; set; }
     public string Name { get; set; } = default!;
+    public int Duration { get; set; }
     public DateOnly SigningDate { get; set; }
     public DateOnly StartDate { get; set; }
     public DateOnly EndDate { get; set; }

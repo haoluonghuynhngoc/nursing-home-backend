@@ -25,8 +25,7 @@ public class Room : BaseEntity<int>
     public int TotalBed => NursingPackage != null ? NursingPackage.Capacity : 0;
     [Projectable]
     public bool AvailableBed => TotalBed > Elders.Count;
-    [Projectable]
-    public int UnusedBed => TotalBed - Elders.Count;
+
     [Projectable]
     public int UserBed => Elders.Count;
     public virtual ICollection<Elder> Elders { get; set; } = new HashSet<Elder>();

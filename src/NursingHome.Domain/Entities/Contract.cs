@@ -10,6 +10,7 @@ public class Contract : BaseAuditableEntity<int>
     public DateOnly SigningDate { get; set; }
     public DateOnly StartDate { get; set; }
     public DateOnly EndDate { get; set; }
+    public int Duration { get; set; }
     public decimal Price { get; set; }
     public string? Content { get; set; } = default!;
     //public string? ImageUrl { get; set; }

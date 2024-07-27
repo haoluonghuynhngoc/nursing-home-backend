@@ -217,6 +217,9 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
                     b.Property<int>("ElderId")
                         .HasColumnType("int");
 
@@ -1095,6 +1098,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("DeletedBy")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
 
                     b.Property<DateTimeOffset?>("ModifiedAt")
                         .HasColumnType("datetime(6)");

@@ -13,7 +13,6 @@ public record BaseRoomResponse : BaseEntityResponse<int>
     public bool IsUsed { get; set; }
     public int TotalBed { get; set; }
     public bool AvailableBed { get; set; }
-    public int UnusedBed { get; set; }
     public int UserBed { get; set; }
     public int TotalNurseOnDuty { get; set; }
 

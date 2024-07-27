@@ -8,6 +8,7 @@ public record BaseContractResponse : BaseAuditableEntityResponse<int>
     public string Name { get; set; } = default!;
     public DateOnly SigningDate { get; set; }
     public DateOnly StartDate { get; set; }
+    public int Duration { get; set; }
     public DateOnly EndDate { get; set; }
     public string? Content { get; set; } = default!;
     //public string? ImageUrl { get; set; }
