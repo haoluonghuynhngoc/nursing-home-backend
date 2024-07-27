@@ -191,12 +191,15 @@ public static class DependencyInjection
     }
     private static void UpdateRecurringJobSchedule()
     {
-        // mỗi phút chạy 1 lần "* * * * *"
+        // "*/5 * * * *"  :5 phút chạy 1 lần
+        // mỗi phút chạy 1 lần "* * * * *" public Task CheckAppointmentExpirationAsync();
 
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("create-renewal-notification", _ => _.CreateDisplayRenewalNotificationAsync(), "20 23 24 * *"); //20 23 24 * *
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-detail-date", _ => _.CheckOrderDetailExpirationAsync(), "45 23 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-expired", _ => _.CheckOrderExpirationAsync(), "20 23 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-contract-expiration-everyday", _ => _.CheckContractExpirationAsync(), "0 0 * * *");
+        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-appointment-expiration-everyday", _ => _.CheckAppointmentExpirationAsync(), "10 23 * * *");
+
     }
 
     private static void UseExceptionApplication(this IApplicationBuilder app)

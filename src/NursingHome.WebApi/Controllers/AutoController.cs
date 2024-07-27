@@ -1,7 +1,7 @@
 ﻿using Hangfire;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using NursingHome.Application.Contracts.Jobs;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Contracts.Services.Notifications;
 using NursingHome.Application.Models.Notifications;
@@ -9,29 +9,47 @@ using NursingHome.Domain.Entities;
 using NursingHome.Domain.Enums;
 using System.Text.Json;
 
-namespace NursingHome.Infrastructure.Jobs;
-public class TaskSchedulerOrder : ITaskSchedulerOrder
+namespace NursingHome.WebApi.Controllers;
+[Route("api/[controller]")]
+[ApiController]
+[Authorize]
+public class AutoController(IUnitOfWork unitOfWork,
+    ILogger<AutoController> logger,
+    INotifier notifier) : ControllerBase
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<TaskSchedulerOrder> logger;
-    private readonly IGenericRepository<Contract> _contractRepository;
-    private readonly IGenericRepository<Order> _orderRepository;
-    private readonly IGenericRepository<OrderDetail> _orderDetailRepository;
-    private readonly IGenericRepository<ScheduledService> _scheduledServiceRepository;
-    private readonly IGenericRepository<Appointment> _appointmentServiceRepository;
-    private readonly INotifier _notifier;
-    public TaskSchedulerOrder(IUnitOfWork unitOfWork, INotifier INotifier, ILogger<TaskSchedulerOrder> logger)
+    private readonly IGenericRepository<Contract> _contractRepository = unitOfWork.Repository<Contract>();
+    private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
+    private readonly IGenericRepository<OrderDetail> _orderDetailRepository = unitOfWork.Repository<OrderDetail>();
+    private readonly IGenericRepository<ScheduledService> _scheduledServiceRepository = unitOfWork.Repository<ScheduledService>();
+    private readonly IGenericRepository<Appointment> _appointmentServiceRepository = unitOfWork.Repository<Appointment>();
+
+    private void SendNotification(int id,
+        string title, string content, Guid userId, string nameEntity,
+        NotificationLevel notificationLevel, CancellationToken cancellationToken)
     {
-        _notifier = INotifier;
-        _unitOfWork = unitOfWork;
-        _contractRepository = unitOfWork.Repository<Contract>();
-        _orderRepository = unitOfWork.Repository<Order>();
-        _orderDetailRepository = unitOfWork.Repository<OrderDetail>();
-        _scheduledServiceRepository = unitOfWork.Repository<ScheduledService>();
-        _appointmentServiceRepository = unitOfWork.Repository<Appointment>();
-        this.logger = logger;
+
+        var notificationMessage = new NotificationRequest
+        {
+            Type = NotificationType.ExpoPush,
+            UserId = userId,
+            Level = notificationLevel,
+            Title = title,
+            Content = content,
+            Data = JsonSerializer.Serialize(new
+            {
+                Id = id,
+                Entity = nameEntity
+                // nameof(ScheduledService)
+            })
+        };
+        BackgroundJob.Enqueue(() => notifier.NotifyAsync(notificationMessage, true, cancellationToken));
     }
-    public async Task CheckContractExpirationAsync()
+
+    /// <summary>
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc 12 giờ đêm
+    /// </summary>
+    [HttpPost("check-contract-expiration")]
+    public async Task<IActionResult> CheckContractExpirationAsync()
     {
         try
         {
@@ -73,15 +91,21 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 //}
 
                 await _contractRepository.UpdateAsync(contract);
-                await _unitOfWork.CommitAsync();
+                await unitOfWork.CommitAsync();
             }
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while checking contract expiration.");
         }
+        return Ok("Check Contract Expiration Success");
     }
-    public async Task CheckOrderExpirationAsync()
+
+    /// <summary>
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc 11:20 đêm mỗi ngày
+    /// </summary>
+    [HttpPost("check-order-expiration")]
+    public async Task<IActionResult> CheckOrderExpirationAsync()
     {
         try
         {
@@ -108,18 +132,21 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 }
                 await _orderRepository.UpdateAsync(order);
             }
-            await _unitOfWork.CommitAsync();
+            await unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while checking order expiration.");
         }
+        return Ok("Check Order Expiration Success");
     }
 
-    // Hàm này chưa kiểm tra nên chưa cho nó vào db 
-    // Lỗi logic có thể nếu tháng sau không có ngày thì chưa lập lại được ngày đó thì có thể nó hủy luôn
-    // Trường hợp tốt nhât là thêm field status nếu ngày chưa lập lại thì thêm
-    public async Task CheckOrderDetailExpirationAsync()
+    /// <summary>
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc 11:20 đêm mỗi ngày
+    /// Công dụng là nó sẽ kiểm tra các đơn hàng đã thanh toán với mục đích lập lại
+    /// </summary>
+    [HttpPost("check-order-detail-expiration")]
+    public async Task<IActionResult> CheckOrderDetailExpirationAsync()
     {
         try
         {
@@ -141,15 +168,21 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 }
                 await _orderDetailRepository.UpdateAsync(orderDetail);
             }
-            await _unitOfWork.CommitAsync();
+            await unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while checking order detail expiration.");
         }
+        return Ok("Check Order Detail Expiration Success");
     }
 
-    public async Task CreateDisplayRenewalNotificationAsync()
+    /// <summary>
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc  11 giờ 20 phút tối ngày 24 hàng tháng
+    /// gợi ý các đơn hàng lập lại cho tháng sau
+    /// </summary>
+    [HttpPost("create-recurring-order")]
+    public async Task<IActionResult> CreateDisplayRenewalNotificationAsync()
     {
         try
         {
@@ -258,7 +291,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 await _scheduledServiceRepository.CreateAsync(scheduledService);
             }
 
-            await _unitOfWork.CommitAsync();
+            await unitOfWork.CommitAsync();
 
             // viết thông báo dịch vụ tháng sau ở đây
             foreach (var scheduledService in mergedServiceDetails)
@@ -272,6 +305,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
         {
             logger.LogError(ex, "An error occurred while creating renewal notifications.");
         }
+        return Ok("Create Recurring Order Success");
     }
     private List<DateOnly> GetDatesInNextMonth(DayOfWeek dayOfWeek)
     {
@@ -293,6 +327,10 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
         return specificDays;
     }
 
+    /// <summary>
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc  11 giờ 10 phút tối mỗi ngày
+    /// </summary>
+    [HttpPost("check-appointment-expiration")]
     public async Task CheckAppointmentExpirationAsync()
     {
         try
@@ -309,34 +347,12 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 }
 
                 await _appointmentServiceRepository.UpdateAsync(appointment);
-                await _unitOfWork.CommitAsync();
+                await unitOfWork.CommitAsync();
             }
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while check appointment expiration.");
         }
-    }
-
-    private void SendNotification(int id,
-    string title, string content, Guid userId, string nameEntity,
-    NotificationLevel notificationLevel, CancellationToken cancellationToken)
-    {
-
-        var notificationMessage = new NotificationRequest
-        {
-            Type = NotificationType.ExpoPush,
-            UserId = userId,
-            Level = notificationLevel,
-            Title = title,
-            Content = content,
-            Data = JsonSerializer.Serialize(new
-            {
-                Id = id,
-                Entity = nameEntity
-                // nameof(ScheduledService)
-            })
-        };
-        BackgroundJob.Enqueue(() => _notifier.NotifyAsync(notificationMessage, true, cancellationToken));
     }
 }

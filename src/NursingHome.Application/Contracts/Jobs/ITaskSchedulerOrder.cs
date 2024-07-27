@@ -2,6 +2,7 @@
 public interface ITaskSchedulerOrder
 {
     //public void CheckContractExpirationAsync();
+    public Task CheckAppointmentExpirationAsync();
     public Task CreateDisplayRenewalNotificationAsync();
     public Task CheckContractExpirationAsync();
     public Task CheckOrderDetailExpirationAsync();
