@@ -29,11 +29,20 @@ public class OrdersController(ISender sender) : ControllerBase
         return await sender.Send(new GetOrderByIdQuery(id), cancellationToken);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<MessageResponse>> UpdateOrderAsync(
-        int id,
-        UpdateOrderCommand command,
-        CancellationToken cancellationToken)
+    //[HttpPut("{id}")]
+    //public async Task<ActionResult<MessageResponse>> UpdateOrderAsync(
+    //    int id,
+    //    UpdateOrderCommand command,
+    //    CancellationToken cancellationToken)
+    //{
+    //    return await sender.Send(command with { Id = id }, cancellationToken);
+    //}
+
+    [HttpPut("{id}/change-method")]
+    public async Task<ActionResult<MessageResponse>> ChangeStatusOrderAsync(
+    int id,
+    ChangeMethodPaymentOrderCommand command,
+    CancellationToken cancellationToken)
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
