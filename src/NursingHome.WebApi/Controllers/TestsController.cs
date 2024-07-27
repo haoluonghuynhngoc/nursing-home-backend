@@ -34,6 +34,7 @@ public class TestsController(
         {
             Type = NotificationType.ExpoPush,
             UserId = await currentUserService.FindCurrentUserIdAsync(),
+            Level = NotificationLevel.Information,
             Title = "Test Notification",
             Content = "This is a test notification",
             Data = JsonSerializer.Serialize(new
@@ -126,7 +127,8 @@ public class TestsController(
         IPushApiClient _client = new PushApiClient("ehAXa94NsN6NnpSTLLZkb2vnmxZC3Y-vF0k7xDkk");
         PushTicketRequest pushTicketRequest = new PushTicketRequest()
         {
-            PushTo = new List<string>() { "ExponentPushToken[fxc4drPagqlftQNP2D1JSg]", "ExponentPushToken[LYbkmXI2vH3-PvFNIzVRTW]" },
+            // ExponentPushToken[2TCZk1JFMD5CJA_WfvoUWS]   || "ExponentPushToken[fxc4drPagqlftQNP2D1JSg]", "ExponentPushToken[LYbkmXI2vH3-PvFNIzVRTW]" 
+            PushTo = new List<string>() { "ExponentPushToken[2TCZk1JFMD5CJA_WfvoUWS]" },
             PushTitle = "moi tao",
             PushBody = "TEST 11111"
         };

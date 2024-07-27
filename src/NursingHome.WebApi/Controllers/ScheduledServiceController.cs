@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NursingHome.Application.Features.Rooms.Models;
 using NursingHome.Application.Features.ScheduledServices.Commands;
 using NursingHome.Application.Features.ScheduledServices.Models;
 using NursingHome.Application.Features.ScheduledServices.Queries;
@@ -21,18 +22,18 @@ public class ScheduledServiceController(ISender sender) : ControllerBase
         return Ok(await sender.Send(request, cancellationToken));
     }
 
+    [HttpGet("{id}")]
+    public async Task<ActionResult<RoomResponse>> GetScheduledServiceIdAsync(
+       int id,
+       CancellationToken cancellationToken)
+    {
+        return Ok(await sender.Send(new GetScheduledServiceByIdQuery(id), cancellationToken));
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult<MessageResponse>> RemoveScheduledServiceAsync(int id, CancellationToken cancellationToken)
     {
         return Ok(await sender.Send(new RemoveScheduleServiceCommand(id), cancellationToken));
     }
-    /// <summary>
-    /// hàm này chỉ để test nên không cần phải sài 
-    /// </summary>
-    [HttpPost]
-    public async Task<ActionResult<MessageResponse>> CreateScheduledService(
-        CancellationToken cancellationToken)
-    {
-        return await sender.Send(new CreateScheduleServiceCommand(), cancellationToken);
-    }
+
 }
