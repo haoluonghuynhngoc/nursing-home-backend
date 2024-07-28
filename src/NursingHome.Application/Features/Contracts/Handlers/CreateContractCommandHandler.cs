@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
@@ -22,10 +23,6 @@ internal sealed class CreateContractCommandHandler(ILogger<CreateContractCommand
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
     public async Task<MessageResponse> Handle(CreateContractCommand request, CancellationToken cancellationToken)
     {
-        //if (!await _elderRepository.ExistsByAsync(_ => _.Id == request.ElderId))
-        //{
-        //    throw new NotFoundException(nameof(Elder), request.ElderId);
-        //}
         if (!await _userRepository.ExistsByAsync(_ => _.Id == request.UserId))
         {
             throw new NotFoundException(nameof(User), request.UserId);
@@ -35,16 +32,50 @@ internal sealed class CreateContractCommandHandler(ILogger<CreateContractCommand
             throw new NotFoundException(nameof(NursingPackage), request.UserId);
         }
         var elder = await _elderRepository.FindByAsync(
-              expression: _ => _.Id == request.ElderId) ?? throw new NotFoundException($"Elder Have Id {request.ElderId} Is Not Found");
+              expression: _ => _.Id == request.ElderId,
+              includeFunc: _ => _.Include(e => e.Contracts))
+            ?? throw new NotFoundException($"Elder Have Id {request.ElderId} Is Not Found");
 
-        request.Status = request.StartDate < DateOnly.FromDateTime(DateTime.Now)
-            ? ContractStatus.Pending
-            : ContractStatus.Valid;
+        var overlappingContracts = elder.Contracts.Where(_ => _.Status == ContractStatus.Valid &&
+        ((_.StartDate < request.StartDate && request.StartDate < _.EndDate) ||
+        (_.StartDate < request.EndDate && request.EndDate < _.EndDate))).ToList();
+
+        if (overlappingContracts.Any())
+        {
+            var overlappingDetails = string.Join(", ", overlappingContracts.Select(c => $"Start: {c.StartDate.ToString("dd/MM/yyyy")}, End: {c.EndDate.ToString("dd/MM/yyyy")}"));
+            throw new FieldResponseException(616, $"The time coincides with the old contract's expiration date: {overlappingDetails}");
+        }
+        //if (elder.Contracts.Any(_ => _.Status == ContractStatus.Valid))
+        //{
+        //    var contractCheck = elder.Contracts.Where(_ => _.Status == ContractStatus.Valid).FirstOrDefault();
+        //    if (contractCheck != null)
+        //    {
+        //        if (contractCheck.StartDate < request.StartDate && request.StartDate < contractCheck.EndDate)
+        //        {
+        //            // Báo lỗi: Thời gian trùng với hợp đồng cũ còn hạn
+        //            throw new InvalidOperationException("Thời gian trùng với hợp đồng cũ còn hạn.");
+        //        }
+        //    }
+        //}
+        if (elder.Contracts.Any(_ => _.Status == ContractStatus.Pending))
+        {
+            throw new BadRequestException("Elder Already Has A Pending Contract.");
+        }
 
         var contract = new Contract();
         request.Adapt(contract);
 
-        contract.Status = ContractStatus.Pending;
+        //contract.Status = request.StartDate < DateOnly.FromDateTime(DateTime.Now)
+        //    ? ContractStatus.Pending
+        //    : ContractStatus.Valid;
+        contract.Status = DateOnly.FromDateTime(DateTime.Now) >= contract.StartDate && DateOnly.FromDateTime(DateTime.Now) <= contract.EndDate
+            ? ContractStatus.Valid
+            : ContractStatus.Pending;
+
+        if (contract.EndDate < DateOnly.FromDateTime(DateTime.Now))
+        {
+            contract.Status = ContractStatus.Expired;
+        }
 
         await _contractRepository.CreateAsync(contract);
 
