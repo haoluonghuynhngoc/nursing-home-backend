@@ -69,11 +69,11 @@ public class AutoController(IUnitOfWork unitOfWork,
                 }
 
                 var notificationDate = contract.EndDate;
-                if (notificationDate.AddDays(-10) == currentDate)
+                if (notificationDate.AddDays(-30) == currentDate)
                 {
                     // gửi email thông báo sắp hết hạn
                     SendNotification(contract.Id, "Thông Báo Hợp Đồng",
-                      $"Ông/Bà có hợp đồng {contract.Name} còn 10 ngày nữa sẽ kết thúc hợp đồng.",
+                      $"Ông/Bà có hợp đồng {contract.Name} còn 30 ngày nữa sẽ kết thúc hợp đồng.",
                     contract.UserId, nameof(Contract), NotificationLevel.Information, CancellationToken.None);
                 }
                 if (contract.EndDate <= currentDate)

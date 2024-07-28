@@ -51,7 +51,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 }
 
                 var notificationDate = contract.EndDate;
-                if (notificationDate.AddDays(-10) == currentDate)
+                if (notificationDate.AddDays(-30) == currentDate)
                 {
                     // gửi email thông báo sắp hết hạn
                     SendNotification(contract.Id, "Thông Báo Hợp Đồng",
