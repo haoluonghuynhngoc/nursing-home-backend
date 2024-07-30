@@ -59,13 +59,13 @@ internal class CreateHealthReportCommandHandler(
         if (healthReport.HealthReportDetails.Any(_ => _.IsWarning))
         {
             SendNotification(healthReport.Id, "Cảnh Báo Báo Cáo Sức Khỏe",
-                $"Xin vui lòng kiểm tra lại báo cáo sức khỏe của Ông/Bà {elder.Name} ngày {DateOnly.FromDateTime(DateTime.Now):dd/MM/yyyy}.",
+                $"Người cao tuổi {elder.Name} có chỉ số sức khỏe “bất thường” ngày {DateOnly.FromDateTime(DateTime.Now):dd/MM/yyyy}.",
                 elder.UserId, NotificationLevel.Warning, cancellationToken);
         }
         else
         {
             SendNotification(healthReport.Id, "Báo Cáo Sức Khỏe",
-                $"Ông/Bà {elder.Name} đã đo chi số ngày {DateOnly.FromDateTime(DateTime.Now):dd/MM/yyyy}",
+                $"Người cao tuổi {elder.Name} đã được đo chỉ số sức khỏe ngày {DateOnly.FromDateTime(DateTime.Now):dd/MM/yyyy}",
                 elder.UserId, NotificationLevel.Information, cancellationToken);
         }
 

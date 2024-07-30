@@ -45,8 +45,8 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 {
                     contract.Status = ContractStatus.Valid;
                     // gửi mail thông báo hợp đồng đã được kích hoạt
-                    SendNotification(contract.Id, "Thông Báo Hợp Đồng",
-                       $"Ông/Bà có hợp đồng {contract.Name} đã được kích hoạt.",
+                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate}",
+                       $"Hợp đồng có hiệu lực: Hợp đồng có mã {contract.Name} có hiệu lực vào ngày {currentDate}.",
                      contract.UserId, nameof(Contract), NotificationLevel.Information, CancellationToken.None);
                 }
 
@@ -54,16 +54,16 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 if (notificationDate.AddDays(-30) == currentDate)
                 {
                     // gửi email thông báo sắp hết hạn
-                    SendNotification(contract.Id, "Thông Báo Hợp Đồng",
-                      $"Ông/Bà có hợp đồng {contract.Name} còn 10 ngày nữa sẽ kết thúc hợp đồng.",
+                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate}",
+                      $"Hợp đồng sắp hết hạn (cách 30 ngày): Bạn có muốn gia hạn hợp đồng có mã {contract.Name} sẽ hết hạn vào ngày {contract.EndDate}",
                     contract.UserId, nameof(Contract), NotificationLevel.Information, CancellationToken.None);
                 }
                 if (contract.EndDate <= currentDate)
                 {
                     contract.Status = ContractStatus.Expired;
                     // gửi email thông báo hợp đồng đã hết hạn
-                    SendNotification(contract.Id, "Thông Báo Hợp Đồng",
-                     $"Ông/Bà có hợp đồng {contract.Name} đã hết hạn thanh toán.",
+                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate}",
+                     $"Hợp đồng có mã {contract.Name} đã hết hạn vào ngày{currentDate}.",
                    contract.UserId, nameof(Contract), NotificationLevel.Information, CancellationToken.None);
                 }
 
@@ -263,8 +263,8 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             // viết thông báo dịch vụ tháng sau ở đây
             foreach (var scheduledService in mergedServiceDetails)
             {
-                SendNotification(scheduledService.Id, "Thông Báo Đơn Hàng",
-                      $"Ông/Bà có đơn hàng của {scheduledService.Name}",
+                SendNotification(scheduledService.Id, $"Thông Báo Đơn Hàng Ngày {currentDate}",
+                      $"Thông báo xác nhận đăng ký dịch vụ {scheduledService.Name} cho tháng {nextMonth.Month} Năm {nextMonth.Year}",
                     scheduledService.UserId, nameof(ScheduledService), NotificationLevel.Information, CancellationToken.None);
             }
         }
