@@ -16,7 +16,8 @@ public sealed record GetEldersQuery : PaginationRequest<Elder>, IRequest<Paginat
     public GenderStatus? Gender { get; set; }
     public Guid? UserId { get; set; }
     public int? RoomId { get; set; }
-
+    //public int? Month { get; set; }
+    //public int? Year { get; set; }
     public override Expression<Func<Elder, bool>> GetExpressions()
     {
 
@@ -24,6 +25,12 @@ public sealed record GetEldersQuery : PaginationRequest<Elder>, IRequest<Paginat
         Expression = Expression.And(u => !Gender.HasValue || u.Gender == Gender);
         Expression = Expression.And(u => !UserId.HasValue || u.UserId == UserId);
         Expression = Expression.And(u => !RoomId.HasValue || u.RoomId == RoomId);
+        //if (!Month.HasValue && !Year.HasValue)
+        //{
+        //    Expression = Expression.And(u => u.Contracts.Any(c => c.Status == ContractStatus.Valid
+        //    && c.EndDate.Month == Month
+        //    && c.EndDate.Year == Year));
+        //}
         return Expression;
     }
 }

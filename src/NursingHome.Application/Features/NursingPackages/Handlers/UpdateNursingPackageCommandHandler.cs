@@ -26,6 +26,11 @@ internal class UpdateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
         {
             throw new NotFoundException(nameof(NursingPackage), request.Id);
         }
+        // sửa ở đây 
+        if (nursingPackage.Rooms.Any(room => room.Elders.Any()))
+        {
+            throw new BadRequestException("The room was occupied so it was not updated");
+        }
         // cập nhật gói thì nhớ check xem số lượng giường trong phòng phải được cập nhật theo 
         request.Adapt(nursingPackage);
         await _nursingPackageRepository.UpdateAsync(nursingPackage);

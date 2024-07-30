@@ -20,11 +20,13 @@ public sealed record GetAllProfileUserQuery : PaginationRequest<User>, IRequest<
     /// Sài Cái RoleName Thì Không Nên Sài RoleNames 
     /// </summary>
     public RoleUserName? RoleName { get; set; }
+
     /// <summary>
     /// Lấy được tất cả các role trừ role user  (Customer,Director,Manager,Staff,Nurse)
     /// </summary>
     public int? CareMonth { get; set; }
     public int? CareYear { get; set; }
+    public EmployeeTypeName? Name { get; set; }
     public string[] RoleNames { get; set; } = Array.Empty<string>();
     public override Expression<Func<User, bool>> GetExpressions()
     {
@@ -50,6 +52,15 @@ public sealed record GetAllProfileUserQuery : PaginationRequest<User>, IRequest<
         {
             Expression = Expression.And(u => u.IsActive == IsActive);
         }
+
+        if (CareMonth.HasValue && CareYear.HasValue && Name.HasValue)
+        {
+            Expression = Expression.And(u => !u.EmployeeSchedules.Any(_ => (_.CareSchedule.CareMonth == CareMonth) && (_.CareSchedule.CareYear == CareYear))
+            || u.EmployeeSchedules.Any(_ => (_.EmployeeType.Name == Name)
+                                            && (_.CareSchedule.CareMonth == CareMonth)
+                                            && (_.CareSchedule.CareYear == CareYear)));
+        }
+
         return Expression;
     }
 }

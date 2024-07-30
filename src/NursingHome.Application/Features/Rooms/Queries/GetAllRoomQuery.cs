@@ -14,6 +14,9 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
 
     public string? Search { get; set; }
     public int? NursingPackageId { get; set; }
+    // true là phòng đã được lên lịch chăm sóc
+    // false là phòng chưa được lên lịch chăm sóc
+    public bool? IsScheduled { get; set; }
     public RoomType? Type { get; set; }
     public int? CareMonth { get; set; }
     public int? CareYear { get; set; }
@@ -32,15 +35,9 @@ public sealed record GetAllRoomQuery : PaginationRequest<Room>, IRequest<Paginat
         Expression = Expression
             .And(r => !Type.HasValue || r.Type == Type)
             .And(r => !NursingPackageId.HasValue || r.NursingPackageId == NursingPackageId)
-            .And(r => !AvailableBed.HasValue || r.AvailableBed == AvailableBed);
-        //if (CareMonth != null)
-        //{
-        //    Expression = Expression.And(r => !r.CareSchedules.Any(_ => _.CareMonth == CareMonth));
-        //}
-        //if (CareYear != null)
-        //{
-        //    Expression = Expression.And(r => !r.CareSchedules.Any(_ => _.CareYear == CareYear));
-        //}
+            .And(r => !AvailableBed.HasValue || r.AvailableBed == AvailableBed)
+            .And(r => !IsScheduled.HasValue || r.CareSchedules.Any(_ => (!CareMonth.HasValue || _.CareMonth == CareMonth)
+            && (!CareYear.HasValue || _.CareYear == CareYear)) == IsScheduled);
         return Expression;
     }
 
