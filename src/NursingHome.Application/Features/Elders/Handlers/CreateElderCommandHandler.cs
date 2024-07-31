@@ -25,7 +25,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
     {
         if (await _elderRepository.ExistsByAsync(x => x.CCCD == request.CCCD))
         {
-            throw new ConflictException($"Elder Have CCCD is {request.CCCD} In DataBase");
+            throw new FieldResponseException(602, $"CCCD Is {request.CCCD} already exists.");
         }
         if (!await _roomRepository.ExistsByAsync(_ => _.Id == request.RoomId, cancellationToken))
         {

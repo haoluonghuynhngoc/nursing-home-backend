@@ -10,19 +10,19 @@ namespace NursingHome.WebApi.Controllers;
 [Authorize]
 public class StatisticalController(ISender sender) : ControllerBase
 {
-    [HttpGet("/elder")]
+    [HttpGet("elder")]
     public async Task<ActionResult<TotalElderResponse>> GetStatiscalElder(
          CancellationToken cancellationToken)
     {
         return await sender.Send(new GetAllTotalElderQuery(), cancellationToken);
     }
-    [HttpGet("/money")]
+    [HttpGet("money")]
     public async Task<ActionResult<TotalMoneyResponse>> GetStatiscalMoney(
         CancellationToken cancellationToken)
     {
         return await sender.Send(new GetAllTotalMoneyQuery(), cancellationToken);
     }
-    [HttpGet("/user")]
+    [HttpGet("user")]
     public async Task<ActionResult<TotalUserResponse>> GetStatiscalUser(
         CancellationToken cancellationToken)
     {

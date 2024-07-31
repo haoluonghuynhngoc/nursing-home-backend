@@ -11,8 +11,7 @@ public class User : IdentityUser<Guid>, IAuditableEntity
     public string? AvatarUrl { get; set; }
     public string? Address { get; set; }
     public string? CCCD { get; set; }
-    //public DateOnly RestDay { get; set; }
-    //public bool CanWorkNightShift { get; set; }
+    public int Index { get; set; }
     public bool IsActive { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public GenderStatus Gender { get; set; }

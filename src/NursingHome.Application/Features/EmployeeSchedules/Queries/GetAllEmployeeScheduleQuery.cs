@@ -18,7 +18,7 @@ public sealed record GetAllEmployeeScheduleQuery
     {
         Expression = Expression.And(es => !CareMonth.HasValue || es.CareSchedule.CareMonth == CareMonth);
         Expression = Expression.And(es => !CareYear.HasValue || es.CareSchedule.CareYear == CareYear);
-        //  Expression = Expression.And(es => !RoomId.HasValue || es.CareSchedule.RoomId == RoomId);
+        Expression = Expression.And(es => !RoomId.HasValue || es.CareSchedule.Rooms.Any(_ => _.Id == RoomId));
         Expression = Expression.And(es => !UserId.HasValue || es.UserId == UserId);
         return Expression;
     }

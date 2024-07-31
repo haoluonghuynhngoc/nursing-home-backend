@@ -11,6 +11,7 @@ public record UpdateNursingPackageCommand : IRequest<MessageResponse>
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
     public NursingPackageType Type { get; set; } = default!;
+    public int NumberOfNurses { get; set; }
     public decimal Price { get; set; }
     public int RegistrationLimit { get; set; }
     public string? ImageUrl { get; set; }

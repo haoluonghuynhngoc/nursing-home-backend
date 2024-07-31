@@ -58,6 +58,15 @@ public class UsersController(ISender sender) : ControllerBase
         return await sender.Send(command, cancellationToken);
     }
     /// <summary>
+    /// Tạo nhiều user theo role pass mặt định là 1 
+    /// </summary>
+    [HttpPost("auto")]
+    public async Task<ActionResult<MessageResponse>> RegisterUserAsync(
+        CreateAutoNurseCommand command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command, cancellationToken);
+    }
+    /// <summary>
     /// Đăng ký được tất cả các loai tài khoản như : Admin, Manager, Staff  nếu để RoleUserName là Customer thì hệ thống sẽ
     /// mặt định là role Nurse
     /// </summary>
