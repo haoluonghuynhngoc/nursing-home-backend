@@ -7,4 +7,5 @@ public interface ITaskSchedulerOrder
     public Task CheckContractExpirationAsync();
     public Task CheckOrderDetailExpirationAsync();
     public Task CheckOrderExpirationAsync();
+    public Task CheckOrderRepeatableAsync();
 }

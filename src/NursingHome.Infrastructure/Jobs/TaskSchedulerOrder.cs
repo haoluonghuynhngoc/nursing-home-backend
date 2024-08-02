@@ -45,8 +45,8 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 {
                     contract.Status = ContractStatus.Valid;
                     // gửi mail thông báo hợp đồng đã được kích hoạt
-                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate}",
-                       $"Hợp đồng có hiệu lực: Hợp đồng có mã {contract.Name} có hiệu lực vào ngày {currentDate}.",
+                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate:dd/MM/yyyy}",
+                       $"Hợp đồng có hiệu lực: Hợp đồng có mã {contract.Name} có hiệu lực vào ngày {currentDate:dd/MM/yyyy}.",
                      contract.UserId, nameof(Contract), NotificationLevel.Information, CancellationToken.None);
                 }
 
@@ -54,16 +54,16 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 if (notificationDate.AddDays(-30) == currentDate)
                 {
                     // gửi email thông báo sắp hết hạn
-                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate}",
-                      $"Hợp đồng sắp hết hạn (cách 30 ngày): Bạn có muốn gia hạn hợp đồng có mã {contract.Name} sẽ hết hạn vào ngày {contract.EndDate}",
+                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate:dd/MM/yyyy}",
+                      $"Hợp đồng sắp hết hạn (cách 30 ngày): Bạn có muốn gia hạn hợp đồng có mã {contract.Name} sẽ hết hạn vào ngày {contract.EndDate:dd/MM/yyyy}",
                     contract.UserId, nameof(Contract), NotificationLevel.Information, CancellationToken.None);
                 }
                 if (contract.EndDate <= currentDate)
                 {
                     contract.Status = ContractStatus.Expired;
                     // gửi email thông báo hợp đồng đã hết hạn
-                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate}",
-                     $"Hợp đồng có mã {contract.Name} đã hết hạn vào ngày{currentDate}.",
+                    SendNotification(contract.Id, $"Thông Báo Hợp Đồng Ngày {currentDate:dd/MM/yyyy}",
+                     $"Hợp đồng có mã {contract.Name} đã hết hạn vào ngày{currentDate:dd/MM/yyyy}.",
                    contract.UserId, nameof(Contract), NotificationLevel.Information, CancellationToken.None);
                 }
 
@@ -148,7 +148,38 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             logger.LogError(ex, "An error occurred while checking order detail expiration.");
         }
     }
+    public async Task CheckOrderRepeatableAsync()
+    {
+        try
+        {
+            var currentDate = new DateTimeOffset(DateTime.Today);
+            var listOrders = await _orderRepository.FindAsync(
+                expression: _ => _.Status == OrderStatus.Paid, includeFunc: _ => _.Include(x => x.OrderDetails)
+                .ThenInclude(x => x.OrderDates)
+                .AsNoTracking());
 
+            foreach (var order in listOrders)
+            {
+                if (order.CreatedAt != null || order.CreatedAt <= currentDate.AddDays(1))
+                {
+                    foreach (var orderDetail in order.OrderDetails)
+                    {
+                        // cuối tháng kiểm tra xem nó có lập lại không nếu lập rồi thì không cho lập lại nữa
+                        if (orderDetail.IsRepeatable)
+                        {
+                            orderDetail.Status = OrderDetailStatus.NonRepeatable;
+                        }
+                    }
+                }
+                await _orderRepository.UpdateAsync(order);
+            }
+            await _unitOfWork.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while check order repeatable expiration.");
+        }
+    }
     public async Task CreateDisplayRenewalNotificationAsync()
     {
         try
@@ -157,15 +188,19 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             var nextMonth = currentDate.AddMonths(1);
 
             var listOrderDetails = await _orderDetailRepository.FindAsync(
-                expression: _ => _.Status == OrderDetailStatus.Repeatable,
+                expression: _ => _.Status == OrderDetailStatus.Repeatable
+                && _.Order.Status == OrderStatus.Paid,
                 includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
-
+            // check thời hạn servic packeg không được vượt quá  nursing package  không cho gợi ý 
             // Dictionary để nhóm dữ liệu theo UserId và gộp các ScheduledServiceDetail trùng lặp
             var groupedOrderDetails = new Dictionary<Guid, List<ScheduledServiceDetail>>();
 
             foreach (var item in listOrderDetails)
             {
                 var userId = item.Order.UserId;
+
+                // Nêu đã gợi ý lập lại thì lưu vào Db là đã lập lại
+                item.IsRepeatable = true;
 
                 if (!groupedOrderDetails.ContainsKey(userId))
                 {
@@ -263,7 +298,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             // viết thông báo dịch vụ tháng sau ở đây
             foreach (var scheduledService in mergedServiceDetails)
             {
-                SendNotification(scheduledService.Id, $"Thông Báo Đơn Hàng Ngày {currentDate}",
+                SendNotification(scheduledService.Id, $"Thông Báo Đơn Hàng Ngày {currentDate:dd/MM/yyyy}",
                       $"Thông báo xác nhận đăng ký dịch vụ {scheduledService.Name} cho tháng {nextMonth.Month} Năm {nextMonth.Year}",
                     scheduledService.UserId, nameof(ScheduledService), NotificationLevel.Information, CancellationToken.None);
             }

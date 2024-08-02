@@ -190,7 +190,7 @@ public class AutoController(IUnitOfWork unitOfWork,
             var nextMonth = currentDate.AddMonths(1);
 
             var listOrderDetails = await _orderDetailRepository.FindAsync(
-                expression: _ => _.Status == OrderDetailStatus.Repeatable,
+                expression: _ => _.Status == OrderDetailStatus.Repeatable && _.Order.Status == OrderStatus.Paid,
                 includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
 
             // Dictionary để nhóm dữ liệu theo UserId và gộp các ScheduledServiceDetail trùng lặp
@@ -199,6 +199,9 @@ public class AutoController(IUnitOfWork unitOfWork,
             foreach (var item in listOrderDetails)
             {
                 var userId = item.Order.UserId;
+
+                // Nêu đã gợi ý lập lại thì lưu vào Db là đã lập lại
+                item.IsRepeatable = true;
 
                 if (!groupedOrderDetails.ContainsKey(userId))
                 {
@@ -296,7 +299,7 @@ public class AutoController(IUnitOfWork unitOfWork,
             // viết thông báo dịch vụ tháng sau ở đây
             foreach (var scheduledService in mergedServiceDetails)
             {
-                SendNotification(scheduledService.Id, $"Thông Báo Đơn Hàng Ngày {currentDate}",
+                SendNotification(scheduledService.Id, $"Thông Báo Đơn Hàng Ngày {currentDate:dd/MM/yyyy}",
                       $"Thông báo xác nhận đăng ký dịch vụ {scheduledService.Name} cho tháng {nextMonth.Month} Năm {nextMonth.Year}",
                     scheduledService.UserId, nameof(ScheduledService), NotificationLevel.Information, CancellationToken.None);
             }
