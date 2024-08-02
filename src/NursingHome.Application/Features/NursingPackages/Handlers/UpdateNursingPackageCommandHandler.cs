@@ -6,6 +6,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.NursingPackages.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.NursingPackages.Handlers;
 internal class UpdateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
@@ -26,12 +27,12 @@ internal class UpdateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
         {
             throw new NotFoundException(nameof(NursingPackage), request.Id);
         }
-        // sửa ở đây 
-        if (nursingPackage.Rooms.Any(room => room.Elders.Any()))
+
+        if (nursingPackage.Contracts.Any(_ => _.Status != ContractStatus.Expired && _.Status != ContractStatus.Cancelled))
         {
-            throw new BadRequestException("The room was occupied so it was not updated");
+            throw new FieldResponseException(619, "The service plan cannot be fixed because there is an active contract");
         }
-        // cập nhật gói thì nhớ check xem số lượng giường trong phòng phải được cập nhật theo 
+
         request.Adapt(nursingPackage);
         await _nursingPackageRepository.UpdateAsync(nursingPackage);
         await unitOfWork.CommitAsync(cancellationToken);

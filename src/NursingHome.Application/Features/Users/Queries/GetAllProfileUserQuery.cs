@@ -26,7 +26,7 @@ public sealed record GetAllProfileUserQuery : PaginationRequest<User>, IRequest<
     /// </summary>
     public int? CareMonth { get; set; }
     public int? CareYear { get; set; }
-    public EmployeeTypeName? Name { get; set; }
+    // public EmployeeTypeName? Name { get; set; }
     public string[] RoleNames { get; set; } = Array.Empty<string>();
     public override Expression<Func<User, bool>> GetExpressions()
     {
@@ -52,15 +52,20 @@ public sealed record GetAllProfileUserQuery : PaginationRequest<User>, IRequest<
         {
             Expression = Expression.And(u => u.IsActive == IsActive);
         }
+        // Check nhiều nhân viên 
+        //if (CareMonth.HasValue && CareYear.HasValue && Name.HasValue)
+        //{
+        //    Expression = Expression.And(u => !u.EmployeeSchedules.Any(_ => (_.CareSchedule.CareMonth == CareMonth) && (_.CareSchedule.CareYear == CareYear))
+        //    || u.EmployeeSchedules.Any(_ => (_.EmployeeType.Name == Name)
+        //                                    && (_.CareSchedule.CareMonth == CareMonth)
+        //                                    && (_.CareSchedule.CareYear == CareYear)));
+        //}
 
-        if (CareMonth.HasValue && CareYear.HasValue && Name.HasValue)
+        // chưa check ở đây
+        if (CareMonth.HasValue && CareYear.HasValue)
         {
-            Expression = Expression.And(u => !u.EmployeeSchedules.Any(_ => (_.CareSchedule.CareMonth == CareMonth) && (_.CareSchedule.CareYear == CareYear))
-            || u.EmployeeSchedules.Any(_ => (_.EmployeeType.Name == Name)
-                                            && (_.CareSchedule.CareMonth == CareMonth)
-                                            && (_.CareSchedule.CareYear == CareYear)));
+            Expression = Expression.And(u => !u.EmployeeSchedules.Any(_ => (_.CareSchedule.CareMonth == CareMonth) && (_.CareSchedule.CareYear == CareYear)));
         }
-
         return Expression;
     }
 }

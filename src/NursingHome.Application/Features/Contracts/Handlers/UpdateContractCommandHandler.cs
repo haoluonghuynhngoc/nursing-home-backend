@@ -18,6 +18,13 @@ internal class UpdateContractCommandHandler(
     {
         var contract = await _contractRepository.FindByAsync(
             expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Contract Have Id {request.Id} Is Not Found");
+        // chưa test hàm này 
+        //DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+        //if (today < contract.StartDate || today > contract.EndDate)
+        //{
+        //    throw new FieldResponseException(618, "The contract is not within the valid period");
+        //}
+
         request.Adapt(contract);
         await _contractRepository.UpdateAsync(contract);
         await unitOfWork.CommitAsync();

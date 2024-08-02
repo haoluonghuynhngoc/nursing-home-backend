@@ -28,6 +28,16 @@ internal sealed class CreateCareScheduleCommandHandler(
 
         var rooms = await _roomRepository.FindAsync(_ =>
         request.Rooms.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
+
+        // chưa test 
+        foreach (var room in rooms)
+        {
+            if (room.Elders == null || room.Elders.Count() <= 0)
+            {
+                throw new FieldResponseException(617, "Unoccupied rooms are not scheduled");
+            }
+        }
+
         foreach (var iteam in request.EmployeeSchedules)
         {
             if (!await _employeeTypeRepository.ExistsByAsync(_ => _.Id == iteam.EmployeeTypeId, cancellationToken))

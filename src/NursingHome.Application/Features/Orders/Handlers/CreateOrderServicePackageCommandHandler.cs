@@ -33,6 +33,7 @@ internal class CreateOrderServicePackageCommandHandler(
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
+        // check thời hạn servic packeg không được vượt quá  nursing package quăn lỗi 
         foreach (var item in request.OrderDetails)
         {
             var servicePackage = await _servicePackageRepository.FindByAsync<ServicePackageResponse>(x => x.Id == item.ServicePackageId, cancellationToken)
