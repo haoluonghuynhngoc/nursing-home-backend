@@ -16,7 +16,7 @@ public record CreateContractRequest
     public string? Description { get; set; }
     [JsonIgnore]
     public ContractStatus Status { get; set; } = default!;
-    [JsonIgnore]
+
     public decimal Price { get; set; }
     [JsonIgnore]
     public Guid UserId { get; set; }

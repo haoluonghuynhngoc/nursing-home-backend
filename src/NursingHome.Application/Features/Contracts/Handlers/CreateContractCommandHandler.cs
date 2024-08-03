@@ -27,10 +27,13 @@ internal sealed class CreateContractCommandHandler(ILogger<CreateContractCommand
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
-        if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId))
-        {
-            throw new NotFoundException(nameof(NursingPackage), request.UserId);
-        }
+        //if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId))
+        //{
+        //    throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
+        //}
+        var nursingPackage = await _nursingPackageRepository.FindByAsync(_ => _.Id == request.NursingPackageId)
+            ?? throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
+
         var elder = await _elderRepository.FindByAsync(
               expression: _ => _.Id == request.ElderId,
               includeFunc: _ => _.Include(e => e.Contracts))
@@ -65,9 +68,14 @@ internal sealed class CreateContractCommandHandler(ILogger<CreateContractCommand
         var contract = new Contract();
         request.Adapt(contract);
 
-        //contract.Status = request.StartDate < DateOnly.FromDateTime(DateTime.Now)
-        //    ? ContractStatus.Pending
-        //    : ContractStatus.Valid;
+        // Tính giá tiền theo tháng
+        var monthsContact = ((contract.EndDate.Year - contract.StartDate.Year) * 12) + contract.EndDate.Month - contract.StartDate.Month;
+        if (contract.Price == 0)
+        {
+            contract.Price = nursingPackage.Price;
+            contract.Price *= monthsContact;
+        }
+
         contract.Status = DateOnly.FromDateTime(DateTime.Now) >= contract.StartDate && DateOnly.FromDateTime(DateTime.Now) <= contract.EndDate
             ? ContractStatus.Valid
             : ContractStatus.Pending;
