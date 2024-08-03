@@ -180,6 +180,28 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             logger.LogError(ex, "An error occurred while check order repeatable expiration.");
         }
     }
+    public async Task RemoveDisplayRenewalNotificationForOrderAsync()
+    {
+        try
+        {
+            var scheduledService = await _scheduledServiceRepository.FindAsync(
+                includeFunc: _ => _.Include(_ => _.ScheduledServiceDetails).ThenInclude(_ => _.ScheduledTimes));
+            foreach (var item in scheduledService)
+            {
+                foreach (var detail in item.ScheduledServiceDetails)
+                {
+                    detail.ScheduledTimes.Clear();
+                }
+                item.ScheduledServiceDetails.Clear();
+                await _scheduledServiceRepository.DeleteAsync(item);
+            }
+            await _unitOfWork.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while removing renewal notifications.");
+        }
+    }
     public async Task CreateDisplayRenewalNotificationAsync()
     {
         try
@@ -374,4 +396,5 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
         };
         BackgroundJob.Enqueue(() => _notifier.NotifyAsync(notificationMessage, true, cancellationToken));
     }
+
 }

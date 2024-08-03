@@ -358,4 +358,31 @@ public class AutoController(IUnitOfWork unitOfWork,
             logger.LogError(ex, "An error occurred while check appointment expiration.");
         }
     }
+    /// <summary>
+    /// xóa thông báo gia hạn hiển thị cho đơn hàng (11h59 Ngày cuối cùng của tháng)
+    /// </summary>
+    [HttpDelete("remove-display-renewal-notification-for-order")]
+    public async Task<IActionResult> RemoveDisplayRenewalNotificationForOrderAsync()
+    {
+        try
+        {
+            var scheduledService = await _scheduledServiceRepository.FindAsync(
+                includeFunc: _ => _.Include(_ => _.ScheduledServiceDetails).ThenInclude(_ => _.ScheduledTimes));
+            foreach (var item in scheduledService)
+            {
+                foreach (var detail in item.ScheduledServiceDetails)
+                {
+                    detail.ScheduledTimes.Clear();
+                }
+                item.ScheduledServiceDetails.Clear();
+                await _scheduledServiceRepository.DeleteAsync(item);
+            }
+            await unitOfWork.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while removing renewal notifications.");
+        }
+        return Ok("Remove Display Renewal Notification For Order Success");
+    }
 }
