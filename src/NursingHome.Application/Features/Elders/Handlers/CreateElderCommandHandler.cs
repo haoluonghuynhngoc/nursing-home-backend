@@ -61,11 +61,18 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
         var elder = request.Adapt<Elder>();
         elder.MedicalRecord.DiseaseCategories = diseaseCategories;
         request.Contract.UserId = request.UserId;
-        request.Contract.NursingPackageId = room?.NursingPackageId; // Nếu đã sửa database rồi thì nhớ sửa lại int? sang int
-        request.Contract.Price = room?.NursingPackage.Price ?? 0m;
+        request.Contract.NursingPackageId = room?.NursingPackageId; // Nếu đã sửa database rồi thì nhớ sửa lại int? sang int    
         request.Contract.Status = request.Contract.StartDate < DateOnly.FromDateTime(DateTime.Now)
             ? ContractStatus.Pending
             : ContractStatus.Valid;
+
+        // Tính giá tiền theo tháng
+        var monthsContact = ((request.Contract.EndDate.Year - request.Contract.StartDate.Year) * 12) + request.Contract.EndDate.Month - request.Contract.StartDate.Month;
+        if (request.Contract.Price == 0)
+        {
+            request.Contract.Price = room?.NursingPackage.Price ?? 0m;
+            request.Contract.Price *= monthsContact;
+        }
 
         var contract = request.Contract.Adapt<Contract>();
         elder.Contracts = new List<Contract> {

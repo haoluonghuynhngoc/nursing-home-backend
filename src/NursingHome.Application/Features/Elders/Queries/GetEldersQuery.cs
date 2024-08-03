@@ -15,6 +15,7 @@ public sealed record GetEldersQuery : PaginationRequest<Elder>, IRequest<Paginat
     public string? Search { get; set; }
     public GenderStatus? Gender { get; set; }
     public Guid? UserId { get; set; }
+    public bool? IsRoomTransfer { get; set; }
     public int? RoomId { get; set; }
     //public int? Month { get; set; }
     //public int? Year { get; set; }
@@ -31,6 +32,16 @@ public sealed record GetEldersQuery : PaginationRequest<Elder>, IRequest<Paginat
         //    && c.EndDate.Month == Month
         //    && c.EndDate.Year == Year));
         //}
+        if (IsRoomTransfer.HasValue && IsRoomTransfer == true)
+        {
+            Expression = Expression.And(u =>
+                u.Room != null && // Người dùng phải có phòng
+                u.Contracts.Any(c => c.Status == ContractStatus.Valid) && // Có ít nhất một hợp đồng hợp lệ
+                u.Contracts
+                    .Where(c => c.Status == ContractStatus.Valid)
+                    .Any(c => u.Room.NursingPackageId != c.NursingPackageId)
+            );
+        }
         return Expression;
     }
 }

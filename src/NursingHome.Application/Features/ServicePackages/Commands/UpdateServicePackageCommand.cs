@@ -1,7 +1,5 @@
 ﻿using MediatR;
-using NursingHome.Application.Features.ServicePackageDates.Models;
 using NursingHome.Application.Models;
-using NursingHome.Domain.Enums;
 using System.Text.Json.Serialization;
 
 namespace NursingHome.Application.Features.ServicePackages.Commands;
@@ -16,11 +14,12 @@ public record UpdateServicePackageCommand : IRequest<MessageResponse>
     public int RegistrationLimit { get; set; }
     public int TimeBetweenServices { get; set; }
     public string? ImageUrl { get; set; }
-    public PackageType Type { get; set; } = default!;
-    public DateOnly StartRegistrationDate { get; set; }
-    public DateOnly EndRegistrationDate { get; set; }
-    //public DateOnly EndDate { get; set; }
-    public DateOnly? EventDate { get; set; }
     public int ServicePackageCategoryId { get; set; }
-    public virtual ICollection<CreateServicePackageDateRequest> ServicePackageDates { get; set; } = new HashSet<CreateServicePackageDateRequest>();
+    //public PackageType Type { get; set; } = default!;
+    //public DateOnly StartRegistrationDate { get; set; }
+    //public DateOnly EndRegistrationDate { get; set; }
+    ////public DateOnly EndDate { get; set; }
+    //public DateOnly? EventDate { get; set; }
+
+    //public virtual ICollection<CreateServicePackageDateRequest> ServicePackageDates { get; set; } = new HashSet<CreateServicePackageDateRequest>();
 }

@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
@@ -22,7 +23,8 @@ internal class UpdateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
         }
 
         var nursingPackage = await _nursingPackageRepository
-            .FindByAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
+            .FindByAsync(x => x.Id == request.Id
+            , includeFunc: _ => _.Include(x => x.Contracts), cancellationToken: cancellationToken);
         if (nursingPackage is null)
         {
             throw new NotFoundException(nameof(NursingPackage), request.Id);

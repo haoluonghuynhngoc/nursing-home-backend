@@ -12,9 +12,14 @@ namespace NursingHome.Application.Features.ServicePackages.Handlers;
 internal class UpdateServicePackageCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateServicePackageCommand, MessageResponse>
 {
     private readonly IGenericRepository<ServicePackage> _servicePackageRepository = unitOfWork.Repository<ServicePackage>();
-
+    private readonly IGenericRepository<ServicePackageCategory> _servicePackageCategoryRepository = unitOfWork.Repository<ServicePackageCategory>();
     public async Task<MessageResponse> Handle(UpdateServicePackageCommand request, CancellationToken cancellationToken)
     {
+        if (!await _servicePackageCategoryRepository.ExistsByAsync(_ => _.Id != request.ServicePackageCategoryId))
+        {
+            throw new FieldResponseException(620, "Service Package Category Is Not Found");
+        }
+
         var package = await _servicePackageRepository
             .FindByAsync(
                 x => x.Id == request.Id,
