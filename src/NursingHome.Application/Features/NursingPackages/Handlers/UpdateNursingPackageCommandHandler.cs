@@ -17,7 +17,8 @@ internal class UpdateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
 
     public async Task<MessageResponse> Handle(UpdateNursingPackageCommand request, CancellationToken cancellationToken)
     {
-        if (await _nursingPackageRepository.ExistsByAsync(_ => _.Id != request.Id && _.Name == request.Name))
+        // có thể sai logic ở đây : && _.State == StateType.Active
+        if (await _nursingPackageRepository.ExistsByAsync(_ => _.Id != request.Id && _.Name == request.Name && _.State == StateType.Active))
         {
             throw new ConflictException($"Nursing Package Have Name {request.Name} In DataBase");
         }

@@ -36,7 +36,6 @@ internal sealed class CreateCareScheduleCommandHandler(
         request.Rooms.Select(_ => _.Id).Contains(_.Id),
         includeFunc: _ => _.Include(x => x.Elders), isAsNoTracking: false);
 
-        // chưa test 
         foreach (var room in rooms)
         {
             if (room.Elders == null || room.Elders.Count() <= 0)
@@ -64,7 +63,7 @@ internal sealed class CreateCareScheduleCommandHandler(
         foreach (var iteam in request.EmployeeSchedules)
         {
             SendNotification(careSchedules.Id, "Thông báo lịch trực",
-                $"Bạn có lịch trực vào tháng {DateTime.Now.AddMonths(1).Month}.  Vui lòng kiểm tra lịch trình của bạn.",
+                $"Bạn có lịch trực vào tháng {careSchedules.CareMonth}.  Vui lòng kiểm tra lịch trình của bạn.",
                 iteam.UserId, NotificationLevel.Information, cancellationToken);
         }
         return new MessageResponse(Resource.CreatedSuccess);

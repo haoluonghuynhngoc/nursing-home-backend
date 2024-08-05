@@ -6,6 +6,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.ServicePackages.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.ServicePackages.Handlers;
 internal class CreateServicePackageCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateServicePackageCommand, MessageResponse>
@@ -21,6 +22,7 @@ internal class CreateServicePackageCommandHandler(IUnitOfWork unitOfWork) : IReq
         }
 
         var package = request.Adapt<ServicePackage>();
+        package.State = StateType.Active;
         await _servicePackageRepository.CreateAsync(package, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
 

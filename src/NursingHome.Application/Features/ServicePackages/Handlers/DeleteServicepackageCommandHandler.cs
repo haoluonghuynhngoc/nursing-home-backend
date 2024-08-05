@@ -5,6 +5,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.ServicePackages.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.ServicePackages.Handlers;
 internal class DeleteServicepackageCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteServicepackageCommand, MessageResponse>
@@ -18,7 +19,9 @@ internal class DeleteServicepackageCommandHandler(IUnitOfWork unitOfWork) : IReq
         {
             throw new NotFoundException(nameof(ServicePackage), request.Id);
         }
-        await _servicePackageRepository.DeleteAsync(package);
+        package.State = StateType.Deleted;
+        // await _servicePackageRepository.DeleteAsync(package);
+        await _servicePackageRepository.UpdateAsync(package);
         await unitOfWork.CommitAsync(cancellationToken);
         return new MessageResponse(Resource.DeletedSuccess);
     }
