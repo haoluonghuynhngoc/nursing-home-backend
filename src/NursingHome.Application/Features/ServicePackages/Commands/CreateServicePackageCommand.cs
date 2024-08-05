@@ -14,8 +14,8 @@ public record CreateServicePackageCommand : IRequest<MessageResponse>
     public int TimeBetweenServices { get; set; }
     public string? ImageUrl { get; set; }
     public PackageType Type { get; set; } = default!;
-    public DateOnly StartRegistrationDate { get; set; }
-    public DateOnly EndRegistrationDate { get; set; }
+    public DateOnly? StartRegistrationDate { get; set; }
+    public DateOnly? EndRegistrationDate { get; set; }
     //public DateOnly EndDate { get; set; }
     public DateOnly? EventDate { get; set; }
     public int ServicePackageCategoryId { get; set; }
