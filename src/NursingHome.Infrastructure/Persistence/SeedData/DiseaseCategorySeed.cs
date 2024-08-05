@@ -6,15 +6,15 @@ internal static class DiseaseCategorySeed
 {
     private static readonly List<string> ListDiseaseNames = new List<string>
     {
-        "Diabetes",
-        "Hypertension",
-        "Asthma",
-        "Chronic Obstructive Pulmonary Disease",
-        "Heart Disease",
-        "Cancer",
-        "Stroke",
-        "Alzheimer's Disease",
-        "Arthritis"
+        "Tiểu đường",
+        "Cao huyết áp",
+        "Hen suyễn",
+        "Bệnh phổi tắc nghẽn mãn tính",
+        "Bệnh tim",
+        "Ung thư",
+        "Đột quỵ",
+        "Bệnh Alzheimer",
+        "Viêm khớp"
     };
 
     public static List<DiseaseCategory> Default

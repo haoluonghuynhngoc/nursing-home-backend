@@ -6,59 +6,51 @@ internal static class HealthCaterorySeed
     public static List<HealthCategory> Default =>
          new List<HealthCategory>
          {
-            new HealthCategory {
-               Name = "Blood Sugar",
-               ImageUrl ="https://static.vecteezy.com/system/resources/previews/005/116/379/original/blood-sugar-logo-template-this-design-use-glucose-symbol-suitable-for-medical-business-free-vector.jpg" ,
-               Description="None",
+             new HealthCategory {
+               Name = "Huyết áp",
+               ImageUrl ="https://thanhnien.mediacdn.vn/Uploaded/ngocquy/2021_10_30/1-huyet-ap-shutterstock-6379.jpeg" ,
+               Description="Đo các chỉ số liên quan đến huyết áp",
                MeasureUnits = new List<MeasureUnit>
                 {
-                    new MeasureUnit { Name = "Fasting Blood Sugar", Description = "None",UnitType ="mg/dL" },
-                    new MeasureUnit { Name = "Postprandial Blood Sugar", Description = "None",UnitType ="mg/dL" },
-                    new MeasureUnit { Name = "HbA1c", Description = "None",UnitType ="%" }
+                    new MeasureUnit { Name = "Huyết áp tâm thu", Description = "Áp lực trong động mạch khi tim co bóp",UnitType ="mg/dL" },
+                    new MeasureUnit { Name = "Huyết áp tâm trương", Description = "Áp lực trong động mạch khi tim nghỉ",UnitType ="mg/dL" },
+                }
+            },
+            new HealthCategory {
+               Name = "Đường huyết",
+               ImageUrl ="https://static.vecteezy.com/system/resources/previews/005/116/379/original/blood-sugar-logo-template-this-design-use-glucose-symbol-suitable-for-medical-business-free-vector.jpg" ,
+               Description="Theo dõi các chỉ số đường huyết quan trọng",
+               MeasureUnits = new List<MeasureUnit>
+                {
+                    new MeasureUnit { Name = "Đường huyết ngẫu nhiên", Description = "Đo mức đường trong máu tại bất kỳ thời điểm nào",UnitType ="mg/dL" },
                 }
             },
             new HealthCategory {
                Name = "Cholesterol" ,
                ImageUrl="https://media.gettyimages.com/id/1413404652/vector/cholesterol-education-month-september-vector.jpg?s=612x612&w=gi&k=20&c=Q4dSiTTOlce99S6BqIdc0O8KPMiuJmb2_1wvoD8uGxU=",
-               Description="None",
+               Description="Theo dõi các chỉ số liên quan đến cholesterol trong máu",
                MeasureUnits = new List<MeasureUnit>
                 {
-                    new MeasureUnit { Name = "Total Cholesterol", Description = "None",UnitType ="mg/dL" },
-                    new MeasureUnit { Name = "HDL Cholesterol", Description = "None",UnitType ="mg/dL" },
-                    new MeasureUnit { Name = "LDL Cholesterol", Description = "None",UnitType ="mg/dL" },
-                    new MeasureUnit { Name = "Triglycerides", Description = "None",UnitType ="mg/dL" }
+                    new MeasureUnit { Name = "Cholesterol toàn phần", Description = "Đo lượng cholesterol tổng trong máu",UnitType ="mg/dL" }
                 }
             },
             new HealthCategory {
-               Name = "Lung",
-               ImageUrl="https://static.vecteezy.com/system/resources/previews/000/682/073/original/lungs-icon-vector.jpghttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiucESZqFtkbgcn55W54Q5Q3224Ntm7QpYBg&s",
-               Description="None",
+               Name = "Phổi",
+               ImageUrl="https://img.lovepik.com/free-png/20210926/lovepik-lung-png-image_401431526_wh1200.png",
+               Description = "Theo dõi các chỉ số liên quan đến phổi",
                MeasureUnits = new List<MeasureUnit>
                {
-                  new MeasureUnit { Name = "Lung Capacity", Description = "None" ,UnitType ="mL" },
-                  new MeasureUnit { Name = "Oxygen Level", Description = "None",UnitType ="SpO₂" }
+                 new MeasureUnit { Name = "Dung tích phổi", Description = "Dung tích phổi khi hít vào và thở ra", UnitType = "mL" },
                }
             },
             new HealthCategory {
-               Name = "Kidney",
-               ImageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAP6gKcYE3S5RZPb3KnLtazpe7dfVKU8TEhg&s",
-               Description="None",
+               Name = "Thận",
+               ImageUrl="https://media.istockphoto.com/id/1317973249/vi/vec-to/%E1%BA%A3nh-minh-h%E1%BB%8Da-s%E1%BB%8Fi-th%E1%BA%ADn-%C4%91%C6%B0%E1%BB%A3c-ph%C3%A2n-l%E1%BA%ADp-tr%C3%AAn-n%E1%BB%81n-tr%E1%BA%AFng-kh%C3%A1i-ni%E1%BB%87m-v%E1%BB%81-b%E1%BB%87nh-th%E1%BA%ADn.jpg?s=1024x1024&w=is&k=20&c=dS0VdCfCyKg4OsaBslB2zS9WrCD2x41WMKE6ZTdXXAA=",
+               Description = "Theo dõi các chỉ số liên quan đến thận",
                MeasureUnits = new List<MeasureUnit>
                 {
-                    new MeasureUnit { Name = "Creatinine", Description = "None",UnitType ="mg/dL" },
-                    new MeasureUnit { Name = "Blood Urea Nitrogen", Description = "None",UnitType ="mg/dL" },
-                    new MeasureUnit { Name = "eGFR", Description = "None",UnitType ="mL/min/1.73m²" }
+                    new MeasureUnit { Name = "Creatinine", Description = "Đo mức creatinine trong máu để đánh giá chức năng thận", UnitType = "mg/dL" },
                 }
-            },
-            new HealthCategory {
-               Name = "Heart",
-               ImageUrl="https://t4.ftcdn.net/jpg/02/67/21/75/360_F_267217594_MBBpEMgCXkQr8USHMo2lyjPcp8W8tg46.jpg",
-               Description="None",
-               MeasureUnits = new List<MeasureUnit>
-                 {
-                      new MeasureUnit { Name = "Blood Pressure", Description = "None",UnitType ="mmHg" },
-                      new MeasureUnit { Name = "Heart Rate", Description = "None",UnitType ="bpm" }
-                 }
-            },
+            }
          };
 }

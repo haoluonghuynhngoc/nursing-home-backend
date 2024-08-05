@@ -94,7 +94,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
 
             foreach (var order in listOrders)
             {
-                if (order.DueDate < currentDate)
+                if (order.DueDate <= currentDate)
                 {
                     order.Status = OrderStatus.OverDue;
                     foreach (var orderDetail in order.OrderDetails)

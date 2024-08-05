@@ -9,7 +9,7 @@ internal static class BlockSeed
     {
         get
         {
-            var blockNames = new List<string> { "Block A", "Block B", "Block C" };
+            var blockNames = new List<string> { "Khu A", "Khu  B", "Khu  C" };
             var faker = new Faker<Block>().StrictMode(true)
                 .RuleFor(a => a.Id, f => f.IndexFaker + 1)
                 .RuleFor(a => a.Name, (f, a) => blockNames[f.IndexFaker])

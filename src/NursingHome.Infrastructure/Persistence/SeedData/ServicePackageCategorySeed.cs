@@ -7,19 +7,19 @@ internal static class ServicePackageCategorySeed
          new List<ServicePackageCategory>
          {
             new ServicePackageCategory {
-               Name = "Health and Wellness Package",
+               Name = "Gói Sức Khỏe và Thể Chất",
             },
             new ServicePackageCategory {
-               Name = "Holiday Special" ,
+               Name = "Ưu Đãi Dịp Lễ" ,
             },
             new ServicePackageCategory {
-               Name = "Eco-Friendly Package",
+               Name = "Gói Thân Thiện Với Môi Trường",
             },
             new ServicePackageCategory {
-               Name = "Weekend Special",
+               Name = "Ưu Đãi Cuối Tuần",
             },
             new ServicePackageCategory {
-               Name = "Fitness Plus",
+               Name = "Gói Thể Dục Thể Thao",
             },
          };
 }
