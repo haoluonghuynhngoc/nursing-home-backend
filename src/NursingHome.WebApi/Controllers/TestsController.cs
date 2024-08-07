@@ -128,7 +128,7 @@ public class TestsController(
         PushTicketRequest pushTicketRequest = new PushTicketRequest()
         {
             // ExponentPushToken[2TCZk1JFMD5CJA_WfvoUWS]   || "ExponentPushToken[fxc4drPagqlftQNP2D1JSg]", "ExponentPushToken[LYbkmXI2vH3-PvFNIzVRTW]" 
-            PushTo = new List<string>() { "ExponentPushToken[CxaK2eLhBQiXb9LqXg06rR]" },
+            PushTo = new List<string>() { "ExponentPushToken[u_mFsLH_ECaVA9WbxeW8FZ]" },
             PushTitle = "Api Mơi Tạo ",
             PushBody = "TEST 11111"
         };

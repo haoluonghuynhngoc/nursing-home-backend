@@ -18,6 +18,7 @@ internal class CreateAppointmentCommandHandler(IUnitOfWork unitOfWork) : IReques
     private readonly IGenericRepository<Contract> _contractRepository = unitOfWork.Repository<Contract>();
     public async Task<MessageResponse> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
+        // check ngày trùng ở đây 
         if (!await _userRepository.ExistsByAsync(_ => _.Id == request.UserId, cancellationToken))
         {
             throw new NotFoundException(nameof(User), request.UserId);

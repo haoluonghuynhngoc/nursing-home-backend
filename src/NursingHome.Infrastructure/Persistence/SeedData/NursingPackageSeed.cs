@@ -44,7 +44,7 @@ internal static class NursingPackageSeed
                 Price = 1500000,
                 RegistrationLimit = 150,
                 ImageUrl = "https://nhaduonglao.com/wp-content/uploads/2023/11/Vien-duong-lao-Nghe-Si.jpg",
-                NumberOfNurses = 4,
+                NumberOfNurses = 2,
                 Capacity = 15
             },
             new NursingPackage
@@ -68,7 +68,7 @@ internal static class NursingPackageSeed
                 Price = 1200000,
                 RegistrationLimit = 120,
                 ImageUrl = "https://duonglaothienduc.com/wp-content/uploads/2023/02/thuvien3-1900x900resize_and_crop.jpg",
-                NumberOfNurses = 5,
+                NumberOfNurses = 2,
                 Capacity = 12
             },
             new NursingPackage
@@ -80,7 +80,7 @@ internal static class NursingPackageSeed
                 Price = 900000,
                 RegistrationLimit = 90,
                 ImageUrl = "https://random.com.vn/blog/wp-content/uploads/2020/09/tap-duong-sinh-5-1.jpg",
-                NumberOfNurses = 4,
+                NumberOfNurses = 1,
                 Capacity = 9
             }
         };

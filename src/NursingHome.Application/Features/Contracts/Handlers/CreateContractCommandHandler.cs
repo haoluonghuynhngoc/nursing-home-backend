@@ -45,8 +45,8 @@ internal sealed class CreateContractCommandHandler(ILogger<CreateContractCommand
 
         if (overlappingContracts.Any())
         {
-            var overlappingDetails = string.Join(", ", overlappingContracts.Select(c => $"Start: {c.StartDate.ToString("dd/MM/yyyy")}, End: {c.EndDate.ToString("dd/MM/yyyy")}"));
-            throw new FieldResponseException(616, $"The time coincides with the old contract's expiration date: {overlappingDetails}");
+            var overlappingDetails = string.Join(", ", overlappingContracts.Select(c => $"Bắt Đầu: {c.StartDate.ToString("dd/MM/yyyy")}, Kết Thúc: {c.EndDate.ToString("dd/MM/yyyy")}"));
+            throw new FieldResponseException(616, $"Thời gian trùng với ngày hết hạn của hợp đồng cũ: {overlappingDetails}");
         }
         //if (elder.Contracts.Any(_ => _.Status == ContractStatus.Valid))
         //{
@@ -102,7 +102,7 @@ internal sealed class CreateContractCommandHandler(ILogger<CreateContractCommand
                 UserId = userId,
                 Method = TransactionMethod.Cash,
                 Status = OrderStatus.Paid,
-                Description = $"Người Lớn Tuổi {elder.Name} Đã Thanh Toán Chi Phí Gói Dưỡng Lão Vào Ngày {DateOnly.FromDateTime(DateTime.Now)}.",
+                Description = $"Người Lớn Tuổi {elder.Name} Đã Thanh Toán Chi Phí Gói Dưỡng Lão.",
                 Amount = (double)contract.Price,
                 Content = "Payment For Nursing Care Service Package",
                 Notes = "None",

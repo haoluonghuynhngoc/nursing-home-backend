@@ -12,7 +12,13 @@ internal static class HealthCaterorySeed
                Description="Đo các chỉ số liên quan đến huyết áp",
                MeasureUnits = new List<MeasureUnit>
                 {
-                    new MeasureUnit { Name = "Huyết áp tâm thu", Description = "Áp lực trong động mạch khi tim co bóp",UnitType ="mg/dL" },
+                    new MeasureUnit {
+                        Name = "Huyết áp tâm thu",
+                        Description = "Áp lực trong động mạch khi tim co bóp",
+                        UnitType ="mg/dL",
+                        MinValue = 60,
+                        MaxValue = 90
+                    },
                     new MeasureUnit { Name = "Huyết áp tâm trương", Description = "Áp lực trong động mạch khi tim nghỉ",UnitType ="mg/dL" },
                 }
             },
