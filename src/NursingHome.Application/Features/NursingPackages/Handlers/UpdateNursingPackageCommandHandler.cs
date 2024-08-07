@@ -31,9 +31,15 @@ internal class UpdateNursingPackageCommandHandler(IUnitOfWork unitOfWork)
             throw new NotFoundException(nameof(NursingPackage), request.Id);
         }
 
-        if (nursingPackage.Contracts.Any(_ => _.Status != ContractStatus.Expired && _.Status != ContractStatus.Cancelled))
+        if (nursingPackage.Contracts.Any(_ => _.Status != ContractStatus.Expired && _.Status != ContractStatus.Cancelled)
+            && nursingPackage.Capacity != request.Capacity)
         {
-            throw new FieldResponseException(619, "The service plan cannot be fixed because there is an active contract");
+            throw new FieldResponseException(621, "Nursing package cannot be edited because there is an active contract that cannot edit Capacity");
+        }
+        if (nursingPackage.Contracts.Any(_ => _.Status != ContractStatus.Expired && _.Status != ContractStatus.Cancelled)
+            && nursingPackage.NumberOfNurses != request.NumberOfNurses)
+        {
+            throw new FieldResponseException(622, "Nursing package cannot be edited because there is an active contract that cannot edit Number Of Nurses");
         }
 
         request.Adapt(nursingPackage);
