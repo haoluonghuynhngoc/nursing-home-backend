@@ -35,29 +35,33 @@ public class ExpoNotificationService : IExpoNotificationService
         }
 
         IPushApiClient _client = new PushApiClient("ehAXa94NsN6NnpSTLLZkb2vnmxZC3Y-vF0k7xDkk");
-        PushTicketRequest pushTicketRequest = new PushTicketRequest()
+        // Push Notification chỉ nhận 1 device id mỗi lần
+        foreach (var deviceId in deviceIds)
         {
-            PushTo = deviceIds,
-            PushTitle = notification.Title,
-            PushBody = notification.Content,
-            PushData = notification.Data
-        };
+            PushTicketRequest pushTicketRequest = new PushTicketRequest()
+            {
+                PushTo = new List<string> { deviceId },
+                PushTitle = notification.Title,
+                PushBody = notification.Content,
+                PushData = notification.Data
+            };
 
-        _logger.LogInformation($"[Expo NOTIFICATION] Data full: {JsonSerializer.Serialize(pushTicketRequest)}");
-        _logger.LogInformation($"[Expo NOTIFICATION] Data: {JsonSerializer.Serialize(pushTicketRequest.PushData)}");
+            _logger.LogInformation($"[Expo NOTIFICATION] Data full: {JsonSerializer.Serialize(pushTicketRequest)}");
+            _logger.LogInformation($"[Expo NOTIFICATION] Data: {JsonSerializer.Serialize(pushTicketRequest.PushData)}");
 
-        try
-        {
-            PushTicketResponse result = await _client.SendPushAsync(pushTicketRequest);
-            _logger.LogInformation($"[Expo NOTIFICATION] Success push notification: {JsonSerializer.Serialize(result)}");
-        }
-        catch (ExpoCommunityNotificationServer.Exceptions.InvalidRequestException ex)
-        {
-            _logger.LogError(ex, "Invalid request: {Message}", ex.Message);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred while sending notification");
+            try
+            {
+                PushTicketResponse result = await _client.SendPushAsync(pushTicketRequest);
+                _logger.LogInformation($"[Expo NOTIFICATION] Success push notification: {JsonSerializer.Serialize(result)}");
+            }
+            catch (ExpoCommunityNotificationServer.Exceptions.InvalidRequestException ex)
+            {
+                _logger.LogError(ex, "Invalid request: {Message}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while sending notification");
+            }
         }
     }
     //public async Task NotifyAsync(NotificationRequest notification, CancellationToken cancellationToken = default)
@@ -68,6 +72,12 @@ public class ExpoNotificationService : IExpoNotificationService
     //            cancellationToken: cancellationToken))
     //        .Select(_ => _.Token).ToList();
 
+    //    if (deviceIds == null || !deviceIds.Any())
+    //    {
+    //        _logger.LogWarning($"No device tokens found for user {notification.UserId}. Notification will not be sent.");
+    //        return;
+    //    }
+
     //    IPushApiClient _client = new PushApiClient("ehAXa94NsN6NnpSTLLZkb2vnmxZC3Y-vF0k7xDkk");
     //    PushTicketRequest pushTicketRequest = new PushTicketRequest()
     //    {
@@ -76,10 +86,23 @@ public class ExpoNotificationService : IExpoNotificationService
     //        PushBody = notification.Content,
     //        PushData = notification.Data
     //    };
+
     //    _logger.LogInformation($"[Expo NOTIFICATION] Data full: {JsonSerializer.Serialize(pushTicketRequest)}");
     //    _logger.LogInformation($"[Expo NOTIFICATION] Data: {JsonSerializer.Serialize(pushTicketRequest.PushData)}");
 
-    //    PushTicketResponse result = await _client.SendPushAsync(pushTicketRequest);
-    //    _logger.LogInformation($"[Expo NOTIFICATION] Success push notification: {JsonSerializer.Serialize(result)}");
+    //    try
+    //    {
+    //        PushTicketResponse result = await _client.SendPushAsync(pushTicketRequest);
+    //        _logger.LogInformation($"[Expo NOTIFICATION] Success push notification: {JsonSerializer.Serialize(result)}");
+    //    }
+    //    catch (ExpoCommunityNotificationServer.Exceptions.InvalidRequestException ex)
+    //    {
+    //        _logger.LogError(ex, "Invalid request: {Message}", ex.Message);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.LogError(ex, "Error occurred while sending notification");
+    //    }
     //}
+
 }
