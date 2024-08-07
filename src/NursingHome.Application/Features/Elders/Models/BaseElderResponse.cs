@@ -8,6 +8,7 @@ public record BaseElderResponse : BaseEntityResponse<int>
     public string Name { get; set; } = default!;
     public string? DateOfBirth { get; set; }
     public GenderStatus Gender { get; set; }
+    public bool IsContractActive { get; set; }
     public string CCCD { get; set; } = default!;
     public string? ImageUrl { get; set; }
     public string? Address { get; set; }

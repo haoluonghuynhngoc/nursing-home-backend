@@ -1,4 +1,5 @@
-﻿using NursingHome.Domain.Common;
+﻿using EntityFrameworkCore.Projectables;
+using NursingHome.Domain.Common;
 using NursingHome.Domain.Entities.Identities;
 using NursingHome.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,8 @@ public class Elder : BaseAuditableEntity<int>
     public string? ImageUrl { get; set; }
     public string? Address { get; set; }
     public string? Nationality { get; set; }
+    [Projectable]
+    public bool IsContractActive => Contracts.Any(_ => _.Status == ContractStatus.Valid);
     public DateOnly InDate { get; set; }
     public DateOnly OutDate { get; set; }
     public bool IsActive { get; set; }
