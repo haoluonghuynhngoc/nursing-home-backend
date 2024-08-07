@@ -39,27 +39,23 @@ internal sealed class CreateContractCommandHandler(ILogger<CreateContractCommand
               includeFunc: _ => _.Include(e => e.Contracts))
             ?? throw new NotFoundException($"Elder Have Id {request.ElderId} Is Not Found");
 
+        //var overlappingContracts = elder.Contracts.Where(_ => _.Status == ContractStatus.Valid &&
+        //((_.StartDate < request.StartDate && request.StartDate < _.EndDate) ||
+        //(_.StartDate < request.EndDate && request.EndDate < _.EndDate))).ToList();
+
         var overlappingContracts = elder.Contracts.Where(_ => _.Status == ContractStatus.Valid &&
-        ((_.StartDate < request.StartDate && request.StartDate < _.EndDate) ||
-        (_.StartDate < request.EndDate && request.EndDate < _.EndDate))).ToList();
+            (
+                (request.StartDate <= _.EndDate && request.EndDate >= _.StartDate) ||  // request intersects existing contract
+                (request.EndDate >= _.StartDate && request.EndDate <= _.EndDate) ||
+                (request.StartDate <= _.StartDate && request.EndDate >= _.EndDate)    // request contains existing contract
+            )).ToList();
 
         if (overlappingContracts.Any())
         {
             var overlappingDetails = string.Join(", ", overlappingContracts.Select(c => $"Bắt Đầu: {c.StartDate.ToString("dd/MM/yyyy")}, Kết Thúc: {c.EndDate.ToString("dd/MM/yyyy")}"));
             throw new FieldResponseException(616, $"Thời gian trùng với ngày hết hạn của hợp đồng cũ: {overlappingDetails}");
         }
-        //if (elder.Contracts.Any(_ => _.Status == ContractStatus.Valid))
-        //{
-        //    var contractCheck = elder.Contracts.Where(_ => _.Status == ContractStatus.Valid).FirstOrDefault();
-        //    if (contractCheck != null)
-        //    {
-        //        if (contractCheck.StartDate < request.StartDate && request.StartDate < contractCheck.EndDate)
-        //        {
-        //            // Báo lỗi: Thời gian trùng với hợp đồng cũ còn hạn
-        //            throw new InvalidOperationException("Thời gian trùng với hợp đồng cũ còn hạn.");
-        //        }
-        //    }
-        //}
+
         if (elder.Contracts.Any(_ => _.Status == ContractStatus.Pending))
         {
             throw new BadRequestException("Elder Already Has A Pending Contract.");
