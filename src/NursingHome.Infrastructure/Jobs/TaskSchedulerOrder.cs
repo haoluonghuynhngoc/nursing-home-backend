@@ -212,7 +212,8 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             var listOrderDetails = await _orderDetailRepository.FindAsync(
                 expression: _ => _.Status == OrderDetailStatus.Repeatable
                 && _.Order.Status == OrderStatus.Paid,
-                includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order));
+                includeFunc: _ => _.Include(x => x.OrderDates).Include(x => x.Order)
+                .Include(x => x.Elder).ThenInclude(e => e.Contracts));
             // check thời hạn servic packeg không được vượt quá  nursing package  không cho gợi ý 
             // Dictionary để nhóm dữ liệu theo UserId và gộp các ScheduledServiceDetail trùng lặp
             var groupedOrderDetails = new Dictionary<Guid, List<ScheduledServiceDetail>>();
@@ -243,10 +244,25 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                     {
                         if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
                         {
-                            scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                            // Hàm mới chưa check 
+                            foreach (var contract in item.Elder.Contracts)
                             {
-                                Date = orderDate.Date.AddMonths(1)
-                            });
+                                if (contract.Status == ContractStatus.Valid)
+                                {
+                                    if (contract.EndDate < orderDate.Date.AddMonths(1))
+                                    {
+                                        scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                                        {
+                                            Date = orderDate.Date.AddMonths(1)
+                                        });
+                                    }
+                                }
+                            }
+                            // Hàm Cũ
+                            //scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                            //{
+                            //    Date = orderDate.Date.AddMonths(1)
+                            //});
                         }
                     }
                 }
@@ -265,10 +281,25 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                         {
                             if (date.Month == nextMonth.Month && date.Year == nextMonth.Year)
                             {
-                                scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                                // Hàm mới chưa check 
+                                foreach (var contract in item.Elder.Contracts)
                                 {
-                                    Date = date
-                                });
+                                    if (contract.Status == ContractStatus.Valid)
+                                    {
+                                        if (contract.EndDate < date)
+                                        {
+                                            scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                                            {
+                                                Date = date
+                                            });
+                                        }
+                                    }
+                                }
+                                // Hàm Cũ 
+                                //scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                                //{
+                                //    Date = date
+                                //});
                             }
                         }
                     }
