@@ -16,7 +16,7 @@ public class Room : BaseEntity<int>
     public int? NursingPackageId { get; set; }
     public virtual NursingPackage NursingPackage { get; set; } = default!;
     [Projectable]
-    public int TotalElder => Elders.Count;
+    public int TotalElder => Elders.Count(_ => _.State == StateType.Active);
     [Projectable]
     public bool IsUsed => NursingPackageId.HasValue;
     [Projectable]
@@ -24,7 +24,7 @@ public class Room : BaseEntity<int>
     [Projectable]
     public int TotalBed => NursingPackage != null ? NursingPackage.Capacity : 0;
     [Projectable]
-    public bool AvailableBed => TotalBed > Elders.Count;
+    public bool AvailableBed => TotalBed > TotalElder;
 
     [Projectable]
     public int UserBed => Elders.Count;

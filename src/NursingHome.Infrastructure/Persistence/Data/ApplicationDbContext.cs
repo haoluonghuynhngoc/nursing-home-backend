@@ -41,6 +41,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<MonthlyCalendar> MonthlyCalendars { get; set; }
     public DbSet<MonthlyCalendarDetail> MonthlyCalendarDetails { get; set; }
     public DbSet<EmployeeType> EmployeeTypes { get; set; }
+    public DbSet<FamilyMember> FamilyMembers { get; set; }
     //public ApplicationDbContext()
     //{
     //}

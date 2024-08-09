@@ -14,7 +14,7 @@ namespace NursingHome.WebApi.Controllers;
 public class FeedbackController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<FeedbackResponse>>> GetAllfeedbackWithPaginAsync(
+    public async Task<ActionResult<PaginatedResponse<FeedbackResponse>>> GetAllFeedbackWithPaginAsync(
     [FromQuery] GetAllFeedbackQuery query,
     CancellationToken cancellationToken)
     {
