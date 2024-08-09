@@ -13,6 +13,7 @@ public record UpdateAppointmentCommand : IRequest<MessageResponse>
     public string? Content { get; set; }
     public string? Reason { get; set; }
     public DateOnly Date { get; set; }
+    public TimeOnly Time { get; set; }
     [JsonIgnore]
     public AppointmentStatus Status => AppointmentStatus.Pending;
     public AppointmentType Type { get; set; }

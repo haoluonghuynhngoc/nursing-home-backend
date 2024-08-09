@@ -10,6 +10,7 @@ public class Appointment : BaseAuditableEntity<int>
     public string? Content { get; set; }
     public string? Reason { get; set; }
     public DateOnly Date { get; set; }
+    public TimeOnly Time { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public AppointmentStatus Status { get; set; }
     [Column(TypeName = "nvarchar(24)")]
