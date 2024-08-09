@@ -19,10 +19,51 @@ namespace NursingHome.WebApi.Controllers;
 public class TestsController(
     INotifier notifier,
     ICurrentUserService currentUserService,
+    IEmailSender emailSender,
     ICacheService cacheService,
     IUnitOfWork unitOfWork) : ControllerBase
 {
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
+
+    [HttpPost("test-send-mail")]
+    public async Task<IActionResult> TestsMailController()
+    {
+        var emailSubject = "Đo chỉ số sức khỏe ngày ";
+
+        var emailBody = @"<!DOCTYPE html>
+        <html lang='vi'>
+        <head>
+            <meta charset='UTF-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+            <title>Báo Cáo Sức Khỏe</title>
+        </head>
+        <body>
+            <div style='font-family: Arial, sans-serif;'>
+                <h2>Báo Cáo Sức Khỏe</h2>
+                <p>Xin chào [Tên Bệnh Nhân],</p>
+                <p>Chúng tôi xin gửi đến bạn báo cáo sức khỏe sau khi khám định kỳ ngày [Ngày Khám]:</p>
+                <h3>Kết Quả Khám Sức Khỏe</h3>
+                <ul>
+                    <li>Chiều cao: [Chiều Cao] cm</li>
+                    <li>Cân nặng: [Cân Nặng] kg</li>
+                    <li>Huyết áp: [Huyết Áp]</li>
+                    <li>Nhịp tim: [Nhịp Tim] lần/phút</li>
+                    <li>Cholesterol: [Cholesterol] mg/dL</li>
+                    <li>Đường huyết: [Đường Huyết] mg/dL</li>
+                </ul>
+                <h3>Đánh Giá Chung</h3>
+                <p>[Đánh Giá Chung]</p>
+                <h3>Khuyến Nghị</h3>
+                <p>[Khuyến Nghị]</p>
+                <p>Xin cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi.</p>
+                 <img src='https://support.content.office.net/en-us/media/7dbd87dd-c244-4d78-8fda-4408a08582cc.jpg' alt='Congratulations Image' style='max-width: 100%;'>
+            </div>
+        </body>
+        </html";
+
+        await emailSender.SendEmailAsync("haolhnse150758@fpt.edu.vn", emailSubject, emailBody);
+        return Ok("Test send mail");
+    }
 
     /// <summary>
     /// Only used for backend testing
