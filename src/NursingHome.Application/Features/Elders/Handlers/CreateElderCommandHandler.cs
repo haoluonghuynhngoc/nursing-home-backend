@@ -23,7 +23,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
     public async Task<MessageResponse> Handle(CreateElderCommand request, CancellationToken cancellationToken)
     {
-        if (await _elderRepository.ExistsByAsync(x => x.CCCD == request.CCCD))
+        if (await _elderRepository.ExistsByAsync(x => x.CCCD == request.CCCD && x.State == StateType.Active))
         {
             throw new FieldResponseException(602, $"CCCD Is {request.CCCD} already exists.");
         }
@@ -59,6 +59,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
         var diseaseCategories = await _diseaseCategoryRepository.FindAsync(_ =>
         request.MedicalRecord.DiseaseCategories.Select(_ => _.Id).Contains(_.Id), isAsNoTracking: false);
         var elder = request.Adapt<Elder>();
+        elder.State = StateType.Active;
         elder.MedicalRecord.DiseaseCategories = diseaseCategories;
         request.Contract.UserId = request.UserId;
         request.Contract.NursingPackageId = room?.NursingPackageId; // Nếu đã sửa database rồi thì nhớ sửa lại int? sang int    
