@@ -9,6 +9,9 @@ public record BaseElderResponse : BaseEntityResponse<int>
     public string? DateOfBirth { get; set; }
     public GenderStatus Gender { get; set; }
     public bool IsContractActive { get; set; }
+    public StateType State { get; set; }
+    public string? Habits { get; set; }
+    public string? Relationship { get; set; }
     public string CCCD { get; set; } = default!;
     public string? ImageUrl { get; set; }
     public string? Address { get; set; }

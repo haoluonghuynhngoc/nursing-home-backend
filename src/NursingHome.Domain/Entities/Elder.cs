@@ -12,6 +12,8 @@ public class Elder : BaseAuditableEntity<int>
     public string? DateOfBirth { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public GenderStatus Gender { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
+    public StateType State { get; set; }
     public string? ImageUrl { get; set; }
     public string? Address { get; set; }
     public string? Nationality { get; set; }
@@ -21,6 +23,8 @@ public class Elder : BaseAuditableEntity<int>
     public DateOnly OutDate { get; set; }
     public bool IsActive { get; set; }
     public string? Notes { get; set; }
+    public string? Habits { get; set; }
+    public string? Relationship { get; set; }
     public int RoomId { get; set; }
     public virtual Room Room { get; set; } = default!;
     public Guid UserId { get; set; }
@@ -32,4 +36,5 @@ public class Elder : BaseAuditableEntity<int>
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
     public virtual ICollection<ScheduledServiceDetail> ScheduledServiceDetails { get; set; } = new HashSet<ScheduledServiceDetail>();
     public virtual ICollection<Appointment> Appointments { get; set; } = new HashSet<Appointment>();
+    public virtual ICollection<FamilyMember> FamilyMembers { get; set; } = new HashSet<FamilyMember>();
 }
