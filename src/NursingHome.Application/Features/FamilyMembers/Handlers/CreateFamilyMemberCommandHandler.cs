@@ -22,6 +22,10 @@ internal class CreateFamilyMemberCommandHandler(IUnitOfWork unitOfWork,
         {
             throw new NotFoundException(nameof(Room), request.ElderId);
         }
+        if (await _familyMemberRepository.ExistsByAsync(_ => _.PhoneNumber == request.PhoneNumber && _.ElderId == request.ElderId))
+        {
+            throw new FieldResponseException(600, "Phone Number Is Conflit");
+        }
         var familyMember = request.Adapt<FamilyMember>();
         familyMember.State = StateType.Active;
 

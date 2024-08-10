@@ -22,13 +22,13 @@ internal class CreateAppointmentCommandHandler(IUnitOfWork unitOfWork) : IReques
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
-        //// chưa test cái này
-        //if (!await _appointmentRepository.ExistsByAsync(_ => _.Date == request.Date
-        //&& _.UserId == request.UserId
-        //&& _.Type == request.Type, cancellationToken))
-        //{
-        //    throw new NotFoundException(nameof(User), request.UserId);
-        //}
+        // chưa test cái này
+        if (!await _appointmentRepository.ExistsByAsync(_ => _.Date == request.Date
+        && _.UserId == request.UserId
+        && _.Type == request.Type, cancellationToken))
+        {
+            throw new FieldResponseException(624, "You have an appointment scheduled for the same day");
+        }
         if (request.NursingPackageId != null)
         {
             if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId, cancellationToken))

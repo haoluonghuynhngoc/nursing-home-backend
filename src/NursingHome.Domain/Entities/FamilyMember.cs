@@ -8,6 +8,7 @@ public class FamilyMember : BaseAuditableEntity<int>
     public string? Name { get; set; }
     public string? DateOfBirth { get; set; }
     public string? PhoneNumber { get; set; }
+    [Column(TypeName = "nvarchar(24)")]
     public GenderStatus Gender { get; set; }
     [Column(TypeName = "nvarchar(24)")]
     public StateType State { get; set; }
