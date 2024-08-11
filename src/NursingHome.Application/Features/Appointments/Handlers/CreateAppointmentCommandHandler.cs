@@ -22,9 +22,9 @@ internal class CreateAppointmentCommandHandler(IUnitOfWork unitOfWork) : IReques
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
-        // chưa test cái này
-        if (!await _appointmentRepository.ExistsByAsync(_ => _.Date == request.Date
-        && _.UserId == request.UserId
+
+        if (await _appointmentRepository.ExistsByAsync(_ => _.Date == request.Date
+        && _.UserId == request.UserId && _.Status == request.Status
         && _.Type == request.Type, cancellationToken))
         {
             throw new FieldResponseException(624, "You have an appointment scheduled for the same day");
