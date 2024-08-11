@@ -19,8 +19,8 @@ public class SmsSender(
 
     public async Task SendAsync(string phoneNumber, string message, CancellationToken cancellationToken = default)
     {
-        var response = await SendSmsGatewayAsync(phoneNumber, message, cancellationToken);
-        //var response = await SendSpeedSMSAsync(phoneNumber, message, cancellationToken);
+        //var response = await SendSmsGatewayAsync(phoneNumber, message, cancellationToken);
+        var response = await SendSpeedSMSAsync(phoneNumber, message, cancellationToken);
 
         string data = await response.Content.ReadAsStringAsync(cancellationToken);
 

@@ -1,12 +1,10 @@
-﻿using Hangfire;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Services;
 using NursingHome.Application.Features.Auth.Commands;
-using NursingHome.Application.Features.Auth.Events;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Constants;
 using NursingHome.Domain.Entities.Identities;
@@ -16,6 +14,7 @@ namespace NursingHome.Application.Features.Auth.Handlers;
 internal sealed class SendOtpRequestHandler(
     UserManager<User> userManager,
     ILogger<SendOtpRequestHandler> logger,
+    ISmsSender smsSender,
     IPublisher publisher,
     IEmailSender emailSender) : IRequestHandler<SendOtpRequest, MessageResponse>
 {
@@ -24,29 +23,7 @@ internal sealed class SendOtpRequestHandler(
         var user = await userManager.FindByNameAsync(request.PhoneNumber);
         if (user is null)
         {
-            user = new User
-            {
-                UserName = request.PhoneNumber,
-                PhoneNumber = request.PhoneNumber,
-                IsActive = true,
-                PhoneNumberConfirmed = true
-            };
-
-            var result = await userManager.CreateAsync(user);
-
-            if (!result.Succeeded)
-            {
-                throw new ValidationBadRequestException(result.Errors);
-            }
-
-            result = await userManager.AddToRoleAsync(user, RoleName.Customer);
-
-            if (!result.Succeeded)
-            {
-                throw new ValidationBadRequestException(result.Errors);
-            }
-
-            //await publisher.Publish(new InitWalletEvent() with { UserId = user.Id }, cancellationToken);
+            throw new NotFoundException(nameof(User), request.PhoneNumber);
         }
 
         if (!await userManager.IsInRoleAsync(user, RoleName.Customer))
@@ -56,12 +33,16 @@ internal sealed class SendOtpRequestHandler(
 
         var code = await userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
 
-        logger.LogInformation($"OTP: {code} ");
+        logger.LogInformation($"OTP: {code}");
 
-        // send otp to phonenumber in background job
-        BackgroundJob.Enqueue(() => publisher.Publish(new SendOtpEvent(request.PhoneNumber, code), cancellationToken));
-        _ = emailSender.SendEmailAsync("trinmse150418@fpt.edu.vn", "OTP", code, cancellationToken);
-
+        string message = $"Xác minh OTP từ Nursing Home\n\n{user.UserName} thân mến,\n\nMã OTP của bạn là: {code}\n\nVui lòng nhập mã này để hoàn tất quá trình xác minh. Mã này sẽ hết hạn sau 5 phút.\n\nNếu bạn không yêu cầu mã này, vui lòng bỏ qua tin nhắn này.\n\nCảm ơn bạn,\nNursing Home";
+        if (!string.IsNullOrEmpty(user.PhoneNumber))
+        {
+            // Gửi mã OTP qua SMS
+            await smsSender.SendAsync(user.PhoneNumber, message, cancellationToken);
+        }
+        // Trả về kết quả
         return new MessageResponse(Resource.OtpSendSuccess + $" (OTP: {code})");
     }
+
 }

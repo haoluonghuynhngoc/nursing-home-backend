@@ -17,3 +17,7 @@ Tài Khoảng : tegokox365@mposhop.com
 Password : tegokox365@mposhop.com
 Link mysql: https://admin.monsterasp.net/app/database/mysql/info/webmysql?database=db6203
 Link Web :https://nursinghome.runasp.net/swagger
+
+_Seed SMS 
++ Hướng dẫn sử dụng SMS Gateway
+https://speedsms.vn/huong-dan-sms-gateway/ 
