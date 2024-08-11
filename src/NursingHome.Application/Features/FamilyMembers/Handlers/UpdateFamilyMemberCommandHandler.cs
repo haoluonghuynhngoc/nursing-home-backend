@@ -17,6 +17,11 @@ internal class UpdateFamilyMemberCommandHandler(
     {
         var familyMember = await _familyMemberRepository.FindByAsync(
             expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Family Member Have Id {request.Id} Is Not Found");
+        if (await _familyMemberRepository.ExistsByAsync(_ => _.Id != request.Id && _.PhoneNumber == request.PhoneNumber && _.ElderId == familyMember.ElderId))
+        {
+            throw new FieldResponseException(600, "Phone Number Is Conflit");
+        }
+
         request.Adapt(familyMember);
         await _familyMemberRepository.UpdateAsync(familyMember);
         await unitOfWork.CommitAsync();
