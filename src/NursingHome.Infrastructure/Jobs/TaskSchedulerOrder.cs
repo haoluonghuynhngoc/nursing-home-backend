@@ -19,6 +19,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
     private readonly IGenericRepository<OrderDetail> _orderDetailRepository;
     private readonly IGenericRepository<ScheduledService> _scheduledServiceRepository;
     private readonly IGenericRepository<Appointment> _appointmentServiceRepository;
+    private readonly IGenericRepository<OrderDate> _orderDateRepository;
     private readonly INotifier _notifier;
     public TaskSchedulerOrder(IUnitOfWork unitOfWork, INotifier INotifier, ILogger<TaskSchedulerOrder> logger)
     {
@@ -29,6 +30,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
         _orderDetailRepository = unitOfWork.Repository<OrderDetail>();
         _scheduledServiceRepository = unitOfWork.Repository<ScheduledService>();
         _appointmentServiceRepository = unitOfWork.Repository<Appointment>();
+        _orderDateRepository = unitOfWork.Repository<OrderDate>();
         this.logger = logger;
     }
     public async Task CheckContractExpirationAsync()
@@ -115,10 +117,29 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
             logger.LogError(ex, "An error occurred while checking order expiration.");
         }
     }
+    public async Task CheckOrderDateStatusAsync()
+    {
+        try
+        {
+            var currentDate = DateOnly.FromDateTime(DateTime.Now);
+            var listOrderDates = await _orderDateRepository.FindAsync(_ => _.Status == OrderDateStatus.InComplete);
 
-    // Hàm này chưa kiểm tra nên chưa cho nó vào db 
-    // Lỗi logic có thể nếu tháng sau không có ngày thì chưa lập lại được ngày đó thì có thể nó hủy luôn
-    // Trường hợp tốt nhât là thêm field status nếu ngày chưa lập lại thì thêm
+            foreach (var orderDate in listOrderDates)
+            {
+                if (orderDate.Date <= currentDate)
+                {
+                    orderDate.Status = OrderDateStatus.Missed;
+                }
+                await _orderDateRepository.UpdateAsync(orderDate);
+            }
+            await _unitOfWork.CommitAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while check order date status.");
+        }
+    }
+
     public async Task CheckOrderDetailExpirationAsync()
     {
         try

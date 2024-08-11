@@ -193,8 +193,9 @@ public static class DependencyInjection
     {
         // "*/5 * * * *"  :5 phút chạy 1 lần
         // mỗi phút chạy 1 lần "* * * * *" public Task CheckAppointmentExpirationAsync();
-        // "59 23 L * *" Ngày cuối cùng của tháng  CheckOrderRepeatableAsync 
+        // "59 23 L * *" Ngày cuối cùng của tháng  CheckOrderRepeatableAsync  // CheckOrderDateStatusAsync
 
+        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("change-order-date-status", _ => _.CheckOrderDateStatusAsync(), "30 11 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("remove-renewal-notification", _ => _.RemoveDisplayRenewalNotificationForOrderAsync(), "59 23 L * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("create-renewal-notification", _ => _.CreateDisplayRenewalNotificationAsync(), "20 23 24 * *"); //20 23 24 * *
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-detail-date", _ => _.CheckOrderDetailExpirationAsync(), "45 23 * * *");

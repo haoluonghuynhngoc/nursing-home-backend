@@ -9,4 +9,5 @@ public interface ITaskSchedulerOrder
     public Task CheckOrderDetailExpirationAsync();
     public Task CheckOrderExpirationAsync();
     public Task CheckOrderRepeatableAsync();
+    public Task CheckOrderDateStatusAsync();
 }
