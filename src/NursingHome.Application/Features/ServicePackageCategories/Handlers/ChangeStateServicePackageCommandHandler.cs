@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Common.Exceptions;
 using NursingHome.Application.Common.Resources;
 using NursingHome.Application.Contracts.Repositories;
@@ -17,8 +18,13 @@ internal class ChangeStateServicePackageCommandHandler(
     public async Task<MessageResponse> Handle(ChangeStateServicePackageCategoryCommand request, CancellationToken cancellationToken)
     {
         var packageCategory = await _packageCategoryRepository.FindByAsync(
-         expression: _ => _.Id == request.Id)
+         expression: _ => _.Id == request.Id, includeFunc: _ => _.Include(x => x.ServicePackages))
           ?? throw new NotFoundException(nameof(ServicePackageCategory), request.Id);
+
+        if (packageCategory.ServicePackages.Count() > 0)
+        {
+            throw new FieldResponseException(627, "The service package cannot remove because it is currently in use.");
+        }
         request.Adapt(packageCategory);
 
         await _packageCategoryRepository.UpdateAsync(packageCategory);
