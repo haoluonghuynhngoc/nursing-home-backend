@@ -21,6 +21,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
     private readonly IGenericRepository<User> _userRepository = unitOfWork.Repository<User>();
     private readonly IGenericRepository<DiseaseCategory> _diseaseCategoryRepository = unitOfWork.Repository<DiseaseCategory>();
     private readonly IGenericRepository<Order> _orderRepository = unitOfWork.Repository<Order>();
+    private readonly IGenericRepository<Contract> _contractRepository = unitOfWork.Repository<Contract>();
     public async Task<MessageResponse> Handle(CreateElderCommand request, CancellationToken cancellationToken)
     {
         if (await _elderRepository.ExistsByAsync(x => x.CCCD == request.CCCD && x.State == StateType.Active))
@@ -34,6 +35,10 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
         if (!await _userRepository.ExistsByAsync(_ => _.Id == request.UserId, cancellationToken))
         {
             throw new NotFoundException(nameof(User), request.UserId);
+        }
+        if (await _contractRepository.ExistsByAsync(_ => _.Name == request.Contract.Name))
+        {
+            throw new FieldResponseException(625, $"Name Contract Is Conflit");
         }
         //if (await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId
         //&& request.Contract.Price != _.Price, cancellationToken))

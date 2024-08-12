@@ -27,10 +27,10 @@ internal sealed class CreateContractCommandHandler(ILogger<CreateContractCommand
         {
             throw new NotFoundException(nameof(User), request.UserId);
         }
-        //if (!await _nursingPackageRepository.ExistsByAsync(_ => _.Id == request.NursingPackageId))
-        //{
-        //    throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
-        //}
+        if (await _contractRepository.ExistsByAsync(_ => _.Name == request.Name))
+        {
+            throw new FieldResponseException(626, $"Name Contract Is Conflit");
+        }
         var nursingPackage = await _nursingPackageRepository.FindByAsync(_ => _.Id == request.NursingPackageId)
             ?? throw new NotFoundException(nameof(NursingPackage), request.NursingPackageId);
 
