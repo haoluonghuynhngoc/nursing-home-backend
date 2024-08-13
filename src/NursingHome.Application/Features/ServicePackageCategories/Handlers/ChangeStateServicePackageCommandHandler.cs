@@ -7,6 +7,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.ServicePackageCategories.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.ServicePackageCategories.Handlers;
 internal class ChangeStateServicePackageCommandHandler(
@@ -21,7 +22,7 @@ internal class ChangeStateServicePackageCommandHandler(
          expression: _ => _.Id == request.Id, includeFunc: _ => _.Include(x => x.ServicePackages))
           ?? throw new NotFoundException(nameof(ServicePackageCategory), request.Id);
 
-        if (packageCategory.ServicePackages.Count() > 0)
+        if (packageCategory.ServicePackages.Count(_ => _.State == StateType.Active) > 0)
         {
             throw new FieldResponseException(627, "The service package cannot remove because it is currently in use.");
         }
