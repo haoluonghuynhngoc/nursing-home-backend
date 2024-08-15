@@ -6,6 +6,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.FamilyMembers.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.FamilyMembers.Handlers;
 internal class UpdateFamilyMemberCommandHandler(
@@ -17,7 +18,8 @@ internal class UpdateFamilyMemberCommandHandler(
     {
         var familyMember = await _familyMemberRepository.FindByAsync(
             expression: _ => _.Id == request.Id) ?? throw new NotFoundException($"Family Member Have Id {request.Id} Is Not Found");
-        if (await _familyMemberRepository.ExistsByAsync(_ => _.Id != request.Id && _.PhoneNumber == request.PhoneNumber && _.ElderId == familyMember.ElderId))
+        if (await _familyMemberRepository.ExistsByAsync(_ => _.Id != request.Id && _.State == StateType.Active
+        && _.PhoneNumber == request.PhoneNumber && _.ElderId == familyMember.ElderId))
         {
             throw new FieldResponseException(600, "Phone Number Is Conflit");
         }

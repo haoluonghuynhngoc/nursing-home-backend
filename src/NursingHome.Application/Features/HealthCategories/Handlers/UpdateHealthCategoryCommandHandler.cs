@@ -6,6 +6,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.HealthCategories.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.HealthCategories.Handlers;
 internal class UpdateHealthCategoryCommandHandler(IUnitOfWork unitOfWork)
@@ -15,7 +16,7 @@ internal class UpdateHealthCategoryCommandHandler(IUnitOfWork unitOfWork)
 
     public async Task<MessageResponse> Handle(UpdateHealthCategoryCommand request, CancellationToken cancellationToken)
     {
-        if (await _healthCategoryRepository.ExistsByAsync(_ => _.Id != request.Id && _.Name == request.Name))
+        if (await _healthCategoryRepository.ExistsByAsync(_ => _.Id != request.Id && _.Name == request.Name && _.State == StateType.Active))
         {
             throw new ConflictException($"Health Category Have Name {request.Name} In DataBase");
         }
