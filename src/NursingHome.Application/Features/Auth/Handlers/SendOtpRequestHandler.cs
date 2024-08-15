@@ -35,7 +35,7 @@ internal sealed class SendOtpRequestHandler(
 
         logger.LogInformation($"OTP: {code}");
 
-        string message = $"Xác minh OTP từ Nursing Home\n\n{user.UserName} thân mến,\n\nMã OTP của bạn là: {code}\n\nVui lòng nhập mã này để hoàn tất quá trình xác minh. Mã này sẽ hết hạn sau 5 phút.\n\nNếu bạn không yêu cầu mã này, vui lòng bỏ qua tin nhắn này.\n\nCảm ơn bạn,\nNursing Home";
+        string message = $"Xác minh OTP từ Care Connect\n\n{user.FullName} thân mến,\n\nMã OTP của bạn là: {code}\n\nVui lòng nhập mã này để hoàn tất quá trình xác minh. Mã này sẽ hết hạn sau 5 phút.\n\nNếu bạn không yêu cầu mã này, vui lòng bỏ qua tin nhắn này.\n\nCảm ơn bạn,\nCare Connect";
         if (!string.IsNullOrEmpty(user.PhoneNumber))
         {
             // Gửi mã OTP qua SMS
