@@ -26,7 +26,7 @@ internal sealed class GetAllTotalInYearQueryHandler(
         var statisticalResponse = Enumerable.Range(1, 12).ToDictionary(i => i, i => new StatisticalResponse());
 
         var elders = await _elderRepository.FindAsync(
-            expression: e => e.CreatedAt != null && e.CreatedAt.Value.Year == request.Year);
+            expression: e => e.CreatedAt != null && e.State == StateType.Active && e.CreatedAt.Value.Year == request.Year);
 
         var users = await _userRepository.FindAsync(
             expression: u => u.CreatedAt != null && u.CreatedAt.Value.Year == request.Year);

@@ -35,4 +35,11 @@ public class StatisticalController(ISender sender) : ControllerBase
     {
         return await sender.Send(new GetAllTotalInYearQuery(year), cancellationToken);
     }
+    [HttpGet("user/{year}")]
+    public async Task<ActionResult<Dictionary<int, TotalUserResponse>>> GetAllStatiscalUserInYearAsync(
+        int year,
+        CancellationToken cancellationToken)
+    {
+        return await sender.Send(new GetAllTotalUserInYearQuery(year), cancellationToken);
+    }
 }

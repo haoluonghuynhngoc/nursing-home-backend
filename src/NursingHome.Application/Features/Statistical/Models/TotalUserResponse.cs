@@ -1,10 +1,10 @@
 ﻿namespace NursingHome.Application.Features.Statistical.Models;
 public record TotalUserResponse
 {
-    public int TotalUser { get; init; }
-    public int TotalCustomer { get; init; }
-    public int TotalDirector { get; init; }
-    public int TotalManager { get; init; }
-    public int TotalStaff { get; init; }
-    public int TotalNurse { get; init; }
+    public int TotalUser { get; set; }
+    public int TotalCustomer { get; set; }
+    public int TotalDirector { get; set; }
+    public int TotalManager { get; set; }
+    public int TotalStaff { get; set; }
+    public int TotalNurse { get; set; }
 }
