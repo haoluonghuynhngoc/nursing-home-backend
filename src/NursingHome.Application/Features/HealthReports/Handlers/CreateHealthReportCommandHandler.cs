@@ -124,7 +124,9 @@ internal class CreateHealthReportCommandHandler(
                        background-color: #f9f9f9;
                    }}
                    h2 {{
-                       color: {collor};
+                        color: {collor};
+                        font-size: 27px;
+                        text-align: center; 
                    }}
                    ul {{
                        list-style-type: none;
@@ -145,103 +147,6 @@ internal class CreateHealthReportCommandHandler(
            <body>
                <div class='container'>
                    <h2>{title}</h2>
-                   <p>Xin chào {elder.User.FullName},</p>
-                   <p>Chúng tôi xin gửi đến bạn báo cáo sức khỏe Của Cụ {elder.Name}.</p>
-                   <h3>Kết Quả Khám Sức Khỏe</h3>
-                   <ul>";
-
-            // Lặp qua các chi tiết báo cáo sức khỏe và thêm vào email body
-            foreach (var detail in healthDetails)
-            {
-                emailBody += $@"
-            <li><strong>{detail.Name}</strong>: {detail.Value}</li>";
-            }
-
-            emailBody += $@"
-                   </ul>
-                   <h3>Đánh Giá Chung</h3>
-                   <p>{healthReport.Notes}</p>
-                   <div class='footer'>
-                       <p>Xin cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi.</p>
-                       <img src='https://firebasestorage.googleapis.com/v0/b/careconnect-2d494.appspot.com/o/images%2Ff4dbf5a6-1495-4314-9e64-52e35d2564fd.png?alt=media&token=926dd20b-667a-431d-a1a7-dc7fec3243e5' alt='Health Report Image' style='max-width: 100%;'>
-                   </div>
-               </div>
-           </body>
-           </html>";
-            if (elder.User.Email != null)
-            {
-                await emailSender.SendEmailAsync($"{elder.User.Email}", emailSubject, emailBody);
-            }
-        }
-        catch (Exception ex)
-        {
-        }
-
-    }
-    //
-    public async Task SendMailInformation(HealthReport healthReport, Elder elder)
-    {
-        try
-        {
-            var healthDetails = new List<(string Name, string Value)>();
-
-            foreach (var healthReportDetail in healthReport.HealthReportDetails)
-            {
-                var healthCategory = await _healthCategoryRepository.FindByAsync(_ => _.Id == healthReportDetail.HealthCategoryId)
-                    ?? throw new NotFoundException(nameof(HealthCategory), healthReportDetail.HealthCategoryId);
-
-                foreach (var healthReportDetailMeasures in healthReportDetail.HealthReportDetailMeasures)
-                {
-                    var measureaUnit = await _measureUnitRepository.FindByAsync(_ => _.Id == healthReportDetailMeasures.MeasureUnitId)
-                       ?? throw new NotFoundException(nameof(MeasureUnit), healthReportDetailMeasures.MeasureUnitId);
-                    healthDetails.Add((healthCategory.Name, healthReportDetailMeasures.Value.ToString() + "/" + measureaUnit.UnitType + " " + measureaUnit.Name));
-                }
-            }
-
-            var emailSubject = $"Đo chỉ số sức khỏe ngày {healthReport.Date:dd/MM/yyyy}";
-            var emailBody = $@"<!DOCTYPE html>
-           <html lang='vi'>
-           <head>
-               <meta charset='UTF-8'>
-               <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-               <title>Báo Cáo Sức Khỏe Của Cụ {elder.Name}</title>
-               <style>
-                   body {{
-                       font-family: Arial, sans-serif;
-                       line-height: 1.6;
-                       color: #333;
-                   }}
-                   .container {{
-                       width: 100%;
-                       max-width: 600px;
-                       margin: 0 auto;
-                       padding: 20px;
-                       border: 1px solid #ccc;
-                       border-radius: 10px;
-                       background-color: #f9f9f9;
-                   }}
-                   h2 {{
-                       color: #4CAF50;
-                   }}
-                   ul {{
-                       list-style-type: none;
-                       padding: 0;
-                   }}
-                   ul li {{
-                       padding: 10px;
-                       margin-bottom: 5px;
-                       background: #eee;
-                       border-radius: 5px;
-                   }}
-                   .footer {{
-                       margin-top: 20px;
-                       text-align: center;
-                   }}
-               </style>
-           </head>
-           <body>
-               <div class='container'>
-                   <h2>Báo Cáo Sức Khỏe</h2>
                    <p>Xin chào {elder.User.FullName},</p>
                    <p>Chúng tôi xin gửi đến bạn báo cáo sức khỏe Của Cụ {elder.Name}.</p>
                    <h3>Kết Quả Khám Sức Khỏe</h3>
