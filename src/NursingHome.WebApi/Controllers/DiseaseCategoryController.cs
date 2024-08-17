@@ -43,4 +43,11 @@ public class DiseaseCategoryController(ISender sender) : ControllerBase
     {
         return await sender.Send(command with { Id = id }, cancellationToken);
     }
+
+    [HttpPut("{id}/change-state")]
+    public async Task<ActionResult<MessageResponse>> ChangeStateDiseaseCategoryAsync(
+        int id, ChageStateDiseaseCategory command, CancellationToken cancellationToken)
+    {
+        return await sender.Send(command with { Id = id }, cancellationToken);
+    }
 }
