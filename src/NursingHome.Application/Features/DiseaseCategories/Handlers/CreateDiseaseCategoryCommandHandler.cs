@@ -6,6 +6,7 @@ using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.DiseaseCategories.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.DiseaseCategories.Handlers;
 internal sealed class CreateDiseaseCategoryCommandHandler(
@@ -16,7 +17,7 @@ internal sealed class CreateDiseaseCategoryCommandHandler(
 
     public async Task<MessageResponse> Handle(CreateDiseaseCategoryCommand request, CancellationToken cancellationToken)
     {
-        if (await _diseaseCategoryRepository.ExistsByAsync(x => x.Name == request.Name))
+        if (await _diseaseCategoryRepository.ExistsByAsync(x => x.Name == request.Name && x.State == StateType.Active))
         {
             throw new ConflictException($"Disease Category Have Name {request.Name} In DataBase");
         }
