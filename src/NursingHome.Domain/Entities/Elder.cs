@@ -25,7 +25,7 @@ public class Elder : BaseAuditableEntity<int>
     public string? Notes { get; set; }
     public string? Habits { get; set; }
     public string? Relationship { get; set; }
-    public int RoomId { get; set; }
+    public int? RoomId { get; set; }
     public virtual Room Room { get; set; } = default!;
     public Guid UserId { get; set; }
     public virtual User User { get; set; } = default!;

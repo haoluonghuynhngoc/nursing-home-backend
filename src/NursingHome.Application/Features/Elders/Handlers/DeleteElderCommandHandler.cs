@@ -26,6 +26,7 @@ internal class DeleteElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
             throw new FieldResponseException(623, "Elderly people with valid contracts or pending contracts");
         }
         elder.State = StateType.Deleted;
+        elder.RoomId = null;
         await _elderRepository.UpdateAsync(elder);
         await unitOfWork.CommitAsync(cancellationToken);
 

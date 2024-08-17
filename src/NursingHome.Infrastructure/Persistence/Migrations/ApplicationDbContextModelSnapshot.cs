@@ -309,6 +309,10 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(24)");
+
                     b.HasKey("Id");
 
                     b.ToTable("DiseaseCategory");
@@ -382,7 +386,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                     b.Property<string>("Relationship")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("RoomId")
+                    b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<string>("State")
@@ -1926,9 +1930,7 @@ namespace NursingHome.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("NursingHome.Domain.Entities.Room", "Room")
                         .WithMany("Elders")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoomId");
 
                     b.HasOne("NursingHome.Domain.Entities.Identities.User", "User")
                         .WithMany("Elders")
