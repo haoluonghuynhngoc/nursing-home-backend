@@ -6,6 +6,7 @@ using NursingHome.Application.Features.CareServices.Queries;
 using NursingHome.Application.Features.Elders.Models;
 using NursingHome.Application.Features.Rooms.Models;
 using NursingHome.Domain.Entities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.CareServices.Handlers;
 internal class GetCareServiceQueryHandler(
@@ -20,7 +21,7 @@ internal class GetCareServiceQueryHandler(
          ?? throw new NotFoundException($"Room Have Id {request.RoomId} Is Not Found");
 
         var elder = await _elderRepository.FindAsync<ElderCareServiceResponse>(_ => _.RoomId == request.RoomId
-        && _.OrderDetails.Any(o => o.OrderDates.Any(od => od.Date == request.Date)));
+        && _.OrderDetails.Any(o => o.Order.Status == OrderStatus.Paid && o.OrderDates.Any(od => od.Date == request.Date)));
 
         return new CareServiceResponse
         {
