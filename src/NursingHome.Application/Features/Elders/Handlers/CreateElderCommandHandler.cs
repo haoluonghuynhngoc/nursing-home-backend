@@ -117,7 +117,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
                     Price = contract.Price,
                     ElderId = elder.Id,
                     Quantity = 1,
-                    Notes = $"Pay for the elderly care package for the elderly person {elder.Name}",
+                    Notes = $"Thanh toán gói chăm sóc người cao tuổi cho người cao tuổi  {elder.Name}",
                     Status = OrderDetailStatus.Finalized,
                     Type = OrderDetailType.One_Time,
                 }
