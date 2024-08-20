@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using NursingHome.Application.Contracts.Repositories;
 using NursingHome.Application.Features.Statistical.Models;
 using NursingHome.Application.Features.Statistical.Queries;
@@ -14,13 +13,14 @@ internal sealed class GetAllTotalElderQueryhandler(
     private readonly IGenericRepository<Elder> _elderRepository = unitOfWork.Repository<Elder>();
     public async Task<TotalElderResponse> Handle(GetAllTotalElderQuery request, CancellationToken cancellationToken)
     {
-        var totalElder = await _elderRepository.FindAsync(
-            includeFunc: _ => _.Include(x => x.Contracts));
-
+        //var totalElder = await _elderRepository.FindAsync(
+        //    includeFunc: _ => _.Include(x => x.Contracts));
+        var totalElder = await _elderRepository.FindAsync();
         return new TotalElderResponse
         {
             TotalElder = totalElder.Count(),
-            TotalElderValid = totalElder.Count(_ => _.Contracts.Any(a => a.Status == ContractStatus.Valid))
+            // TotalElderValid = totalElder.Count(_ => _.Contracts.Any(a => a.Status == ContractStatus.Valid))
+            TotalElderValid = totalElder.Count(_ => _.State == StateType.Active)
         };
     }
 }
