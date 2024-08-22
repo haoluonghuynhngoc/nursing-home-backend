@@ -549,7 +549,7 @@ public class TaskSchedulerOrder : ITaskSchedulerOrder
                 expression: _ => _.Status == AppointmentStatus.Pending || _.Status == AppointmentStatus.Approved);
             foreach (var appointment in listAppointment)
             {
-                if (appointment.Date < currentDate)
+                if (appointment.Date <= currentDate)
                 {
                     appointment.Status = AppointmentStatus.Cancelled;
                 }

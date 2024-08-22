@@ -196,12 +196,12 @@ public static class DependencyInjection
         // "59 23 L * *" Ngày cuối cùng của tháng  CheckOrderRepeatableAsync  // CheckOrderDateStatusAsync
 
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("change-order-date-status", _ => _.CheckOrderDateStatusAsync(), "30 11 * * *");
-        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("remove-renewal-notification", _ => _.RemoveDisplayRenewalNotificationForOrderAsync(), "59 23 L * *");
-        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("create-renewal-notification", _ => _.CreateDisplayRenewalNotificationAsync(), "20 23 24 * *"); //20 23 24 * *
-        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-detail-date", _ => _.CheckOrderDetailExpirationAsync(), "45 23 * * *");
+        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("remove-renewal-notification", _ => _.RemoveDisplayRenewalNotificationForOrderAsync(), "49 23 L * *");
+        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("create-renewal-notification", _ => _.CreateDisplayRenewalNotificationAsync(), "20 23 25 * *"); //20 23 24 * *
+        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-detail-date", _ => _.CheckOrderDetailExpirationAsync(), "00 20 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-expired", _ => _.CheckOrderExpirationAsync(), "10 23 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-contract-expiration-everyday", _ => _.CheckContractExpirationAsync(), "0 0 * * *");
-        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-appointment-expiration-everyday", _ => _.CheckAppointmentExpirationAsync(), "10 23 * * *");
+        RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-appointment-expiration-everyday", _ => _.CheckAppointmentExpirationAsync(), "00 21 * * *");
         RecurringJob.AddOrUpdate<ITaskSchedulerOrder>("check-order-repeatable-last-day-of-the-month", _ => _.CheckOrderRepeatableAsync(), "50 23 L * *");
 
     }

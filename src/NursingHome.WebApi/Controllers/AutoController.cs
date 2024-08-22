@@ -236,7 +236,7 @@ public class AutoController(IUnitOfWork unitOfWork,
     }
 
     /// <summary>
-    /// Hàm này sẽ tự chạy mỗi ngày vào lúc 11:20 đêm mỗi ngày để đổi trạng thái của các đơn hàng (Failed ,UnPaid) Không cho thanh toán lại
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc 11:10 đêm mỗi ngày để đổi trạng thái của các đơn hàng (Failed ,UnPaid) Không cho thanh toán lại
     /// </summary>
     [HttpPost("check-order-expiration")]
     public async Task<IActionResult> CheckOrderExpirationAsync()
@@ -276,7 +276,7 @@ public class AutoController(IUnitOfWork unitOfWork,
     }
 
     /// <summary>
-    /// Hàm này sẽ tự chạy mỗi ngày vào lúc 11:20 đêm mỗi ngày
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc 8 đêm mỗi ngày
     /// Công dụng là nó sẽ kiểm tra các đơn hàng đã thanh toán với mục đích không cho lập lại (Chạy trước hàm gợi ý)
     /// </summary>
     [HttpPost("check-order-detail-expiration")]
@@ -312,7 +312,7 @@ public class AutoController(IUnitOfWork unitOfWork,
     }
 
     /// <summary>
-    /// Hàm này sẽ tự chạy mỗi ngày vào lúc  11 giờ 20 phút tối ngày 24 hàng tháng
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc  11 giờ 20 phút tối ngày 25 hàng tháng
     /// gợi ý các đơn hàng lập lại cho tháng sau
     /// </summary>
     [HttpPost("create-recurring-order")]
@@ -505,7 +505,7 @@ public class AutoController(IUnitOfWork unitOfWork,
     }
 
     /// <summary>
-    /// Hàm này sẽ tự chạy mỗi ngày vào lúc  11 giờ 10 phút tối mỗi ngày để kiểm tra xem lịch hẹn chưa làm gì thì tự động hủy
+    /// Hàm này sẽ tự chạy mỗi ngày vào lúc  9 giờ 00 phút tối mỗi ngày để kiểm tra xem lịch hẹn chưa làm gì thì tự động hủy
     /// </summary>
     [HttpPost("check-appointment-expiration")]
     public async Task<IActionResult> CheckAppointmentExpirationAsync()
@@ -518,7 +518,7 @@ public class AutoController(IUnitOfWork unitOfWork,
                 expression: _ => _.Status == AppointmentStatus.Pending || _.Status == AppointmentStatus.Approved);
             foreach (var appointment in listAppointment)
             {
-                if (appointment.Date < currentDate)
+                if (appointment.Date <= currentDate)
                 {
                     appointment.Status = AppointmentStatus.Cancelled;
                 }
@@ -534,7 +534,7 @@ public class AutoController(IUnitOfWork unitOfWork,
         return Ok("Check Appointment Expiration Success");
     }
     /// <summary>
-    /// xóa thông báo gia hạn hiển thị cho đơn hàng (11h59 Ngày cuối cùng của tháng)
+    /// xóa thông báo gia hạn hiển thị cho đơn hàng (11h49 Ngày cuối cùng của tháng)
     /// </summary>
     [HttpDelete("remove-display-renewal-notification-for-order")]
     public async Task<IActionResult> RemoveDisplayRenewalNotificationForOrderAsync()
