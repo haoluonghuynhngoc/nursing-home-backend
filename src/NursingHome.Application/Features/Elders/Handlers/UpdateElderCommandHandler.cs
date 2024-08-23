@@ -8,6 +8,7 @@ using NursingHome.Application.Features.Elders.Commands;
 using NursingHome.Application.Models;
 using NursingHome.Domain.Entities;
 using NursingHome.Domain.Entities.Identities;
+using NursingHome.Domain.Enums;
 
 namespace NursingHome.Application.Features.Elders.Handlers;
 internal class UpdateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateElderCommand, MessageResponse>
@@ -48,7 +49,10 @@ internal class UpdateElderCommandHandler(IUnitOfWork unitOfWork) : IRequestHandl
         {
             throw new NotFoundException(nameof(Elder), request.Id);
         }
-
+        if (elder.State == StateType.Deleted)
+        {
+            throw new FieldResponseException(629, "Elder have been removed");
+        }
         request.Adapt(elder);
 
         await _elderRepository.UpdateAsync(elder);
