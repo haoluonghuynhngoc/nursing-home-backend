@@ -106,7 +106,7 @@ internal class CreateElderCommandHandler(IUnitOfWork unitOfWork,
                 Description = $"Người Lớn Tuổi {elder.Name} Đã Thanh Toán Chi Phí Gói Dưỡng Lão.",
                 Amount = (double)contract.Price,
                 Content = "Payment For Nursing Care Service Package",
-                Notes = "None",
+                Notes = "Thanh Toán Cho Hợp Đồng",
                 PaymentDate = DateTime.UtcNow,
                 DueDate = DateOnly.FromDateTime(DateTime.Today),
                 OrderDetails = new List<OrderDetail>

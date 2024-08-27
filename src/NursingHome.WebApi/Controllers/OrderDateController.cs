@@ -5,6 +5,7 @@ using NursingHome.Application.Features.OrderDates.Commands;
 using NursingHome.Application.Features.OrderDates.Models;
 using NursingHome.Application.Features.OrderDates.Queries;
 using NursingHome.Application.Models;
+using NursingHome.Shared.Pages;
 
 namespace NursingHome.WebApi.Controllers;
 [Route("api/[controller]")]
@@ -25,5 +26,12 @@ public class OrderDateController(ISender sender) : ControllerBase
             CancellationToken cancellationToken)
     {
         return await sender.Send(new GetOrderDateByIdQuery(id), cancellationToken);
+    }
+    [HttpGet]
+    public async Task<ActionResult<PaginatedResponse<OrderDateGetAllResponse>>> GetAllOrderDatesWithPaginAsync(
+    [FromQuery] GetAllOrderDateQuery query,
+    CancellationToken cancellationToken)
+    {
+        return await sender.Send(query, cancellationToken);
     }
 }

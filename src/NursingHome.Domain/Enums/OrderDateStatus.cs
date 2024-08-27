@@ -4,5 +4,6 @@ public enum OrderDateStatus
     NotPerformed,
     InComplete,
     Complete,
-    Missed
+    Missed,
+    Processed
 }
