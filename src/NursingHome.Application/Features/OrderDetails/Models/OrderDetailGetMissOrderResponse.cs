@@ -5,7 +5,7 @@ using NursingHome.Application.Features.ServicePackages.Models;
 namespace NursingHome.Application.Features.OrderDetails.Models;
 public record OrderDetailGetMissOrderResponse : BaseOrderDetailResponse
 {
-    public virtual BaseServicePackageResponse ServicePackage { get; set; } = default!;
+    public virtual ServicePackageResponse ServicePackage { get; set; } = default!;
     public virtual BaseElderResponse Elder { get; set; } = default!;
     public virtual BaseOrderResponse Order { get; set; } = default!;
 }
