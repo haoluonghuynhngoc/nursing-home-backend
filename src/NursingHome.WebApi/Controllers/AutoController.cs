@@ -357,10 +357,14 @@ public class AutoController(IUnitOfWork unitOfWork,
                     {
                         if (orderDate.Date.Month == currentDate.Month && orderDate.Date.Year == currentDate.Year)
                         {
-                            scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                            if (orderDate.Date.Day != 31)
                             {
-                                Date = orderDate.Date.AddMonths(1)
-                            });
+                                scheduledServiceDetail.ScheduledTimes.Add(new ScheduledTime
+                                {
+                                    Date = orderDate.Date.AddMonths(1)
+                                });
+                            }
+
                         }
                     }
                 }
